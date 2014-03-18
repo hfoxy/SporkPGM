@@ -34,6 +34,8 @@ public class Spork extends JavaPlugin {
 				continue;
 			}
 		}
+
+		return modules;
 	}
 
 	public List<Class<? extends ModuleBuilder>> getBuilders() {
