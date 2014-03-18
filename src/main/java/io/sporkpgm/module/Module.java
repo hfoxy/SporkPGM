@@ -8,4 +8,6 @@ public abstract class Module implements Listener {
 		return new ModuleAbout(this.getClass());
 	}
 
+	public abstract Class<? extends ModuleBuilder> builder();
+
 }
