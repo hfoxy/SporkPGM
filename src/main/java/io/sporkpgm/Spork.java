@@ -49,29 +49,6 @@ public class Spork extends JavaPlugin {
 		return modules;
 	}
 
-	public List<Module> getModules(Document document, List<Class<? extends Builder>> builders) {
-		List<Module> modules = new ArrayList<>();
-
-		for(Class<? extends Builder> clazz : builders) {
-			try {
-				Constructor constructor = clazz.getConstructor(Document.class);
-				constructor.setAccessible(true);
-				Builder builder = (Builder) constructor.newInstance(document);
-				BuilderAbout about = builder.getInfo();
-
-				if(!about.isDocumentable()) {
-					constructor = clazz.getConstructor(SporkMap.class);
-					builder = (Builder) constructor.newInstance(document);
-				}
-			} catch(Exception e) {
-				getLogger().warning("Error when loading '" + clazz.getSimpleName() + "' due to " + e.getClass().getSimpleName());
-				continue;
-			}
-		}
-
-		return modules;
-	}
-
 	public List<Class<? extends Builder>> getBuilders() {
 		return builders;
 	}
