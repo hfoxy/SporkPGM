@@ -20,6 +20,10 @@ public class Spork extends JavaPlugin {
 		spork = this;
 	}
 
+	public List<Module> getModules(SporkMap map) {
+		return getModules(map, builders);
+	}
+
 	public List<Module> getModules(SporkMap map, List<Class<? extends ModuleBuilder>> builders) {
 		List<Module> modules = new ArrayList<>();
 
