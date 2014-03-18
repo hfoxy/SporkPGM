@@ -1,15 +1,16 @@
 package io.sporkpgm.module;
 
 import io.sporkpgm.map.SporkMap;
+import org.dom4j.Document;
 
 import java.util.List;
 
 public abstract class ModuleBuilder {
 
-	SporkMap map;
+	Document document;
 
-	public ModuleBuilder(SporkMap map) {
-		this.map = map;
+	public ModuleBuilder(Document document) {
+		this.document = document;
 	}
 
 	public abstract List<Module> build();

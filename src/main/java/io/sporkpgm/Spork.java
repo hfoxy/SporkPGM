@@ -4,6 +4,7 @@ import io.sporkpgm.map.SporkMap;
 import io.sporkpgm.module.Module;
 import io.sporkpgm.module.ModuleBuilder;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.dom4j.Document;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -20,18 +21,18 @@ public class Spork extends JavaPlugin {
 		spork = this;
 	}
 
-	public List<Module> getModules(SporkMap map) {
-		return getModules(map, builders);
+	public List<Module> getModules(Document document) {
+		return getModules(document, builders);
 	}
 
-	public List<Module> getModules(SporkMap map, List<Class<? extends ModuleBuilder>> builders) {
+	public List<Module> getModules(Document document, List<Class<? extends ModuleBuilder>> builders) {
 		List<Module> modules = new ArrayList<>();
 
 		for(Class<? extends ModuleBuilder> clazz : builders) {
 			try {
 				Constructor constructor = clazz.getConstructor(SporkMap.class);
 				constructor.setAccessible(true);
-				ModuleBuilder builder = (ModuleBuilder) constructor.newInstance(map);
+				ModuleBuilder builder = (ModuleBuilder) constructor.newInstance(document);
 				modules.addAll(builder.build());
 			} catch(Exception e) {
 				getLogger().warning("Error when loading '" + clazz.getSimpleName() + "' due to " + e.getClass().getSimpleName());
