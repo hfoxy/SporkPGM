@@ -56,13 +56,13 @@ public class Config {
 
 	public static class Rotation {
 
-		public static final String ROTATION = get("rotation.file", "rotation.txt");
+		public static final String ROTATION = get("settings.rotation.file", "rotation.txt");
 
 	}
 
 	public static class Match {
 
-		public static final String PREFIX = get("match.prefix", "match-");
+		public static final String PREFIX = get("settings.match.prefix", "match-");
 
 	}
 

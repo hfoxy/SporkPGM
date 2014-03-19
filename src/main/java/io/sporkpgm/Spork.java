@@ -5,6 +5,7 @@ import io.sporkpgm.map.MapLoader;
 import io.sporkpgm.map.SporkMap;
 import io.sporkpgm.module.Module;
 import io.sporkpgm.module.ModuleBuilder;
+import io.sporkpgm.rotation.Rotation;
 import io.sporkpgm.util.Config;
 import io.sporkpgm.util.Config.Map;
 import io.sporkpgm.util.Log;
@@ -43,12 +44,15 @@ public class Spork extends JavaPlugin {
 
 		StartupType type = Map.STARTUP;
 
-		List<MapBuilder> load = MapLoader.build(repository);
-		if(type == SPECIFIED) {
+		List<MapBuilder> all = MapLoader.build(repository);
+		List<MapBuilder> load = new ArrayList<>();
+		if(type == ALL) {
+			load.addAll(all);
+		} else if(type == SPECIFIED) {
 			load.clear();
 			List<String> specified = getConfig().getStringList("settings.maps.load");
 			if(specified != null) {
-				for(MapBuilder map : MapLoader.build(repository)) {
+				for(MapBuilder map : all) {
 					if(contains(specified, "map name")) {
 						load.add(map);
 					}
@@ -56,8 +60,16 @@ public class Spork extends JavaPlugin {
 			}
 		}
 
-		if(load.isEmpty() && type != ALL) {
+		if(load.isEmpty() && type != SPECIFIED) {
+			Log.warning("No maps were available from the specified list - loading all maps");
+			load = new ArrayList<>();
+			load.addAll(all);
+		}
 
+		if(load.isEmpty()) {
+			Log.severe("Unable to find any maps inside the repository! Disabling plugin...");
+			setEnabled(false);
+			return;
 		}
 	}
 
@@ -103,6 +115,10 @@ public class Spork extends JavaPlugin {
 
 	public static Spork get() {
 		return spork;
+	}
+
+	private Rotation provide() {
+		
 	}
 
 	public enum StartupType {
