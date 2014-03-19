@@ -4,6 +4,7 @@ import io.sporkpgm.Spork;
 
 import java.io.File;
 
+import io.sporkpgm.Spork.StartupType;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -42,14 +43,14 @@ public class Config {
 
 	public static class General {
 
-		public static final boolean DEBUG = get("general.debug", false);
+		public static final boolean DEBUG = get("settings.debug", false);
 
 	}
 
 	public static class Map {
 
-		public static final String DIRECTORY = get("map.directory", "maps");
-		public static final String CONFIG = get("map.config", "map.xml");
+		public static final File DIRECTORY = new File((String) get("settings.maps.repository", "maps/"));
+		public static final StartupType STARTUP = StartupType.getType((String) get("settings.maps.startup", "all"));
 
 	}
 

@@ -5,6 +5,8 @@ import io.sporkpgm.map.MapLoader;
 import io.sporkpgm.map.SporkMap;
 import io.sporkpgm.module.Module;
 import io.sporkpgm.module.ModuleBuilder;
+import io.sporkpgm.util.Config;
+import io.sporkpgm.util.Config.Map;
 import io.sporkpgm.util.Log;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.dom4j.Document;
@@ -13,6 +15,8 @@ import java.io.File;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
+
+import static io.sporkpgm.Spork.StartupType.*;
 
 public class Spork extends JavaPlugin {
 
@@ -34,19 +38,37 @@ public class Spork extends JavaPlugin {
 			getConfig().set("settings.maps.repository", "maps/");
 		}
 
-		repository = new File(getConfig().getString("settings.maps.respository"));
+		repository = Map.DIRECTORY;
 		maps = new ArrayList<>();
 
-		String startup = getConfig().getString("settings.maps.startup");
-		StartupType type = StartupType.getType(startup);
+		StartupType type = Map.STARTUP;
 
 		List<MapBuilder> load = MapLoader.build(repository);
-		if(type == StartupType.SPECIFIED) {
+		if(type == SPECIFIED) {
+			load.clear();
 			List<String> specified = getConfig().getStringList("settings.maps.load");
 			if(specified != null) {
-
+				for(MapBuilder map : MapLoader.build(repository)) {
+					if(contains(specified, "map name")) {
+						load.add(map);
+					}
+				}
 			}
 		}
+
+		if(load.isEmpty() && type != ALL) {
+
+		}
+	}
+
+	private boolean contains(List<String> strings, String search) {
+		for(String string : strings) {
+			if(string.equalsIgnoreCase(search)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public List<Module> getModules(Document document) {
