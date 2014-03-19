@@ -30,8 +30,8 @@ public class Spork extends JavaPlugin {
 		Config.init();
 		Log.setDebugging(Config.General.DEBUG);
 
-		if(getConfig().getString("settings.maps.respository") == null) {
-			getConfig().set("settings.maps.respository", "maps/");
+		if(getConfig().getString("settings.maps.repository") == null) {
+			getConfig().set("settings.maps.repository", "maps/");
 		}
 
 		repository = new File(getConfig().getString("settings.maps.respository"));
