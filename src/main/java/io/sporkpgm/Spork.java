@@ -2,7 +2,8 @@ package io.sporkpgm;
 
 import io.sporkpgm.map.SporkMap;
 import io.sporkpgm.module.Module;
-import io.sporkpgm.module.ModuleBuilder;
+import io.sporkpgm.module.builder.Builder;
+import io.sporkpgm.module.builder.BuilderAbout;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.dom4j.Document;
 
@@ -14,7 +15,7 @@ public class Spork extends JavaPlugin {
 
 	protected static Spork spork;
 
-	protected List<Class<? extends ModuleBuilder>> builders;
+	protected List<Class<? extends Builder>> builders;
 
 	@Override
 	public void onEnable() {
@@ -25,15 +26,20 @@ public class Spork extends JavaPlugin {
 		return getModules(document, builders);
 	}
 
-	public List<Module> getModules(Document document, List<Class<? extends ModuleBuilder>> builders) {
+	public List<Module> getModules(Document document, List<Class<? extends Builder>> builders) {
 		List<Module> modules = new ArrayList<>();
 
-		for(Class<? extends ModuleBuilder> clazz : builders) {
+		for(Class<? extends Builder> clazz : builders) {
 			try {
-				Constructor constructor = clazz.getConstructor(SporkMap.class);
+				Constructor constructor = clazz.getConstructor(Document.class);
 				constructor.setAccessible(true);
-				ModuleBuilder builder = (ModuleBuilder) constructor.newInstance(document);
-				modules.addAll(builder.build());
+				Builder builder = (Builder) constructor.newInstance(document);
+				BuilderAbout about = builder.getInfo();
+
+				if(!about.isDocumentable()) {
+					constructor = clazz.getConstructor(SporkMap.class);
+					builder = (Builder) constructor.newInstance(document);
+				}
 			} catch(Exception e) {
 				getLogger().warning("Error when loading '" + clazz.getSimpleName() + "' due to " + e.getClass().getSimpleName());
 				continue;
@@ -43,8 +49,25 @@ public class Spork extends JavaPlugin {
 		return modules;
 	}
 
-	public List<Class<? extends ModuleBuilder>> getBuilders() {
+	public List<Class<? extends Builder>> getBuilders() {
 		return builders;
+	}
+
+	public List<Class<? extends Builder>> getBuilders(List<Class<? extends Builder>> builders, boolean documentable) {
+		List<Class<? extends Builder>> classes = new ArrayList<>();
+
+		for(Class<? extends Builder> clazz : builders) {
+			try {
+				if(documentable && Builder.isDocumentable(clazz)) {
+					classes.add(clazz);
+				} else {
+					classes.add(clazz);
+				}
+			} catch(Exception e) {
+				getLogger().warning("Error when loading '" + clazz.getSimpleName() + "' due to " + e.getClass().getSimpleName());
+				continue;
+			}
+		}
 	}
 
 	protected void builders() {
