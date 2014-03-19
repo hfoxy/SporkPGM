@@ -4,7 +4,8 @@ import io.sporkpgm.map.MapBuilder;
 import io.sporkpgm.map.MapLoader;
 import io.sporkpgm.map.SporkMap;
 import io.sporkpgm.module.Module;
-import io.sporkpgm.module.ModuleBuilder;
+import io.sporkpgm.module.builder.Builder;
+import io.sporkpgm.module.builder.BuilderAbout;
 import io.sporkpgm.rotation.Rotation;
 import io.sporkpgm.rotation.exceptions.RotationLoadException;
 import io.sporkpgm.util.Config;
@@ -25,7 +26,7 @@ public class Spork extends JavaPlugin {
 
 	protected static Spork spork;
 
-	protected List<Class<? extends ModuleBuilder>> builders;
+	protected List<Class<? extends Builder>> builders;
 	protected List<MapBuilder> maps;
 	protected File repository;
 
@@ -112,14 +113,14 @@ public class Spork extends JavaPlugin {
 		return getModules(document, builders);
 	}
 
-	public List<Module> getModules(Document document, List<Class<? extends ModuleBuilder>> builders) {
+	public List<Module> getModules(Document document, List<Class<? extends Builder>> builders) {
 		List<Module> modules = new ArrayList<>();
 
-		for(Class<? extends ModuleBuilder> clazz : builders) {
+		for(Class<? extends Builder> clazz : builders) {
 			try {
-				Constructor constructor = clazz.getConstructor(SporkMap.class);
+				Constructor constructor = clazz.getConstructor(Document.class);
 				constructor.setAccessible(true);
-				ModuleBuilder builder = (ModuleBuilder) constructor.newInstance(document);
+				Builder builder = (Builder) constructor.newInstance(document);
 				modules.addAll(builder.build());
 			} catch(Exception e) {
 				getLogger().warning("Error when loading '" + clazz.getSimpleName() + "' due to " + e.getClass().getSimpleName());
@@ -130,7 +131,29 @@ public class Spork extends JavaPlugin {
 		return modules;
 	}
 
-	public List<Class<? extends ModuleBuilder>> getBuilders() {
+	public List<Module> getModules(SporkMap map, List<Class<? extends Builder>> builders) {
+		List<Module> modules = new ArrayList<>();
+
+		for(Class<? extends Builder> clazz : builders) {
+			try {
+				Constructor constructor = clazz.getConstructor(SporkMap.class, Document.class);
+				constructor.setAccessible(true);
+				Builder builder = (Builder) constructor.newInstance(map, map.getDocument());
+				modules.addAll(builder.build());
+			} catch(Exception e) {
+				getLogger().warning("Error when loading '" + clazz.getSimpleName() + "' due to " + e.getClass().getSimpleName());
+				continue;
+			}
+		}
+
+		return modules;
+	}
+
+	public boolean isDocumentable(Class<? extends Builder> clazz) {
+		return new BuilderAbout(clazz).isDocumentable();
+	}
+
+	public List<Class<? extends Builder>> getBuilders() {
 		return builders;
 	}
 
@@ -140,6 +163,10 @@ public class Spork extends JavaPlugin {
 
 	public static Spork get() {
 		return spork;
+	}
+
+	public static List<MapBuilder> getMaps() {
+		return get().maps;
 	}
 
 	public enum StartupType {

@@ -1,5 +1,6 @@
 package io.sporkpgm.rotation;
 
+import io.sporkpgm.Spork;
 import io.sporkpgm.map.MapBuilder;
 import io.sporkpgm.rotation.exceptions.RotationLoadException;
 import io.sporkpgm.util.Config;
@@ -21,8 +22,8 @@ public class Rotation {
 		}
 
 		if(!rotation.exists()) {
-			BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(rotationsRepository), "UTF8"));
-			for(MapBuilder loader : getMaps()) {
+			BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(rotation), "UTF8"));
+			for(MapBuilder loader : Spork.getMaps()) {
 				Log.info("Printing out " + loader.getName() + " into the Rotation file");
 				out.write(loader.getName());
 			}
