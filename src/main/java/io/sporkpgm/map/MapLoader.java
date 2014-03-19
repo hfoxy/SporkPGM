@@ -3,19 +3,19 @@ package io.sporkpgm.map;
 import io.sporkpgm.util.Config;
 
 import java.io.File;
-import java.util.List;
+import java.util.Collection;
 
 import com.google.common.collect.Lists;
 
 public class MapLoader {
 
-	public List<SporkMap> loadMaps(File dir) {
-		List<SporkMap> maps = Lists.newArrayList();
+	public Collection<SporkMap> loadMaps(File dir) {
+		Collection<SporkMap> maps = Lists.newArrayList();
 
 		for (File f : dir.listFiles()) {
 			if (!valid(f))
 				continue;
-			//TODO: Actually load the map
+			// TODO: Actually load the map
 		}
 		return maps;
 	}

@@ -7,9 +7,10 @@ import tc.oc.commons.core.util.ContextStore;
 public class MapManager extends ContextStore<SporkMap> {
 
 	public MapManager(Collection<SporkMap> maps) {
-		for(SporkMap map : maps) add("NAME HERE LATER", map);
+		for (SporkMap map : maps)
+			add("NAME HERE LATER", map);
 	}
-	
+
 	public Collection<SporkMap> getMaps() {
 		return store.values();
 	}
