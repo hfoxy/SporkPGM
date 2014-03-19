@@ -1,6 +1,6 @@
 package io.sporkpgm.map;
 
-public class SporkMap {
+public class MapBuilder {
 
 
 
