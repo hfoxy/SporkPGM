@@ -8,16 +8,6 @@ import java.util.List;
 
 public class MapLoader {
 
-	InfoModule info;
-
-	public MapLoader() {
-
-	}
-
-	public String getName() {
-		return info.getName();
-	}
-
 	public static List<MapBuilder> build(File folder) {
 		return new ArrayList<>();
 	}
