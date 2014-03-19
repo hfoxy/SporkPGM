@@ -1,0 +1,4 @@
+name: ${plugin.Name}
+version: ${version}
+main: ${plugin.mainClass}
+authors: [ParaPenguin, RainoBoy97]

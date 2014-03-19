@@ -4,12 +4,14 @@ import io.sporkpgm.map.SporkMap;
 import io.sporkpgm.module.Module;
 import io.sporkpgm.module.builder.Builder;
 import io.sporkpgm.module.builder.BuilderAbout;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.dom4j.Document;
+import io.sporkpgm.util.Log;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.bukkit.plugin.java.JavaPlugin;
+import org.dom4j.Document;
 
 public class Spork extends JavaPlugin {
 
@@ -31,7 +33,7 @@ public class Spork extends JavaPlugin {
 
 		for(Class<? extends Builder> clazz : builders) {
 			try {
-				Constructor constructor = clazz.getConstructor(Document.class);
+				Constructor<? extends Builder> constructor = clazz.getConstructor(Document.class);
 				constructor.setAccessible(true);
 				Builder builder = (Builder) constructor.newInstance(document);
 				BuilderAbout about = builder.getInfo();
@@ -41,7 +43,7 @@ public class Spork extends JavaPlugin {
 					builder = (Builder) constructor.newInstance(document);
 				}
 			} catch(Exception e) {
-				getLogger().warning("Error when loading '" + clazz.getSimpleName() + "' due to " + e.getClass().getSimpleName());
+				Log.warning("Error when loading '" + clazz.getSimpleName() + "' due to " + e.getClass().getSimpleName());
 				continue;
 			}
 		}
@@ -64,10 +66,12 @@ public class Spork extends JavaPlugin {
 					classes.add(clazz);
 				}
 			} catch(Exception e) {
-				getLogger().warning("Error when loading '" + clazz.getSimpleName() + "' due to " + e.getClass().getSimpleName());
+				Log.warning("Error when loading '" + clazz.getSimpleName() + "' due to " + e.getClass().getSimpleName());
 				continue;
 			}
 		}
+		
+		return classes;
 	}
 
 	protected void builders() {
