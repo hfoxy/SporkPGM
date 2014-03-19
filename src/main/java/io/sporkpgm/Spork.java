@@ -5,6 +5,7 @@ import io.sporkpgm.map.MapLoader;
 import io.sporkpgm.map.SporkMap;
 import io.sporkpgm.module.Module;
 import io.sporkpgm.module.ModuleBuilder;
+import io.sporkpgm.util.Log;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.dom4j.Document;
 
@@ -25,6 +26,9 @@ public class Spork extends JavaPlugin {
 	public void onEnable() {
 		spork = this;
 		saveDefaultConfig();
+
+		Config.init();
+		Log.setDebugging(Config.General.DEBUG);
 
 		if(getConfig().getString("settings.maps.respository") == null) {
 			getConfig().set("settings.maps.respository", "maps/");
