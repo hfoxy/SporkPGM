@@ -6,6 +6,7 @@ import io.sporkpgm.map.SporkMap;
 import io.sporkpgm.module.Module;
 import io.sporkpgm.module.ModuleBuilder;
 import io.sporkpgm.rotation.Rotation;
+import io.sporkpgm.rotation.exceptions.RotationLoadException;
 import io.sporkpgm.util.Config;
 import io.sporkpgm.util.Config.Map;
 import io.sporkpgm.util.Log;
@@ -13,6 +14,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.dom4j.Document;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +28,8 @@ public class Spork extends JavaPlugin {
 	protected List<Class<? extends ModuleBuilder>> builders;
 	protected List<MapBuilder> maps;
 	protected File repository;
+
+	protected Rotation rotation;
 
 	@Override
 	public void onEnable() {
@@ -68,6 +72,27 @@ public class Spork extends JavaPlugin {
 
 		if(load.isEmpty()) {
 			Log.severe("Unable to find any maps inside the repository! Disabling plugin...");
+			setEnabled(false);
+			return;
+		}
+
+		boolean failed = false;
+		String reason = "";
+		try {
+			this.rotation = Rotation.provide();
+		} catch(RotationLoadException rle) {
+			Log.severe(rle.getClass().getSimpleName() + ": " + rle.getMessage());
+			Log.severe("Could not create a suitable Rotation! Disabling plugin...");
+			setEnabled(false);
+			return;
+		} catch(IOException ioe) {
+			Log.severe(ioe.getClass().getSimpleName() + ": " + ioe.getMessage());
+			failed = true;
+			reason = "Unable to save new Rotation";
+		}
+
+		if(failed) {
+			Log.severe(reason + "! Disabling plugin...");
 			setEnabled(false);
 			return;
 		}
@@ -115,10 +140,6 @@ public class Spork extends JavaPlugin {
 
 	public static Spork get() {
 		return spork;
-	}
-
-	private Rotation provide() {
-		
 	}
 
 	public enum StartupType {

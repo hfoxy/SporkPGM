@@ -56,7 +56,7 @@ public class Config {
 
 	public static class Rotation {
 
-		public static final String ROTATION = get("settings.rotation.file", "rotation.txt");
+		public static final File ROTATION = new File((String) get("settings.rotation.file", "rotation.txt"));
 
 	}
 

@@ -6,6 +6,12 @@ import java.util.List;
 
 public class MapLoader {
 
+	InfoModule info;
+
+	public MapLoader() {
+
+	}
+
 	public static List<MapBuilder> build(File folder) {
 		return new ArrayList<>();
 	}
