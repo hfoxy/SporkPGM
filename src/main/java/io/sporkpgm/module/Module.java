@@ -1,6 +1,5 @@
 package io.sporkpgm.module;
 
-import io.sporkpgm.module.builder.Builder;
 import org.bukkit.event.Listener;
 
 public abstract class Module implements Listener {
@@ -9,6 +8,6 @@ public abstract class Module implements Listener {
 		return new ModuleAbout(this.getClass());
 	}
 
-	public abstract Class<? extends Builder> builder();
+	public abstract Class<? extends ModuleBuilder> builder();
 
 }
