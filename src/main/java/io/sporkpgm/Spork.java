@@ -4,6 +4,7 @@ import io.sporkpgm.map.SporkMap;
 import io.sporkpgm.module.Module;
 import io.sporkpgm.module.builder.Builder;
 import io.sporkpgm.module.builder.BuilderAbout;
+import io.sporkpgm.util.Config;
 import io.sporkpgm.util.Log;
 
 import java.lang.reflect.Constructor;
@@ -22,6 +23,9 @@ public class Spork extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		spork = this;
+		
+		Config.init();
+		Log.setDebugging(Config.General.DEBUG);
 	}
 
 	public List<Module> getModules(Document document) {
