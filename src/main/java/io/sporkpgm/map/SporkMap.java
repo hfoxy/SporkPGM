@@ -14,6 +14,7 @@ import io.sporkpgm.objective.scored.ScoredObjective;
 import io.sporkpgm.player.SporkPlayer;
 import io.sporkpgm.rotation.RotationSlot;
 import io.sporkpgm.team.SporkTeam;
+import io.sporkpgm.team.spawns.SporkSpawn;
 import io.sporkpgm.util.FileUtil;
 import io.sporkpgm.util.Log;
 import org.bukkit.ChatColor;
@@ -40,6 +41,7 @@ public class SporkMap {
 
 	protected SporkTeam observers;
 	protected List<SporkTeam> teams;
+	protected List<SporkSpawn> spawns;
 
 	protected World world;
 	protected Scoreboard scoreboard;
@@ -255,6 +257,20 @@ public class SporkMap {
 
 	public Scoreboard getScoreboard() {
 		return scoreboard;
+	}
+
+	public List<SporkSpawn> getSpawns() {
+		return spawns;
+	}
+
+	public SporkSpawn getSpawn(String name) {
+		for(SporkSpawn spawn : getSpawns()) {
+			if(spawn.getName().equalsIgnoreCase(name)) {
+				return spawn;
+			}
+		}
+
+		return null;
 	}
 
 	public List<Module> getModules() {

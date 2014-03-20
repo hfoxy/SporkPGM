@@ -11,7 +11,6 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-@SuppressWarnings("ALL")
 public class BlockChangeEvent extends Event {
 
 	private static final HandlerList handlers = new HandlerList();
@@ -22,7 +21,7 @@ public class BlockChangeEvent extends Event {
 	private BlockState oldState;
 	private BlockState newState;
 
-	private BlockChangeEvent(Event cause, SporkMap map, SporkPlayer player, BlockState oldState, BlockState newState) {
+	public BlockChangeEvent(Event cause, SporkMap map, SporkPlayer player, BlockState oldState, BlockState newState) {
 		this.cause = cause;
 		this.map = map;
 		this.player = player;
@@ -66,11 +65,11 @@ public class BlockChangeEvent extends Event {
 		return getNewState().getBlock();
 	}
 
-	Location getLocation() {
+	public Location getLocation() {
 		return getNewState().getLocation();
 	}
 
-	boolean isCancellable() {
+	public boolean isCancellable() {
 		return cause instanceof Cancellable;
 	}
 
