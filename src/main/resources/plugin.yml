@@ -2,5 +2,5 @@ name: ${plugin.name}
 description: ${project.description}
 main: ${plugin.mainClass}
 version: ${project.version}
-authors: [AthenaMC,RainoBoy97]
+authors: [AthenaMC,RainoBoy97,Lymi]
 prefix: Spork
