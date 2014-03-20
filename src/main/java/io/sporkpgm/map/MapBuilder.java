@@ -9,10 +9,10 @@ import java.util.List;
 
 public class MapBuilder {
 
-	protected Document document;
-	protected File folder;
+	private Document document;
+	private File folder;
 
-	InfoModule info;
+	private InfoModule info;
 
 	public MapBuilder(Document document, File folder) {
 		this.document = document;
@@ -27,8 +27,16 @@ public class MapBuilder {
 		return folder;
 	}
 
+	public InfoModule getInfo() {
+		return info;
+	}
+
 	public String getName() {
 		return info.getName();
+	}
+
+	public SporkMap getMap() {
+		return null;
 	}
 
 	public static MapBuilder getLoader(String string) {

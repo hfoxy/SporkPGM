@@ -3,6 +3,7 @@ package io.sporkpgm.util;
 import io.sporkpgm.Spork;
 import org.bukkit.scheduler.BukkitTask;
 
+@SuppressWarnings("ALL")
 public class SchedulerUtil {
 
 	private Runnable stopRunnable = new Runnable() {
@@ -41,6 +42,10 @@ public class SchedulerUtil {
 		this.running = true;
 
 		Spork.get().getServer().getScheduler().scheduleSyncDelayedTask(Spork.get(), stopRunnable, delay);
+	}
+
+	public boolean startRepeat(long period) {
+		return startRepeat(0, period);
 	}
 
 	public boolean startRepeat(long delay, long period) {

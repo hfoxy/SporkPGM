@@ -5,7 +5,6 @@ import io.sporkpgm.Spork;
 import java.io.File;
 
 import io.sporkpgm.Spork.StartupType;
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -28,7 +27,7 @@ public class Config {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> T get(String path, Object def) {
+	private static <T> T get(String path, Object def) {
 		return (T) config.get(path, def);
 	}
 
@@ -60,7 +59,7 @@ public class Config {
 
 	}
 
-	public static class Match {
+	private static class Match {
 
 		public static final String PREFIX = get("settings.match.prefix", "match-");
 

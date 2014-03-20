@@ -1,0 +1,120 @@
+package io.sporkpgm.region.types;
+
+import io.sporkpgm.region.Region;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class CuboidRegion extends Region {
+
+	BlockRegion one;
+	BlockRegion two;
+
+	public CuboidRegion(BlockRegion one, BlockRegion two) {
+		this(null, one, two);
+	}
+
+	public CuboidRegion(String name, BlockRegion one, BlockRegion two) {
+		super(name);
+		double xMin, xMax, yMin, yMax, zMin, zMax = 0;
+		xMin = Math.min(one.getX(), two.getX());
+		xMax = Math.max(one.getX(), two.getX());
+		yMin = Math.min(one.getY(), two.getY());
+		yMax = Math.max(one.getY(), two.getY());
+		zMin = Math.min(one.getZ(), two.getZ());
+		zMax = Math.max(one.getZ(), two.getZ());
+
+		this.one = new BlockRegion(xMax, yMax, zMax);
+		this.two = new BlockRegion(xMin, yMin, zMin);
+	}
+
+	public BlockRegion[] getPoints() {
+		return new BlockRegion[]{one, two};
+	}
+
+	public List<BlockRegion> getValues() {
+		List<BlockRegion> blocks = new ArrayList<>();
+
+		double xMin, xMax, yMin, yMax, zMin, zMax = 0;
+		xMin = getPoints()[1].getX();
+		xMax = getPoints()[0].getX();
+		yMin = getPoints()[1].getY();
+		yMax = getPoints()[0].getY();
+		zMin = getPoints()[1].getZ();
+		zMax = getPoints()[0].getZ();
+
+		double px = xMin;
+		while(px <= xMax) {
+			double py = yMin;
+			while(py <= yMax) {
+				double pz = zMin;
+				while(pz <= zMax) {
+					blocks.add(new BlockRegion(px, py, pz));
+					pz++;
+				}
+				py++;
+			}
+			px++;
+		}
+
+		return blocks;
+	}
+
+	@Override
+	public boolean isInside(BlockRegion block) {
+		double xMin, xMax, yMin, yMax, zMin, zMax = 0;
+		xMin = getPoints()[1].getX();
+		xMax = getPoints()[0].getX();
+		yMin = getPoints()[1].getY();
+		yMax = getPoints()[0].getY();
+		zMin = getPoints()[1].getZ();
+		zMax = getPoints()[0].getZ();
+
+		double x = block.getX();
+		double y = block.getY();
+		double z = block.getZ();
+
+		boolean isX = x >= xMin && x <= xMax;
+		boolean isY = y >= yMin && y <= yMax;
+		boolean isZ = z >= zMin && z <= zMax;
+		return isX && isY && isZ;
+	}
+
+	public boolean isAboveOrBelow(BlockRegion region) {
+		BlockRegion block = new BlockRegion(region.getX(), getPoints()[0].getY(), region.getZ());
+		if(isInside(block)) {
+			double yMin = getPoints()[1].getY();
+			double yMax = getPoints()[0].getY();
+			if(region.getY() > yMax || region.getY() < yMin) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public boolean isAbove(BlockRegion region) {
+		BlockRegion block = new BlockRegion(region.getX(), getPoints()[0].getY(), region.getZ());
+		if(isInside(block)) {
+			double yMax = getPoints()[0].getY();
+			if(region.getY() > yMax) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public boolean isBelow(BlockRegion region) {
+		BlockRegion block = new BlockRegion(region.getX(), getPoints()[0].getY(), region.getZ());
+		if(isInside(block)) {
+			double yMin = getPoints()[1].getY();
+			if(region.getY() < yMin) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+}

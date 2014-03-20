@@ -11,6 +11,10 @@ import io.sporkpgm.rotation.exceptions.RotationLoadException;
 import io.sporkpgm.util.Config;
 import io.sporkpgm.util.Config.Map;
 import io.sporkpgm.util.Log;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.dom4j.Document;
 
@@ -113,6 +117,10 @@ public class Spork extends JavaPlugin {
 		return getModules(document, builders);
 	}
 
+	public List<Module> getModules(SporkMap map) {
+		return getModules(map, builders);
+	}
+
 	public List<Module> getModules(Document document, List<Class<? extends Builder>> builders) {
 		List<Module> modules = new ArrayList<>();
 
@@ -124,7 +132,6 @@ public class Spork extends JavaPlugin {
 				modules.addAll(builder.build());
 			} catch(Exception e) {
 				getLogger().warning("Error when loading '" + clazz.getSimpleName() + "' due to " + e.getClass().getSimpleName());
-				continue;
 			}
 		}
 
@@ -142,7 +149,6 @@ public class Spork extends JavaPlugin {
 				modules.addAll(builder.build());
 			} catch(Exception e) {
 				getLogger().warning("Error when loading '" + clazz.getSimpleName() + "' due to " + e.getClass().getSimpleName());
-				continue;
 			}
 		}
 
@@ -161,12 +167,58 @@ public class Spork extends JavaPlugin {
 		builders = new ArrayList<>();
 	}
 
+	public Rotation getRotation() {
+		return rotation;
+	}
+
 	public static Spork get() {
 		return spork;
 	}
 
 	public static List<MapBuilder> getMaps() {
 		return get().maps;
+	}
+
+	public static void registerListeners(Listener... listeners) {
+		for(Listener listener : listeners) {
+			registerListener(listener);
+		}
+	}
+
+	public static void registerListener(Listener listener) {
+		get().getServer().getPluginManager().registerEvents(listener, get());
+	}
+
+	public static void unregisterListeners(Listener... listeners) {
+		for(Listener listener : listeners) {
+			unregisterListener(listener);
+		}
+	}
+
+	public static void unregisterListener(Listener listener) {
+		HandlerList.unregisterAll(listener);
+	}
+
+	public static void callEvents(Event... events) {
+		for(Event event : events) {
+			get().getServer().getPluginManager().callEvent(event);
+		}
+	}
+
+	public static void callEvent(Event event) {
+		get().getServer().getPluginManager().callEvent(event);
+	}
+
+	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
+	public static boolean hasPlugin(String name) {
+		return get().getServer().getPluginManager().getPlugin(name) != null;
+	}
+
+	public static Plugin getPlugin(String name) {
+		if(!hasPlugin(name)) {
+			return null;
+		}
+		return get().getServer().getPluginManager().getPlugin(name);
 	}
 
 	public enum StartupType {
