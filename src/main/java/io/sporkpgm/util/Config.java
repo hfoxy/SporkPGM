@@ -4,7 +4,7 @@ import io.sporkpgm.Spork;
 
 import java.io.File;
 
-import org.bukkit.ChatColor;
+import io.sporkpgm.Spork.StartupType;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -27,7 +27,7 @@ public class Config {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> T get(String path, Object def) {
+	private static <T> T get(String path, Object def) {
 		return (T) config.get(path, def);
 	}
 
@@ -42,26 +42,26 @@ public class Config {
 
 	public static class General {
 
-		public static final boolean DEBUG = get("general.debug", false);
+		public static final boolean DEBUG = get("settings.debug", false);
 
 	}
 
 	public static class Map {
 
-		public static final String DIRECTORY = get("map.directory", "maps");
-		public static final String CONFIG = get("map.config", "map.xml");
+		public static final File DIRECTORY = new File((String) get("settings.maps.repository", "maps/"));
+		public static final StartupType STARTUP = StartupType.getType((String) get("settings.maps.startup", "all"));
 
 	}
 
 	public static class Rotation {
 
-		public static final String ROTATION = get("rotation.file", "rotation.txt");
+		public static final File ROTATION = new File((String) get("settings.rotation.file", "rotation.txt"));
 
 	}
 
-	public static class Match {
+	private static class Match {
 
-		public static final String PREFIX = get("match.prefix", "match-");
+		public static final String PREFIX = get("settings.match.prefix", "match-");
 
 	}
 

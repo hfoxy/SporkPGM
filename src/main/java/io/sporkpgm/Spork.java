@@ -1,32 +1,30 @@
 package io.sporkpgm;
 
-import io.sporkpgm.commands.AdminCommands;
-import io.sporkpgm.commands.UserCommands;
+import io.sporkpgm.map.MapBuilder;
 import io.sporkpgm.map.MapLoader;
-import io.sporkpgm.map.MapManager;
 import io.sporkpgm.map.SporkMap;
-import io.sporkpgm.match.MatchManager;
 import io.sporkpgm.module.Module;
 import io.sporkpgm.module.builder.Builder;
 import io.sporkpgm.module.builder.BuilderAbout;
 import io.sporkpgm.rotation.Rotation;
+import io.sporkpgm.rotation.exceptions.RotationLoadException;
 import io.sporkpgm.util.Config;
+import io.sporkpgm.util.Config.Map;
 import io.sporkpgm.util.Log;
-
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.dom4j.Document;
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.dom4j.Document;
-import org.joda.time.Duration;
-import org.joda.time.Instant;
-
 import com.sk89q.bukkit.util.CommandsManagerRegistration;
 import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.minecraft.util.commands.CommandPermissionsException;
@@ -35,48 +33,83 @@ import com.sk89q.minecraft.util.commands.CommandsManager;
 import com.sk89q.minecraft.util.commands.MissingNestedCommandException;
 import com.sk89q.minecraft.util.commands.WrappedCommandException;
 
+import static io.sporkpgm.Spork.StartupType.*;
+
 public class Spork extends JavaPlugin {
 
-	private static Spork spork;
+	protected static Spork spork;
 
-	private CommandsManager<CommandSender> commands;
-
-	private MapManager mapManager;
-	private MatchManager matchManager;
-
+	protected CommandsManager<CommandSender> commands;
 	protected List<Class<? extends Builder>> builders;
+	protected List<MapBuilder> maps;
+	protected File repository;
+
+	protected Rotation rotation;
 
 	@Override
 	public void onEnable() {
-		Instant start = Instant.now();
 		spork = this;
+		saveDefaultConfig();
 
 		Config.init();
 		Log.setDebugging(Config.General.DEBUG);
+		if(getConfig().getString("settings.maps.repository") == null) {
+			getConfig().set("settings.maps.repository", "maps/");
+		}
 
-		Log.info("Loading maps...");
-		MapLoader loader = new MapLoader();
-		File mapDir = new File(Config.Map.DIRECTORY);
-		Collection<SporkMap> maps = loader.loadMaps(mapDir);
+		repository = Map.DIRECTORY;
+		maps = new ArrayList<>();
 
-		if (maps.size() < 1) {
-			Log.warning("I need at least 1 (one) map in order to function!");
-			Log.warning("Disabling...");
-			this.getServer().getPluginManager().disablePlugin(this);
+		StartupType type = Map.STARTUP;
+
+		List<MapBuilder> all = MapLoader.build(repository);
+		List<MapBuilder> load = new ArrayList<>();
+		if(type == ALL) {
+			load.addAll(all);
+		} else if(type == SPECIFIED) {
+			load.clear();
+			List<String> specified = getConfig().getStringList("settings.maps.load");
+			if(specified != null) {
+				for(MapBuilder map : all) {
+					if(contains(specified, "map name")) {
+						load.add(map);
+					}
+				}
+			}
+		}
+
+		if(load.isEmpty() && type != SPECIFIED) {
+			Log.warning("No maps were available from the specified list - loading all maps");
+			load = new ArrayList<>();
+			load.addAll(all);
+		}
+
+		if(load.isEmpty()) {
+			Log.severe("Unable to find any maps inside the repository! Disabling plugin...");
+			setEnabled(false);
 			return;
 		}
 
-		this.mapManager = new MapManager(maps);
+		boolean failed = false;
+		String reason = "";
+		try {
+			this.rotation = Rotation.provide();
+		} catch(RotationLoadException rle) {
+			Log.severe(rle.getClass().getSimpleName() + ": " + rle.getMessage());
+			Log.severe("Could not create a suitable Rotation! Disabling plugin...");
+			setEnabled(false);
+			return;
+		} catch(IOException ioe) {
+			Log.severe(ioe.getClass().getSimpleName() + ": " + ioe.getMessage());
+			failed = true;
+			reason = "Unable to save new Rotation";
+		}
 
-		Log.info("Loading rotation...");
-		File rotationFile = new File(this.getDataFolder(), Config.Rotation.ROTATION);
-		Rotation rotation = new Rotation(mapManager, rotationFile);
-		this.matchManager = new MatchManager(rotation);
-
-		Log.info("Loading commands...");
-		this.registerCommands();
-		
-		Log.info("Successfully enabled in " + new Duration(start, Instant.now()).getMillis() + "ms!");
+		if(failed) {
+			Log.severe(reason + "! Disabling plugin...");
+			setEnabled(false);
+			return;
+		}
 	}
 
 	private void registerCommands() {
@@ -86,8 +119,6 @@ public class Spork extends JavaPlugin {
 			}
 		};
 		CommandsManagerRegistration cmr = new CommandsManagerRegistration(this, this.commands);
-		cmr.register(UserCommands.class);
-		cmr.register(AdminCommands.class);
 	}
 
 	@Override
@@ -114,62 +145,161 @@ public class Spork extends JavaPlugin {
 		return true;
 	}
 
+	private boolean contains(List<String> strings, String search) {
+		for(String string : strings) {
+			if(string.equalsIgnoreCase(search)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	public List<Module> getModules(Document document) {
 		return getModules(document, builders);
+	}
+
+	public List<Module> getModules(SporkMap map) {
+		return getModules(map, builders);
 	}
 
 	public List<Module> getModules(Document document, List<Class<? extends Builder>> builders) {
 		List<Module> modules = new ArrayList<>();
 
-		for (Class<? extends Builder> clazz : builders) {
+		for(Class<? extends Builder> clazz : builders) {
 			try {
-				Constructor<? extends Builder> constructor = clazz.getConstructor(Document.class);
+				Constructor constructor = clazz.getConstructor(Document.class);
 				constructor.setAccessible(true);
 				Builder builder = (Builder) constructor.newInstance(document);
-				BuilderAbout about = builder.getInfo();
-
-				if (!about.isDocumentable()) {
-					constructor = clazz.getConstructor(SporkMap.class);
-					builder = (Builder) constructor.newInstance(document);
-				}
-			} catch (Exception e) {
-				Log.warning("Error when loading '" + clazz.getSimpleName() + "' due to " + e.getClass().getSimpleName());
-				continue;
+				modules.addAll(builder.build());
+			} catch(Exception e) {
+				getLogger().warning("Error when loading '" + clazz.getSimpleName() + "' due to " + e.getClass().getSimpleName());
 			}
 		}
 
 		return modules;
 	}
 
-	public List<Class<? extends Builder>> getBuilders() {
-		return builders;
-	}
+	public List<Module> getModules(SporkMap map, List<Class<? extends Builder>> builders) {
+		List<Module> modules = new ArrayList<>();
 
-	public List<Class<? extends Builder>> getBuilders(List<Class<? extends Builder>> builders, boolean documentable) {
-		List<Class<? extends Builder>> classes = new ArrayList<>();
-
-		for (Class<? extends Builder> clazz : builders) {
+		for(Class<? extends Builder> clazz : builders) {
 			try {
-				if (documentable && Builder.isDocumentable(clazz)) {
-					classes.add(clazz);
-				} else {
-					classes.add(clazz);
-				}
-			} catch (Exception e) {
-				Log.warning("Error when loading '" + clazz.getSimpleName() + "' due to " + e.getClass().getSimpleName());
-				continue;
+				Constructor constructor = clazz.getConstructor(SporkMap.class, Document.class);
+				constructor.setAccessible(true);
+				Builder builder = (Builder) constructor.newInstance(map, map.getDocument());
+				modules.addAll(builder.build());
+			} catch(Exception e) {
+				getLogger().warning("Error when loading '" + clazz.getSimpleName() + "' due to " + e.getClass().getSimpleName());
 			}
 		}
 
-		return classes;
+		return modules;
+	}
+
+	public boolean isDocumentable(Class<? extends Builder> clazz) {
+		return new BuilderAbout(clazz).isDocumentable();
+	}
+
+	public List<Class<? extends Builder>> getBuilders() {
+		return builders;
 	}
 
 	protected void builders() {
 		builders = new ArrayList<>();
 	}
 
+	public Rotation getRotation() {
+		return rotation;
+	}
+
 	public static Spork get() {
 		return spork;
+	}
+
+	public static List<MapBuilder> getMaps() {
+		return get().maps;
+	}
+
+	public static void registerListeners(Listener... listeners) {
+		for(Listener listener : listeners) {
+			registerListener(listener);
+		}
+	}
+
+	public static void registerListener(Listener listener) {
+		get().getServer().getPluginManager().registerEvents(listener, get());
+	}
+
+	public static void unregisterListeners(Listener... listeners) {
+		for(Listener listener : listeners) {
+			unregisterListener(listener);
+		}
+	}
+
+	public static void unregisterListener(Listener listener) {
+		HandlerList.unregisterAll(listener);
+	}
+
+	public static void callEvents(Event... events) {
+		for(Event event : events) {
+			get().getServer().getPluginManager().callEvent(event);
+		}
+	}
+
+	public static void callEvent(Event event) {
+		get().getServer().getPluginManager().callEvent(event);
+	}
+
+	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
+	public static boolean hasPlugin(String name) {
+		return get().getServer().getPluginManager().getPlugin(name) != null;
+	}
+
+	public static Plugin getPlugin(String name) {
+		if(!hasPlugin(name)) {
+			return null;
+		}
+		return get().getServer().getPluginManager().getPlugin(name);
+	}
+
+	public enum StartupType {
+
+		ALL(new String[]{"all"}),
+		SPECIFIED(new String[]{"specified", "specify", "listed"});
+
+		String[] names;
+
+		StartupType(String[] names) {
+			this.names = names;
+		}
+
+		public String[] getNames() {
+			return names;
+		}
+
+		public boolean matches(String name) {
+			for(String value : names) {
+				if(value.equalsIgnoreCase(name)) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		public static StartupType getType(String name) {
+			if(name != null) {
+				for(StartupType type : values()) {
+					if(type.matches(name)) {
+						return type;
+					}
+				}
+			}
+
+			return ALL;
+		}
+
 	}
 
 }

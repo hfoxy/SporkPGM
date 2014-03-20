@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 
 public class BuilderAbout {
 
-	BuilderInfo info;
+	private BuilderInfo info;
 
 	public BuilderAbout(Class<? extends Builder> module) {
 		Preconditions.checkArgument(module.isAnnotationPresent(BuilderInfo.class), "Module must have a BuilderInfo annotation");

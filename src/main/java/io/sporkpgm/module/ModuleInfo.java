@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface BuilderInfo {
+public @interface ModuleInfo {
 
 	public abstract String name();
 

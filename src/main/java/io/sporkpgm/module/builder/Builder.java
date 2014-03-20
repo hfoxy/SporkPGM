@@ -2,6 +2,7 @@ package io.sporkpgm.module.builder;
 
 import io.sporkpgm.map.SporkMap;
 import io.sporkpgm.module.Module;
+import io.sporkpgm.module.exceptions.ModuleLoadException;
 import org.dom4j.Document;
 
 import java.lang.reflect.Constructor;
@@ -9,8 +10,8 @@ import java.util.List;
 
 public abstract class Builder {
 
-	SporkMap map;
-	Document document;
+	protected SporkMap map;
+	protected Document document;
 
 	public Builder(Document document) {
 		this.document = document;
@@ -21,9 +22,9 @@ public abstract class Builder {
 		this.map = map;
 	}
 
-	public abstract List<Module> build();
+	public abstract List<Module> build() throws ModuleLoadException;
 
-	public BuilderAbout getInfo() {
+	BuilderAbout getInfo() {
 		return new BuilderAbout(this.getClass());
 	}
 

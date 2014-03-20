@@ -1,0 +1,545 @@
+package io.sporkpgm.player;
+
+import io.sporkpgm.Spork;
+import io.sporkpgm.map.SporkMap;
+import io.sporkpgm.map.event.BlockChangeEvent;
+import io.sporkpgm.match.Match;
+import io.sporkpgm.match.MatchPhase;
+import io.sporkpgm.player.event.PlayerAddEvent;
+import io.sporkpgm.player.event.PlayerChatEvent;
+import io.sporkpgm.player.event.PlayerInventoryLoadoutEvent;
+import io.sporkpgm.player.event.PlayerJoinTeamEvent;
+import io.sporkpgm.player.event.PlayerRemoveEvent;
+import io.sporkpgm.player.rank.Permission;
+import io.sporkpgm.player.rank.Rank;
+import io.sporkpgm.rotation.RotationSlot;
+import io.sporkpgm.team.SporkTeam;
+import io.sporkpgm.team.spawns.SporkSpawn;
+import io.sporkpgm.util.Log;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.permissions.PermissionAttachment;
+import org.bukkit.potion.PotionEffectType;
+
+import java.lang.ref.WeakReference;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
+import java.util.List;
+
+public class SporkPlayer implements Listener {
+
+	static List<SporkPlayer> players = new ArrayList<>();
+
+	public static SporkPlayer add(Player player) {
+		return add(player, true);
+	}
+
+	public static SporkPlayer add(Player player, boolean check) {
+		if(check && getPlayer(player) != null) {
+			return getPlayer(player);
+		}
+
+		SporkPlayer about = new SporkPlayer(player);
+		players.add(about);
+
+		Spork.registerListener(about);
+		Spork.callEvent(new PlayerAddEvent(player));
+		return about;
+	}
+
+	public static boolean remove(SporkPlayer player) {
+		return remove(player.getPlayer());
+	}
+
+	public static boolean remove(Player player) {
+		if(getPlayer(player) == null) {
+			return false;
+		}
+
+		SporkPlayer about = getPlayer(player);
+		players.remove(getPlayer(player));
+
+		Spork.unregisterListener(about);
+		Spork.callEvent(new PlayerRemoveEvent(player));
+		return true;
+	}
+
+	public static SporkPlayer getPlayer(Player player) {
+		for(SporkPlayer about : players)
+			if(about.getPlayer() == player)
+				return about;
+
+		return add(player, false);
+	}
+
+	public static SporkPlayer getPlayer(String username) {
+		for(SporkPlayer about : players)
+			if(about.getPlayer().getName().equalsIgnoreCase(username))
+				return about;
+
+		for(SporkPlayer about : players)
+			if(about.getPlayer().getName().startsWith(username))
+				return about;
+
+		return null;
+	}
+
+	public static List<SporkPlayer> getPlayers() {
+		return players;
+	}
+
+	WeakReference<Player> player;
+	String name;
+	SporkTeam team;
+	Inventory inventory;
+	List<PermissionAttachment> attachments;
+	String uuid;
+
+	boolean joined;
+	int score;
+
+	int lives;
+
+	List<Rank> ranks;
+
+	SporkPlayer(Player player) {
+		this.player = new WeakReference<>(player);
+		this.ranks = new ArrayList<>();
+		this.attachments = new ArrayList<>();
+		this.name = player.getName();
+	}
+
+	public Player getPlayer() {
+		return player.get();
+	}
+
+	public List<Rank> getRanks() {
+		return ranks;
+	}
+
+	public Inventory getInventory() {
+		updateInventory();
+		return inventory;
+	}
+
+	public void updateInventory() {
+		if(inventory == null) {
+			inventory = getPlayer().getServer().createInventory(null, 45, getPlayer().getDisplayName());
+		}
+
+		final int health = getPlayer().getHealth() <= 0 ? 1 : (int) getPlayer().getHealth();
+		ItemStack healthBar = new ItemStack(Material.POTION, health);
+		PotionMeta potionMeta = (PotionMeta) healthBar.getItemMeta();
+		potionMeta.setDisplayName(ChatColor.RED + "Health");
+		potionMeta.setLore(new ArrayList<String>() {
+			{
+				add(health + " Health.");
+			}
+		});
+		potionMeta.setMainEffect(PotionEffectType.HEAL);
+		healthBar.setItemMeta(potionMeta);
+
+		ItemStack foodBar = new ItemStack(Material.COOKED_CHICKEN, getPlayer().getFoodLevel());
+		ItemMeta foodMeta = foodBar.getItemMeta();
+		foodMeta.setDisplayName(ChatColor.GOLD + "Food");
+		foodMeta.setLore(new ArrayList<String>() {
+			{
+				add(getPlayer().getFoodLevel() + " Food.");
+			}
+		});
+		foodBar.setItemMeta(foodMeta);
+
+		inventory.setItem(7, healthBar);
+		inventory.setItem(8, foodBar);
+		inventory.setItem(0, getPlayer().getInventory().getBoots());
+		inventory.setItem(1, getPlayer().getInventory().getLeggings());
+		inventory.setItem(2, getPlayer().getInventory().getChestplate());
+		inventory.setItem(3, getPlayer().getInventory().getHelmet());
+
+		for(int i = 0; i < getPlayer().getInventory().getContents().length; i++) {
+			inventory.setItem(i < 9 ? 36 + i : i, getPlayer().getInventory().getContents()[i]);
+		}
+	}
+
+	public PermissionAttachment getAttachment() {
+		PermissionAttachment attachment = getPlayer().addAttachment(Spork.get());
+		attachments.add(attachment);
+		return attachment;
+	}
+
+	public boolean hasPermission(Permission permission) {
+		return hasPermission(permission.getPermission());
+	}
+
+	public boolean hasPermission(String name) {
+		return getPlayer().hasPermission(name);
+	}
+
+	public boolean addPermission(Permission permission) {
+		if(hasPermission(permission)) {
+			return false;
+		}
+
+		getAttachment().setPermission(permission.getPermission(), true);
+
+		return true;
+	}
+
+	public boolean removePermission(Permission permission) {
+		if(!hasPermission(permission)) {
+			return false;
+		}
+
+		getAttachment().unsetPermission(permission.getPermission());
+
+		return true;
+	}
+
+	public boolean addRank(Rank rank) {
+		if(getRanks().contains(rank)) {
+			return false;
+		}
+
+		getRanks().add(rank);
+		for(Permission perm : rank.getPermissions()) {
+			addPermission(perm);
+		}
+		return true;
+	}
+
+	public boolean removeRank(Rank rank) {
+		if(!getRanks().contains(rank)) {
+			return false;
+		}
+
+		getRanks().remove(rank);
+		for(Permission perm : rank.getPermissions()) {
+			if(!hasPermission(perm.getPermission())) {
+				removePermission(perm);
+			}
+		}
+
+		return true;
+	}
+
+	public boolean hasRank(Rank rank) {
+		return getRanks().contains(rank);
+	}
+
+	public String getPrefix() {
+		StringBuilder sb = new StringBuilder();
+		for(Rank rank : ranks) {
+			sb.append(rank.getPrefix());
+		}
+		return sb.toString();
+	}
+
+	public String getFormat(String message, boolean team) {
+		return message;
+	}
+
+	public SporkTeam getTeam() {
+		return team;
+	}
+
+	public SporkTeam setTeam(SporkTeam team) {
+		boolean display = getTeam() != null;
+		boolean running = Spork.get().getRotation().getCurrentMatch().getPhase() == MatchPhase.PLAYING;
+		boolean inventory = running || !display;
+		boolean teleport = !display || running;
+		return setTeam(team, display, inventory, teleport);
+	}
+
+	public SporkTeam setTeam(SporkTeam team, boolean display, boolean inventory, boolean teleport) {
+		PlayerJoinTeamEvent event = new PlayerJoinTeamEvent(this, team);
+		Spork.callEvent(event);
+
+		if(event.isCancelled()) {
+			getPlayer().sendMessage(ChatColor.RED + event.getReason());
+			return this.team;
+		}
+
+		this.team = team;
+
+		SporkSpawn spawn = team.getSporkSpawn();
+
+		if(display)
+			display();
+		if(inventory)
+			inventory(spawn);
+		if(teleport)
+			teleport(spawn);
+
+		getPlayer().setDisplayName(getPrefix() + team.getColor() + getPlayer().getName());
+		getTeam().getTeam().addPlayer(getPlayer());
+		getPlayer().setScoreboard(team.getMap().getScoreboard());
+
+		return team;
+	}
+
+	public void display() {
+		SporkTeam team = getTeam();
+		if(team.isObservers())
+			getPlayer().sendMessage(ChatColor.GRAY + "You are now " + ChatColor.AQUA + "Observing" + ChatColor.GRAY + ".");
+		else
+			getPlayer().sendMessage(ChatColor.GRAY + "You have joined the " + team.getColoredName() + ChatColor.GRAY + ".");
+	}
+
+	public void inventory(SporkSpawn spawn) {
+		empty();
+		boolean update = false;
+		GameMode mode = GameMode.CREATIVE;
+		String[] perms = {"worldedit.navigation.jump.*", "worldedit.navigation.thru.*", "commandbook.teleport"};
+		if(getTeam().isObservers() || !RotationSlot.getRotation().getCurrentMatch().isRunning()) {
+			ItemStack compass = new ItemStack(Material.COMPASS);
+			ItemMeta meta = compass.getItemMeta();
+			meta.setDisplayName(ChatColor.AQUA + "Teleportation Device");
+			compass.setItemMeta(meta);
+			getPlayer().getInventory().setItem(0, compass);
+			for(String permission : perms)
+				addPermission(new Permission(permission, 0));
+		} else {
+			update = true;
+			mode = GameMode.SURVIVAL;
+			if(spawn.hasKit()) {
+				Log.info("SporkSpawn.hasKit() == true... Applying kit!");
+				spawn.getKit().apply(this);
+			}
+			for(String permission : perms)
+				removePermission(new Permission(permission, 0));
+		}
+
+		try {
+			// getPlayer().setAffectsSpawning(update);
+			Method spawning = getPlayer().getClass().getMethod("setAffectsSpawning", Boolean.class);
+			spawning.invoke(getPlayer(), update);
+
+			// getPlayer().setCollidesWithEntities(update);
+			Method collides = getPlayer().getClass().getMethod("setCollidesWithEntities", Boolean.class);
+			collides.invoke(getPlayer(), update);
+
+			// getPlayer().setArrowsStuck(0);
+			Method arrows = getPlayer().getClass().getMethod("setArrowsStuck", Integer.class);
+			arrows.invoke(getPlayer(), update);
+		} catch(Exception e) {
+			Log.warning("Not running Spork or AthenaBukkit, skipping affects spawning...");
+		}
+
+		getPlayer().setCanPickupItems(update);
+		getPlayer().setFireTicks(0);
+		getPlayer().setFallDistance(0);
+		getPlayer().setExp(0);
+		getPlayer().setHealth(20);
+		getPlayer().setFoodLevel(20);
+		getPlayer().setSaturation(20);
+		getPlayer().setGameMode(mode);
+		PlayerInventoryLoadoutEvent event = new PlayerInventoryLoadoutEvent(this, spawn);
+		Spork.callEvent(event);
+
+		vanish();
+	}
+
+	public void teleport(SporkSpawn spawn) {
+		try {
+			getPlayer().teleport(spawn.getSpawn());
+		} catch(ConcurrentModificationException e) {
+			e.printStackTrace();
+			teleport(spawn);
+		}
+	}
+
+	public void empty() {
+		clearPotionEffects();
+		getPlayer().getInventory().clear();
+		getPlayer().getInventory().setHelmet(null);
+		getPlayer().getInventory().setChestplate(null);
+		getPlayer().getInventory().setLeggings(null);
+		getPlayer().getInventory().setBoots(null);
+	}
+
+	public void clearPotionEffects() {
+		clearPotionEffects(PotionEffectType.values());
+	}
+
+	public void clearPotionEffects(PotionEffectType[] types) {
+		for(PotionEffectType type : types)
+			if(type != null)
+				try {
+					if(getPlayer().hasPotionEffect(type))
+						getPlayer().removePotionEffect(type);
+				} catch(NullPointerException e) {
+					Log.warning("NullPointerException thrown when trying to remove '" + type.getName() + "' from '" + getPlayer().getName() + "'");
+				}
+	}
+
+	public boolean isObserver() {
+		return getTeam() == null || getTeam().isObservers();
+	}
+
+	public boolean isParticipating() {
+		return getTeam() == null && !getTeam().isObservers() && RotationSlot.getRotation().getCurrentMatch().isRunning();
+	}
+
+	public ChatColor getTeamColour() {
+		return getTeam() == null ? ChatColor.AQUA : getTeam().getColor();
+	}
+
+	public String getFullName() {
+		return getPrefix() + getTeamColour() + getName();
+	}
+
+	public int getLives() {
+		return lives;
+	}
+
+	public void setLives(int lives) {
+		this.lives = lives;
+	}
+
+	public int addLife() {
+		return addLives(1);
+	}
+
+	public int addLives(int lives) {
+		this.lives = this.lives + lives;
+		return this.lives;
+	}
+
+	public int takeLife() {
+		return takeLives(1);
+	}
+
+	public int takeLives(int lives) {
+		this.lives = this.lives - lives;
+		return this.lives;
+	}
+
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+
+	public int addScore() {
+		return addScore(1);
+	}
+
+	public int addScore(int amount) {
+		this.score = score + amount;
+		return this.score;
+	}
+
+	@EventHandler
+	public void onPlayerChat(AsyncPlayerChatEvent event) {
+		if(event.getPlayer() != getPlayer())
+			return;
+		event.setCancelled(true);
+		PlayerChatEvent pce = new PlayerChatEvent(this, event.getMessage(), true);
+		Spork.callEvent(pce);
+	}
+
+	@EventHandler
+	public void onPlayerChat(PlayerChatEvent event) {
+		if(event.getPlayer() != this)
+			return;
+		if(event.getPlayer().getTeam() == null) {
+			Log.info(event.getPlayer().getPlayer().getName() + "'s team was null!");
+			setTeam(Spork.get().getRotation().getCurrent().getObservers());
+		}
+
+		boolean team = event.isTeam() && getTeam() != null;
+		String pre = (team ? getTeamColour() + "[Team] " : "");
+		String full = pre + getFullName() + ChatColor.WHITE + ": " + event.getMessage();
+		if(team) {
+			for(SporkPlayer player : getTeam().getPlayers()) {
+				player.getPlayer().sendMessage(full);
+			}
+		} else {
+			for(Player player : Bukkit.getOnlinePlayers()) {
+				player.sendMessage(full);
+			}
+		}
+		Bukkit.getConsoleSender().sendMessage(full);
+	}
+
+	@EventHandler
+	public void onBlockChange(BlockChangeEvent event) {
+		if(event.getPlayer() != this)
+			return;
+
+		Match match = RotationSlot.getRotation().getCurrentMatch();
+		if(isObserver() || !match.isRunning())
+			event.setCancelled(true);
+	}
+
+	@EventHandler
+	public void onPlayerRespawn(PlayerRespawnEvent event) {
+		if(event.getPlayer() != getPlayer())
+			return;
+		SporkSpawn spawn = getTeam().getSporkSpawn();
+		event.setRespawnLocation(spawn.getSpawn());
+		inventory(spawn);
+	}
+
+	public static void vanish() {
+		Match match = RotationSlot.getRotation().getCurrentMatch();
+		for(SporkPlayer player : getPlayers()) {
+			SporkMap map = player.getTeam().getMap();
+			List<SporkPlayer> observers = map.getObservers().getPlayers();
+			List<SporkPlayer> players = new ArrayList<>();
+			for(SporkTeam team : map.getTeams())
+				players.addAll(team.getPlayers());
+
+			if(match.isRunning()) {
+				for(SporkPlayer observer : observers)
+					for(SporkPlayer update : getPlayers())
+						try {
+							observer.getPlayer().showPlayer(update.getPlayer());
+						} catch(IllegalStateException e) {
+							e.printStackTrace();
+						}
+				for(SporkPlayer other : players) {
+					for(SporkPlayer update : observers)
+						try {
+							other.getPlayer().hidePlayer(update.getPlayer());
+						} catch(IllegalStateException e) {
+							e.printStackTrace();
+						}
+					for(SporkPlayer update : players)
+						try {
+							other.getPlayer().showPlayer(update.getPlayer());
+						} catch(IllegalStateException e) {
+							e.printStackTrace();
+						}
+				}
+			} else {
+				for(SporkPlayer observer : getPlayers())
+					for(SporkPlayer update : getPlayers())
+						try {
+							observer.getPlayer().showPlayer(update.getPlayer());
+						} catch(IllegalStateException e) {
+							e.printStackTrace();
+						}
+			}
+		}
+	}
+
+	public String getName() {
+		return name;
+	}
+}

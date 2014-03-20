@@ -1,4 +1,7 @@
-name: ${plugin.Name}
-version: ${version}
+name: ${plugin.name}
+description: ${project.description}
 main: ${plugin.mainClass}
-authors: [ParaPenguin, RainoBoy97]
+version: ${project.version}
+authors: [AthenaMC]
+depend: [Commons]
+prefix: Manager

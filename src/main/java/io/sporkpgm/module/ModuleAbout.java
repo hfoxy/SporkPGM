@@ -8,16 +8,16 @@ import java.util.List;
 
 public class ModuleAbout {
 
-	BuilderInfo info;
+	ModuleInfo info;
 	List<Class<? extends Module>> requires = new ArrayList<>();
 
 	public ModuleAbout(Class<? extends Module> module) {
-		Preconditions.checkArgument(module.isAnnotationPresent(BuilderInfo.class), "Module must have a BuilderInfo annotation");
-		this.info = module.getAnnotation(BuilderInfo.class);
+		Preconditions.checkArgument(module.isAnnotationPresent(ModuleInfo.class), "Module must have a ModuleInfo annotation");
+		this.info = module.getAnnotation(ModuleInfo.class);
 		this.requires.addAll(Arrays.asList(info.requires()));
 	}
 
-	public BuilderInfo getInfo() {
+	public ModuleInfo getInfo() {
 		return info;
 	}
 

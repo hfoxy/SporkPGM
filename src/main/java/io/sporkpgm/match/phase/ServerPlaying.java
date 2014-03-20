@@ -1,0 +1,69 @@
+package io.sporkpgm.match.phase;
+
+import io.sporkpgm.match.Match;
+import io.sporkpgm.match.MatchPhase;
+import io.sporkpgm.player.SporkPlayer;
+import io.sporkpgm.team.SporkTeam;
+import io.sporkpgm.util.Chars;
+import org.bukkit.ChatColor;
+
+import java.util.List;
+
+public class ServerPlaying extends ServerPhase {
+
+	public ServerPlaying(Match match, MatchPhase phase) {
+		this.match = match;
+		this.phase = phase;
+	}
+
+	@Override
+	public void run() {
+		if(complete)
+			return;
+		duration++;
+
+		List<SporkPlayer> players = match.getMap().getPlayers();
+		if(duration % 5 == 0) {
+			for(SporkPlayer player : players) {
+				player.updateInventory();
+			}
+		}
+
+		match.getMap().checkEnded();
+		if(players.size() <= 1) {
+			String left = ChatColor.DARK_RED + "" + ChatColor.BOLD + arrows(Chars.RAQUO) + " ";
+			String right = " " + ChatColor.DARK_RED + "" + ChatColor.BOLD + arrows(Chars.LAQUO);
+
+			broadcast(left + ChatColor.RED + "Server cycling due to only 1 player!" + right);
+			end();
+		} else if(match.getMap().hasEnded()) {
+			end();
+		}
+	}
+
+	public void end() {
+		match.setPhase(MatchPhase.CYCLING);
+
+		for(SporkTeam team : match.getMap().getTeams())
+			for(SporkPlayer player : team.getPlayers())
+				player.setTeam(team, false, true, false);
+		match.getMap().stop();
+
+		complete = true;
+
+		SporkTeam winner = match.getMap().getWinner();
+		String message = ChatColor.GOLD + "Match Ended";
+		if(winner != null && !winner.isObservers()) {
+			message = winner.getColoredName() + ChatColor.GOLD + " wins";
+		}
+
+		String left = ChatColor.DARK_PURPLE + arrows(Chars.RAQUO);
+		String right = ChatColor.DARK_PURPLE + arrows(Chars.LAQUO);
+		broadcast(left + " " + message + " " + right);
+	}
+
+	public String arrows(Chars chars) {
+		return chars + " " + chars;
+	}
+
+}
