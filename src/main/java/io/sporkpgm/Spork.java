@@ -1,5 +1,10 @@
 package io.sporkpgm;
 
+import io.sporkpgm.listeners.BlockListener;
+import io.sporkpgm.listeners.ConnectionListener;
+import io.sporkpgm.listeners.EntityListener;
+import io.sporkpgm.listeners.MapListener;
+import io.sporkpgm.listeners.PlayerListener;
 import io.sporkpgm.map.MapBuilder;
 import io.sporkpgm.map.MapLoader;
 import io.sporkpgm.map.SporkMap;
@@ -110,6 +115,9 @@ public class Spork extends JavaPlugin {
 			setEnabled(false);
 			return;
 		}
+
+		registerCommands();
+		registerListeners();
 	}
 
 	private void registerCommands() {
@@ -219,6 +227,15 @@ public class Spork extends JavaPlugin {
 
 	public static List<MapBuilder> getMaps() {
 		return get().maps;
+	}
+
+	private void registerListeners() {
+		Log.info("Loading Listeners...");
+		registerListener(new ConnectionListener());
+		registerListener(new BlockListener());
+		registerListener(new EntityListener());
+		registerListener(new MapListener());
+		registerListener(new PlayerListener());
 	}
 
 	public static void registerListeners(Listener... listeners) {
