@@ -17,8 +17,16 @@ public class BlockRegion extends Region {
 	public static int INFINITE_NEGATIVE = Integer.MIN_VALUE;
 
 	String x;
+	double xD;
+	int xI;
+
 	String y;
+	double yD;
+	int yI;
+
 	String z;
+	double zD;
+	int zI;
 
 	public BlockRegion(int x, int y, int z) {
 		this(null, x + "", y + "", z + "");
@@ -43,8 +51,62 @@ public class BlockRegion extends Region {
 	public BlockRegion(String name, String x, String y, String z) {
 		super(name);
 		this.x = x;
+		this.xD = parseDouble(x);
+		this.xI = parseInteger(x);
+
 		this.y = y;
+		this.yD = parseDouble(y);
+		this.yI = parseInteger(y);
+
 		this.z = z;
+		this.zD = parseDouble(z);
+		this.zI = parseInteger(z);
+	}
+
+	public double parseDouble(String value) {
+		try {
+			return Double.valueOf(value);
+		} catch(NumberFormatException e) {
+			if(isInfinite(value)) {
+				return isNegative(value) ? INFINITE_NEGATIVE : INFINITE_POSITIVE;
+			}
+			throw new NumberFormatException(value);
+		}
+	}
+
+	public int parseInteger(String value) {
+		try {
+			return Integer.parseInt(value);
+		} catch(NumberFormatException e) {
+			if(isInfinite(value)) {
+				return isNegative(value) ? INFINITE_NEGATIVE : INFINITE_POSITIVE;
+			}
+			throw new NumberFormatException(value);
+		}
+	}
+
+	public boolean isInfinite(String value) {
+		return value.equals("oo") || value.equals("-oo");
+	}
+
+	public boolean isNegative(String value) {
+		return isInfinite(value) ? x.equals("-oo") : getDoubleX() < 0;
+	}
+
+	public double getX() {
+		return getDoubleX();
+	}
+
+	public String getStringX() {
+		return x;
+	}
+
+	public double getDoubleX() {
+		return xD;
+	}
+
+	public int getIntegerX() {
+		return xI;
 	}
 
 	public boolean isXDouble() {
@@ -59,30 +121,20 @@ public class BlockRegion extends Region {
 		return isXInfinite() ? x.equals("-oo") : getDoubleX() < 0;
 	}
 
-	public double getX() {
-		return isXDouble() ? getDoubleX() : getIntegerX();
+	public double getY() {
+		return getDoubleY();
 	}
 
-	public int getIntegerX() {
-		try {
-			return Integer.parseInt(x);
-		} catch(NumberFormatException e) {
-			if(isXInfinite()) {
-				return isXNegative() ? INFINITE_NEGATIVE : INFINITE_POSITIVE;
-			}
-			throw new NumberFormatException(x);
-		}
+	public String getStringY() {
+		return y;
 	}
 
-	public double getDoubleX() {
-		try {
-			return Double.valueOf(x);
-		} catch(NumberFormatException e) {
-			if(isYInfinite()) {
-				return isYNegative() ? INFINITE_NEGATIVE : INFINITE_POSITIVE;
-			}
-			throw new NumberFormatException(x);
-		}
+	public double getDoubleY() {
+		return yD;
+	}
+
+	public int getIntegerY() {
+		return yI;
 	}
 
 	public boolean isYDouble() {
@@ -90,37 +142,27 @@ public class BlockRegion extends Region {
 	}
 
 	public boolean isYInfinite() {
-		return y.equals("oo") || y.equals("-oo");
+		return isInfinite(y);
 	}
 
-	public boolean isZNegative() {
-		return isZInfinite() ? z.equals("-oo") : getDoubleZ() < 0;
+	public boolean isYNegative() {
+		return isNegative(y);
 	}
 
-	public double getY() {
-		return isYDouble() ? getDoubleY() : getIntegerY();
+	public double getZ() {
+		return getDoubleZ();
 	}
 
-	public int getIntegerY() {
-		try {
-			return Integer.parseInt(y);
-		} catch(NumberFormatException e) {
-			if(isYInfinite()) {
-				return isYNegative() ? INFINITE_NEGATIVE : INFINITE_POSITIVE;
-			}
-			throw new NumberFormatException(y);
-		}
+	public String getStringZ() {
+		return z;
 	}
 
-	public double getDoubleY() {
-		try {
-			return Double.valueOf(y);
-		} catch(NumberFormatException e) {
-			if(isYInfinite()) {
-				return isYNegative() ? INFINITE_NEGATIVE : INFINITE_POSITIVE;
-			}
-			throw new NumberFormatException(y);
-		}
+	public double getDoubleZ() {
+		return zD;
+	}
+
+	public int getIntegerZ() {
+		return zI;
 	}
 
 	public boolean isZDouble() {
@@ -128,41 +170,11 @@ public class BlockRegion extends Region {
 	}
 
 	public boolean isZInfinite() {
-		return z.equals("oo") || z.equals("-oo");
+		return isInfinite(z);
 	}
 
-	public boolean isYNegative() {
-		return isYInfinite() ? y.equals("-oo") : getDoubleY() < 0;
-	}
-
-	public double getZ() {
-		return isZDouble() ? getDoubleZ() : getIntegerZ();
-	}
-
-	public Vector toVector() {
-		return new Vector(getIntegerX(), getIntegerY(), getIntegerZ());
-	}
-
-	public int getIntegerZ() {
-		try {
-			return Integer.parseInt(z);
-		} catch(NumberFormatException e) {
-			if(isZInfinite()) {
-				return isZNegative() ? INFINITE_NEGATIVE : INFINITE_POSITIVE;
-			}
-			throw new NumberFormatException(z);
-		}
-	}
-
-	public double getDoubleZ() {
-		try {
-			return Double.valueOf(z);
-		} catch(NumberFormatException e) {
-			if(isYInfinite()) {
-				return isYNegative() ? INFINITE_NEGATIVE : INFINITE_POSITIVE;
-			}
-			throw new NumberFormatException(z);
-		}
+	public boolean isZNegative() {
+		return isNegative(z);
 	}
 
 	public Material getMaterial(World world) {
