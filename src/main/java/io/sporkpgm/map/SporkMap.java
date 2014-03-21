@@ -4,17 +4,22 @@ import io.sporkpgm.Spork;
 import io.sporkpgm.map.generator.NullChunkGenerator;
 import io.sporkpgm.match.Match;
 import io.sporkpgm.module.Module;
+import io.sporkpgm.module.exceptions.ModuleLoadException;
 import io.sporkpgm.module.extras.InitModule;
 import io.sporkpgm.module.extras.TaskedModule;
 import io.sporkpgm.module.modules.info.Contributor;
 import io.sporkpgm.module.modules.info.InfoModule;
+import io.sporkpgm.module.modules.timer.TimerBuilder;
 import io.sporkpgm.module.modules.timer.TimerModule;
 import io.sporkpgm.objective.ObjectiveModule;
 import io.sporkpgm.objective.scored.ScoredObjective;
 import io.sporkpgm.player.SporkPlayer;
+import io.sporkpgm.region.Region;
 import io.sporkpgm.rotation.RotationSlot;
 import io.sporkpgm.team.SporkTeam;
+import io.sporkpgm.team.SporkTeamBuilder;
 import io.sporkpgm.team.spawns.SporkSpawn;
+import io.sporkpgm.team.spawns.kits.SporkKit;
 import io.sporkpgm.util.FileUtil;
 import io.sporkpgm.util.Log;
 import org.bukkit.ChatColor;
@@ -42,6 +47,8 @@ public class SporkMap {
 	protected SporkTeam observers;
 	protected List<SporkTeam> teams;
 	protected List<SporkSpawn> spawns;
+	protected List<SporkKit> kits;
+	protected List<Region> regions;
 
 	protected World world;
 	protected Scoreboard scoreboard;
@@ -49,10 +56,19 @@ public class SporkMap {
 	protected SporkTeam winner;
 	protected boolean ended;
 
-	public SporkMap(MapBuilder builder) {
+	public SporkMap(MapBuilder builder) throws ModuleLoadException {
 		this.builder = builder;
 		this.document = builder.getDocument();
 		this.folder = builder.getFolder();
+
+		this.scoreboard = Spork.get().getServer().getScoreboardManager().getNewScoreboard();
+		this.objective = scoreboard.registerNewObjective("Objectives", "dummy");
+		this.teams = SporkTeamBuilder.build(this);
+		this.observers = SporkTeamBuilder.observers(this);
+		// this.kits = SporkKitBuilder.build(this);
+		this.modules = new ArrayList<>();
+		// this.spawns = SporkSpawnBuilder.build(this);
+		this.timer = (TimerModule) new TimerBuilder(this).build().get(0);
 	}
 
 	public boolean load(Match match) {
@@ -244,6 +260,66 @@ public class SporkMap {
 
 	public List<SporkTeam> getTeams() {
 		return teams;
+	}
+
+	public List<SporkTeam> getTeams(String string) {
+		List<SporkTeam> test = new ArrayList<>();
+		test.addAll(getTeams());
+		test.add(getObservers());
+		List<String> names = new ArrayList<>();
+		for(SporkTeam team : getTeams())
+			names.add(team.getName());
+
+		List<SporkTeam> teams = new ArrayList<>();
+		for(SporkTeam team : test) {
+			if(!teams.contains(team)) {
+				String name = team.getName().toLowerCase();
+				String colour = team.getColor().name().replace("_", " ").toLowerCase();
+				if(name.equalsIgnoreCase(string) || colour.equalsIgnoreCase(string))
+					teams.add(team);
+			}
+		}
+
+		for(SporkTeam team : test) {
+			if(!teams.contains(team)) {
+				String name = team.getName().toLowerCase();
+				String colour = team.getColor().name().replace("_", " ").toLowerCase();
+				if(name.startsWith(string) || colour.startsWith(string))
+					teams.add(team);
+			}
+		}
+
+		return teams;
+	}
+
+	public List<SporkKit> getKits() {
+		return kits;
+	}
+
+	public SporkTeam getTeam(String string) {
+		List<SporkTeam> teams = getTeams(string);
+		if(teams.size() == 0)
+			return null;
+		return teams.get(0);
+	}
+
+	public List<Region> getRegions() {
+		return regions;
+	}
+
+	public Region getRegion(String string) {
+		List<String> names = new ArrayList<>();
+		for(Region region : getRegions())
+			if(region.getName() != null)
+				names.add(region.getName());
+
+		for(Region region : regions) {
+			String name = region.getName() != null ? region.getName() : "null";
+			if(region.getName() != null && name.equalsIgnoreCase(string))
+				return region;
+		}
+
+		return null;
 	}
 
 	public List<SporkPlayer> getPlayers() {
