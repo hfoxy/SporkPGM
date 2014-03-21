@@ -15,6 +15,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.inventory.meta.FireworkMeta;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 public class ServerCycling extends ServerPhase {
@@ -59,7 +60,23 @@ public class ServerCycling extends ServerPhase {
 				meta.clearEffects();
 				meta.addEffect(getFirework());
 				firework.setFireworkMeta(meta);
-				firework.detonate();
+
+				try {
+					Method method = firework.getClass().getMethod("getHandle");
+					method.setAccessible(true);
+					method.invoke(firework);
+				} catch(Exception e) {
+					Log.warning("Server isn't running a version of Bukkit which allows the use of Firework.detonate() - resorting to manual detonation.");
+					try {
+						Object craft = firework.getClass().cast(firework);
+						Method method = craft.getClass().getMethod("getHandle");
+						method.setAccessible(true);
+						Object handle = method.invoke(craft);
+						handle.getClass().getField("expectedLifespan").set(handle, 0);
+					} catch(Exception e2) {
+						e2.printStackTrace();
+					}
+				}
 			}
 		} catch(NullPointerException ignored) {
 
