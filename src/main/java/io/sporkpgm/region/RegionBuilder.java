@@ -8,28 +8,32 @@ import io.sporkpgm.region.types.CylinderRegion;
 import io.sporkpgm.region.types.SphereRegion;
 import io.sporkpgm.region.types.groups.IntersectRegion;
 import io.sporkpgm.region.types.groups.UnionRegion;
-import io.sporkpgm.util.Log;
 import io.sporkpgm.util.XMLUtil;
 import org.dom4j.Attribute;
 import org.dom4j.Element;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RegionBuilder {
 
 	public static Region parseRegion(Element ele) throws InvalidRegionException {
 		String type = ele.getName();
+
 		if(type.equalsIgnoreCase("block")) {
 			return parseBlock(ele);
+		} else if(type.equalsIgnoreCase("rectange")) {
+			return parseRectange(ele);
 		} else if(type.equalsIgnoreCase("cuboid")) {
 			return parseCuboid(ele);
+		} else if(type.equalsIgnoreCase("circle")) {
+			return parseCircle(ele);
 		} else if(type.equalsIgnoreCase("cylinder")) {
 			return parseCylinder(ele);
 		} else if(type.equalsIgnoreCase("sphere")) {
 			return parseSphere(ele);
-		} else if(type.equalsIgnoreCase("region")) {
-			return parseMulti(ele);
 		}
+
 		return null;
 	}
 
@@ -47,13 +51,18 @@ public class RegionBuilder {
 
 	public static BlockRegion parseBlock(Element ele) throws InvalidRegionException {
 		String name = ele.attributeValue("name");
-		if(ele.attributeValue("x") == null || ele.attributeValue("x") == null || ele.attributeValue("x") == null) {
-			throw new InvalidRegionException("BlockRegion must have X, Y and Z");
+		if(ele.getText() == null) {
+			throw new InvalidRegionException("BlockRegions must have an X, a Y and a Z in the Element text");
 		}
 
-		String x = ele.attributeValue("x");
-		String y = ele.attributeValue("y");
-		String z = ele.attributeValue("z");
+		String[] split = ele.getText().split(",");
+		if(split.length != 3) {
+			throw new InvalidRegionException("BlockRegions must have an X, a Y and a Z");
+		}
+
+		String x = split[0];
+		String y = split[1];
+		String z = split[2];
 
 		if(isUsable(x) && isUsable(y) && isUsable(z)) {
 			return new BlockRegion(name, x, y, z);
@@ -62,81 +71,141 @@ public class RegionBuilder {
 		return null;
 	}
 
+	public static CuboidRegion parseRectange(Element ele) throws InvalidRegionException {
+		String name = ele.attributeValue("name");
+		if(ele.attributeValue("min") == null || ele.attributeValue("max") == null) {
+			throw new InvalidRegionException("Both the minimum and the maximum values can't be null");
+		}
+
+		String[] minS = ele.attributeValue("min").split(",");
+		String[] maxS = ele.attributeValue("max").split(",");
+		if(minS.length != 2 || maxS.length != 2) {
+			throw new InvalidRegionException("Both the minimum and maximum values should have an X and a Y");
+		}
+
+		String y = "oo"; // infinite y
+		BlockRegion min = new BlockRegion(minS[0], "-" + y, minS[1]);
+		BlockRegion max = new BlockRegion(maxS[0], y, maxS[1]);
+		return new CuboidRegion(name, min, max);
+	}
+
 	public static CuboidRegion parseCuboid(Element ele) throws InvalidRegionException {
 		String name = ele.attributeValue("name");
-		List<Region> sub = parseSubRegions(ele);
-		if(sub.size() != 2) {
-			throw new InvalidRegionException("CuboidRegions can have only 2 BlockRegions");
+		List<BlockRegion> blocks = new ArrayList<>();
+
+		String[] values = new String[]{"min", "max"};
+		for(String attr : values) {
+			Attribute attribute = ele.attribute(attr);
+			if(attribute == null) {
+				throw new InvalidRegionException("The " + attr + "imum value can't be null");
+			}
+
+			String[] split = attribute.getText().split(",");
+			if(split.length != 3) {
+				throw new InvalidRegionException("BlockRegions must have an X, a Y and a Z ('" + attr + "')");
+			}
+
+			String x = split[0];
+			String y = split[1];
+			String z = split[2];
+
+			if(isUsable(x) && isUsable(y) && isUsable(z)) {
+				blocks.add(new BlockRegion(name, x, y, z));
+			} else {
+				throw new InvalidRegionException("Unsupport X, Y or Z value for '" + attr + "'");
+			}
 		}
-		if(!(sub.get(0) instanceof BlockRegion || sub.get(1) instanceof BlockRegion)) {
-			throw new InvalidRegionException("CuboidRegions can only be of 2 BlockRegions");
+
+		if(blocks.size() != 2) {
+			throw new InvalidRegionException("CuboidRegions require a minimum and a maximum value");
 		}
-		return new CuboidRegion(name, (BlockRegion) sub.get(0), (BlockRegion) sub.get(1));
+
+		return new CuboidRegion(name, blocks.get(0), blocks.get(1));
+	}
+
+	public static CylinderRegion parseCircle(Element ele) throws InvalidRegionException {
+		String name = ele.attributeValue("name");
+		double radius;
+		try {
+			radius = Double.parseDouble(ele.attributeValue("radius"));
+		} catch(Exception e) {
+			throw new InvalidRegionException("Radius was not a valid double");
+		}
+
+		if(ele.attributeValue("center") == null) {
+			throw new InvalidRegionException("The center point of a circle can't be null");
+		}
+
+		String[] split = ele.attributeValue("center").split(",");
+		if(split.length != 2) {
+			throw new InvalidRegionException("The center point of a circle only accepts X and Z values");
+		}
+
+		String x = split[0];
+		String y = "oo";
+		String z = split[1];
+		BlockRegion center = new BlockRegion(x, y, z);
+
+		return new CylinderRegion(name, center, radius, 1, false);
 	}
 
 	public static CylinderRegion parseCylinder(Element ele) throws InvalidRegionException {
 		String name = ele.attributeValue("name");
-		List<Region> sub = parseSubRegions(ele);
-		if(sub.size() != 1) {
-			throw new InvalidRegionException("CylinderRegions can have only 1 BlockRegion");
-		}
-		if(!(sub.get(0) instanceof BlockRegion)) {
-			throw new InvalidRegionException("CylinderRegions can only be of 1 BlockRegion");
-		}
-
-		BlockRegion centre = (BlockRegion) sub.get(0);
-		boolean hollow = XMLUtil.parseBoolean(ele.attributeValue("hollow"), false);
-		double radius = 0;
-		double height = 0;
+		double radius;
 		try {
-			radius = XMLUtil.parseDouble(ele.attributeValue("radius"));
-		} catch(NumberFormatException e) {
-			throw new InvalidRegionException("CylinderRegions must have a suitable radius attribute");
+			radius = Double.parseDouble(ele.attributeValue("radius"));
+		} catch(Exception e) {
+			throw new InvalidRegionException("Radius was not a valid double");
 		}
 
-		if(!centre.isYInfinite()) {
-			try {
-				height = XMLUtil.parseDouble(ele.attributeValue("height"));
-			} catch(NumberFormatException nfe1) {
-				try {
-					height = XMLUtil.parseInteger(ele.attributeValue("height"));
-				} catch(NumberFormatException nfe2) {
-					nfe2.printStackTrace();
-
-					Log.info(ele.asXML());
-					@SuppressWarnings("unchecked")
-					List<Attribute> attributes = (List<Attribute>) ele.attributes();
-					for(Attribute attr : attributes)
-						Log.info(attr.getName() + ": " + attr.getText());
-
-					throw new InvalidRegionException("CylinderRegions must have a suitable height attribute or the block must have an infinite Y value");
-				}
-			}
+		double height;
+		try {
+			height = Double.parseDouble(ele.attributeValue("height"));
+		} catch(Exception e) {
+			throw new InvalidRegionException("Height was not a valid double");
 		}
 
-		return new CylinderRegion(name, centre, radius, height, hollow);
+		if(ele.attributeValue("center") == null) {
+			throw new InvalidRegionException("The center point of a circle can't be null");
+		}
+
+		String[] split = ele.attributeValue("center").split(",");
+		if(split.length != 3) {
+			throw new InvalidRegionException("The center point of a cylinder requires X, Y and Z values");
+		}
+
+		String x = split[0];
+		String y = split[1];
+		String z = split[2];
+		BlockRegion center = new BlockRegion(x, y, z);
+
+		return new CylinderRegion(name, center, radius, height, false);
 	}
 
 	public static SphereRegion parseSphere(Element ele) throws InvalidRegionException {
 		String name = ele.attributeValue("name");
-		List<Region> sub = parseSubRegions(ele);
-		if(sub.size() != 1) {
-			throw new InvalidRegionException("CylinderRegions can have only 1 BlockRegion");
-		}
-		if(!(sub.get(0) instanceof BlockRegion)) {
-			throw new InvalidRegionException("CylinderRegions can only be of 1 BlockRegion");
-		}
-
-		BlockRegion centre = (BlockRegion) sub.get(0);
-		boolean hollow = XMLUtil.parseBoolean(ele.attributeValue("hollow"), false);
-		double radius = 0;
+		double radius;
 		try {
-			radius = XMLUtil.parseDouble(ele.attributeValue("radius"));
-		} catch(NumberFormatException e) {
-			throw new InvalidRegionException("CylinderRegions must have a suitable radius attribute");
+			radius = Double.parseDouble(ele.attributeValue("radius"));
+		} catch(Exception e) {
+			throw new InvalidRegionException("Radius was not a valid double");
 		}
 
-		return new SphereRegion(name, centre, radius, hollow);
+		if(ele.attributeValue("center") == null) {
+			throw new InvalidRegionException("The center point of a sphere can't be null");
+		}
+
+		String[] split = ele.attributeValue("center").split(",");
+		if(split.length != 3) {
+			throw new InvalidRegionException("The center point of a sphere requires X, Y and Z values");
+		}
+
+		String x = split[0];
+		String y = split[1];
+		String z = split[2];
+		BlockRegion center = new BlockRegion(x, y, z);
+
+		return new SphereRegion(name, center, radius, false);
 	}
 
 	public static UnionRegion parseMulti(Element ele) throws InvalidRegionException {
@@ -155,20 +224,12 @@ public class RegionBuilder {
 	}
 
 	public static boolean isUsable(String value) {
-		if(value.equals("@") || value.equals("-@")) {
+		if(value.equals("oo") || value.equals("-oo")) {
 			return true;
 		}
 
-		if(value.contains(".")) {
-			try {
-				Double.valueOf(value);
-				return true;
-			} catch(NumberFormatException ignored) {
-			}
-		}
-
 		try {
-			Integer.valueOf(value);
+			Double.valueOf(value);
 			return true;
 		} catch(NumberFormatException ignored) {
 		}
