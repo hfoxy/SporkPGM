@@ -1,6 +1,5 @@
 package io.sporkpgm.map;
 
-import io.sporkpgm.util.Config;
 import io.sporkpgm.util.Config.Map;
 import io.sporkpgm.util.Log;
 import org.dom4j.Document;
