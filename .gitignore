@@ -20,3 +20,7 @@ target/
 *.class
 dependency-reduced-pom.xml
 META-INF/application.xml
+
+git.sh
+copy.sh
+do.sh
