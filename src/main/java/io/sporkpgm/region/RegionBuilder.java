@@ -20,7 +20,7 @@ public class RegionBuilder {
 	public static Region parseRegion(Element ele) throws InvalidRegionException {
 		String type = ele.getName();
 
-		if(type.equalsIgnoreCase("block")) {
+		if(type.equalsIgnoreCase("block") || type.equalsIgnoreCase("point")) {
 			return parseBlock(ele);
 		} else if(type.equalsIgnoreCase("rectange")) {
 			return parseRectange(ele);

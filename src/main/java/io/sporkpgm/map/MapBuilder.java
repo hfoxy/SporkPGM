@@ -1,10 +1,19 @@
 package io.sporkpgm.map;
 
 import io.sporkpgm.Spork;
+import io.sporkpgm.module.Module;
+import io.sporkpgm.module.builder.Builder;
+import io.sporkpgm.module.exceptions.ModuleLoadException;
+import io.sporkpgm.module.modules.info.InfoBuilder;
 import io.sporkpgm.module.modules.info.InfoModule;
+import io.sporkpgm.region.Region;
+import io.sporkpgm.region.RegionBuilder;
+import io.sporkpgm.region.exception.InvalidRegionException;
 import org.dom4j.Document;
+import org.dom4j.Element;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MapBuilder {
@@ -13,10 +22,22 @@ public class MapBuilder {
 	private File folder;
 
 	private InfoModule info;
+	private List<Module> modules;
+	private List<Region> regions;
 
-	public MapBuilder(Document document, File folder) {
+	public MapBuilder(Document document, File folder) throws ModuleLoadException, InvalidRegionException {
 		this.document = document;
 		this.folder = folder;
+
+		Element root = document.getRootElement();
+		this.info = (InfoModule) new InfoBuilder(document).build().get(0);
+
+		this.regions = new ArrayList<>();
+		if(root.element("regions") != null) {
+			this.regions = RegionBuilder.parseSubRegions(root.element("regions"));
+		}
+
+		this.modules = Spork.get().getModules(document);
 	}
 
 	public Document getDocument() {
@@ -35,8 +56,16 @@ public class MapBuilder {
 		return info.getName();
 	}
 
-	public SporkMap getMap() {
-		return null;
+	public List<Module> getModules() {
+		return modules;
+	}
+
+	public List<Region> getRegions() {
+		return regions;
+	}
+
+	public SporkMap getMap() throws ModuleLoadException, InvalidRegionException {
+		return new SporkMap(this);
 	}
 
 	public static MapBuilder getLoader(String string) {

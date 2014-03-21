@@ -15,10 +15,12 @@ import io.sporkpgm.objective.ObjectiveModule;
 import io.sporkpgm.objective.scored.ScoredObjective;
 import io.sporkpgm.player.SporkPlayer;
 import io.sporkpgm.region.Region;
+import io.sporkpgm.region.exception.InvalidRegionException;
 import io.sporkpgm.rotation.RotationSlot;
 import io.sporkpgm.team.SporkTeam;
 import io.sporkpgm.team.SporkTeamBuilder;
 import io.sporkpgm.team.spawns.SporkSpawn;
+import io.sporkpgm.team.spawns.SporkSpawnBuilder;
 import io.sporkpgm.team.spawns.kits.SporkKit;
 import io.sporkpgm.util.FileUtil;
 import io.sporkpgm.util.Log;
@@ -56,18 +58,25 @@ public class SporkMap {
 	protected SporkTeam winner;
 	protected boolean ended;
 
-	public SporkMap(MapBuilder builder) throws ModuleLoadException {
+	public SporkMap(MapBuilder builder) throws ModuleLoadException, InvalidRegionException {
 		this.builder = builder;
 		this.document = builder.getDocument();
 		this.folder = builder.getFolder();
 
 		this.scoreboard = Spork.get().getServer().getScoreboardManager().getNewScoreboard();
 		this.objective = scoreboard.registerNewObjective("Objectives", "dummy");
+
 		this.teams = SporkTeamBuilder.build(this);
 		this.observers = SporkTeamBuilder.observers(this);
+
+		this.modules = builder.getModules();
+		this.modules.addAll(Spork.get().getModules(this));
+
+		this.regions = builder.getRegions();
+
 		// this.kits = SporkKitBuilder.build(this);
-		this.modules = new ArrayList<>();
-		// this.spawns = SporkSpawnBuilder.build(this);
+		this.spawns = SporkSpawnBuilder.build(this);
+
 		this.timer = (TimerModule) new TimerBuilder(this).build().get(0);
 	}
 
