@@ -52,11 +52,11 @@ public class BlockRegion extends Region {
 	}
 
 	public boolean isXInfinite() {
-		return x.equals("@") || x.equals("-@");
+		return x.equals("oo") || x.equals("-oo");
 	}
 
 	public boolean isXNegative() {
-		return isXInfinite() ? x.equals("-@") : getDoubleX() < 0;
+		return isXInfinite() ? x.equals("-oo") : getDoubleX() < 0;
 	}
 
 	public double getX() {
@@ -90,11 +90,11 @@ public class BlockRegion extends Region {
 	}
 
 	public boolean isYInfinite() {
-		return y.equals("@") || y.equals("-@");
+		return y.equals("oo") || y.equals("-oo");
 	}
 
 	public boolean isZNegative() {
-		return isZInfinite() ? z.equals("-@") : getDoubleZ() < 0;
+		return isZInfinite() ? z.equals("-oo") : getDoubleZ() < 0;
 	}
 
 	public double getY() {
@@ -128,11 +128,11 @@ public class BlockRegion extends Region {
 	}
 
 	public boolean isZInfinite() {
-		return z.equals("@") || z.equals("-@");
+		return z.equals("oo") || z.equals("-oo");
 	}
 
 	public boolean isYNegative() {
-		return isYInfinite() ? y.equals("-@") : getDoubleY() < 0;
+		return isYInfinite() ? y.equals("-oo") : getDoubleY() < 0;
 	}
 
 	public double getZ() {
