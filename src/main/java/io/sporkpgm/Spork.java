@@ -120,6 +120,8 @@ public class Spork extends JavaPlugin {
 		registerCommands();
 		registerListeners();
 
+		Log.info(rotation.toString());
+
 		failed = true;
 		try {
 			rotation.start();
