@@ -21,11 +21,11 @@ public class SporkSpawnBuilder {
 		Document document = map.getDocument();
 		Element root = document.getRootElement();
 
-		for(Element spawns : XMLUtil.getElements(root, "spawns", "default")) {
+		for(Element spawns : XMLUtil.getElements(root, "spawns")) {
 			String teamS = spawns.attributeValue("team");
 
 			int noname = 1;
-			for(Element element : XMLUtil.getElements(spawns, "spawn")) {
+			for(Element element : XMLUtil.getElements(spawns, "spawn", "default")) {
 				String nameS = null;
 				teamS = (teamS == null ? element.attributeValue("team") : teamS);
 				String yawS = element.attributeValue("yaw");
