@@ -535,11 +535,15 @@ public class SporkMap {
 			craftScoreboard = checkState.invoke(CRAFT_SCORE.getDeclaredField("objective").get(craftScore));
 			*/
 
-			Object scoreboard = CRAFT_SCOREBOARD.getDeclaredField("board").get(craftScoreboard);
+			Field scoreboardField = CRAFT_SCOREBOARD.getDeclaredField("board");
+			scoreboardField.setAccessible(true);
+			Object scoreboard = scoreboardField.get(craftScoreboard);
 			Method playerObjectives = SCOREBOARD.getDeclaredMethod("getPlayerObjectives", String.class);
 			playerObjectives.setAccessible(true);
 
-			String playerName = (String) CRAFT_SCORE.getDeclaredField("playerName").get(craftScore);
+			Field playerField = CRAFT_SCORE.getDeclaredField("playerName");
+			playerField.setAccessible(true);
+			String playerName = (String) playerField.get(craftScore);
 			Map map = (Map) playerObjectives.invoke(scoreboard, playerName);
 
 			if(map.remove(craftObjectiveHandle) == null) {
@@ -592,7 +596,10 @@ public class SporkMap {
 
 		public static Object checkStateException(Object craftObjective) throws NoSuchFieldException, IllegalAccessException {
 			Object boardComponent = CRAFT_SCOREBOARD_COMPONENT.cast(craftObjective);
-			Object craftBoard = CRAFT_SCOREBOARD_COMPONENT.getDeclaredField("scoreboard").get(boardComponent);
+
+			Field scoreboard = CRAFT_SCOREBOARD_COMPONENT.getDeclaredField("scoreboard");
+			scoreboard.setAccessible(true);
+			Object craftBoard = scoreboard.get(boardComponent);
 
 			if(craftBoard == null) {
 				throw new IllegalStateException("Unregistered scoreboard component");
