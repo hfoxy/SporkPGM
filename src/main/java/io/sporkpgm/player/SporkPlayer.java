@@ -424,7 +424,15 @@ public class SporkPlayer implements Listener {
 	}
 
 	public boolean isParticipating() {
-		return getTeam() == null && !getTeam().isObservers() && RotationSlot.getRotation().getCurrentMatch().isRunning();
+		if(getTeam() == null || getTeam().isObservers()) {
+			return false;
+		}
+
+		if(!RotationSlot.getRotation().getCurrentMatch().isRunning()) {
+			return false;
+		}
+
+		return true;
 	}
 
 	public ChatColor getTeamColour() {
