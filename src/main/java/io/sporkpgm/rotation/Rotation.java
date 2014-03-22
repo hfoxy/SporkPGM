@@ -8,6 +8,7 @@ import io.sporkpgm.match.Match;
 import io.sporkpgm.match.MatchPhase;
 import io.sporkpgm.module.exceptions.ModuleLoadException;
 import io.sporkpgm.player.SporkPlayer;
+import io.sporkpgm.region.exception.InvalidRegionException;
 import io.sporkpgm.rotation.exceptions.RotationLoadException;
 import io.sporkpgm.team.SporkTeam;
 import io.sporkpgm.util.Config;
@@ -82,7 +83,7 @@ public class Rotation {
 		return new Rotation(slots);
 	}
 
-	public void start() throws ModuleLoadException, RotationLoadException {
+	public void start() throws ModuleLoadException, RotationLoadException, InvalidRegionException {
 		Match match = getCurrentSlot().load();
 		this.started = true;
 		match.start();
