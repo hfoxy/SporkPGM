@@ -328,7 +328,7 @@ public class SporkPlayer implements Listener {
 			spawning.setAccessible(true);
 			spawning.invoke(getPlayer(), update);
 		} catch(Exception e) {
-			Log.warning("Not running Spork or AthenaBukkit, skipping affects spawning...");
+			Log.warning("Not running SportBukkit or AthenaBukkit, skipping affects spawning...");
 			e.printStackTrace();
 		}
 
@@ -338,7 +338,7 @@ public class SporkPlayer implements Listener {
 			collides.setAccessible(true);
 			collides.invoke(getPlayer(), update);
 		} catch(Exception e) {
-			Log.warning("Not running Spork or AthenaBukkit, skipping collides with entities...");
+			Log.warning("Not running SportBukkit or AthenaBukkit, skipping collides with entities...");
 			e.printStackTrace();
 		}
 
@@ -348,7 +348,7 @@ public class SporkPlayer implements Listener {
 			arrows.setAccessible(true);
 			arrows.invoke(getPlayer(), 0);
 		} catch(Exception e) {
-			Log.warning("Not running Spork or AthenaBukkit, attempting to set arrows stuck manually...");
+			Log.warning("Not running SportBukkit or AthenaBukkit, attempting to set arrows stuck manually...");
 
 			try {
 			/*
