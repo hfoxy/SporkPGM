@@ -117,6 +117,10 @@ public class PlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		SporkPlayer player = SporkPlayer.getPlayer(event.getPlayer());
+		if(!player.isParticipating()) {
+			event.setCancelled(true);
+		}
+
 		player.updateInventory();
 		if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && event.getClickedBlock().getType().equals(Material.CHEST)) {
 
