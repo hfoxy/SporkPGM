@@ -136,14 +136,6 @@ public class PlayerListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGH)
-	public void onPlayerDeath(PlayerDeathEvent event) {
-		SporkPlayer player = SporkPlayer.getPlayer(event.getEntity());
-		if(player.isParticipating()) {
-			player.setTeam(player.getTeam());
-		}
-	}
-
 	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
 		if(event.getRightClicked() instanceof Player) {
