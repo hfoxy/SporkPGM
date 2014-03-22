@@ -184,7 +184,7 @@ public class SporkKitBuilder {
 	public static short parseDamage(Element element, String name) throws ModuleLoadException {
 		short damage;
 		try {
-			damage = Short.parseShort(element.attributeValue("damage"));
+			damage = (short) Integer.parseInt(element.attributeValue("damage"));
 		} catch(NumberFormatException e) {
 			throw new ModuleLoadException("Could not parse kit because damage was provided but was not a valid number for '" + name + "'");
 		} catch(NullPointerException e) {
