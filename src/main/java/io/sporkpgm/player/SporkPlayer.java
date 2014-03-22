@@ -16,6 +16,7 @@ import io.sporkpgm.rotation.RotationSlot;
 import io.sporkpgm.team.SporkTeam;
 import io.sporkpgm.team.spawns.SporkSpawn;
 import io.sporkpgm.util.Log;
+import io.sporkpgm.util.NMSUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -350,7 +351,7 @@ public class SporkPlayer implements Listener {
 			 */
 
 			Player player = getPlayer();
-			Object craft = player.getClass().cast(player);
+			Object craft = NMSUtil.getClass("CraftPlayer").cast(player);
 			Method method = craft.getClass().getMethod("getHandle");
 			method.setAccessible(true);
 			Object handle = method.invoke(craft);
