@@ -1,7 +1,6 @@
 package io.sporkpgm.team.spawns.kits;
 
 import com.google.common.collect.Lists;
-import io.sporkpgm.map.SporkMap;
 import io.sporkpgm.module.exceptions.ModuleLoadException;
 import io.sporkpgm.util.ItemUtil;
 import io.sporkpgm.util.StringUtil;
@@ -13,6 +12,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.dom4j.Document;
 import org.dom4j.Element;
 
 import java.util.ArrayList;
@@ -22,8 +22,8 @@ import java.util.Map;
 
 public class SporkKitBuilder {
 
-	public static List<SporkKit> build(SporkMap map) throws ModuleLoadException {
-		Element root = map.getDocument().getRootElement();
+	public static List<SporkKit> build(Document document) throws ModuleLoadException {
+		Element root = document.getRootElement();
 		List<SporkKit> sporks = new ArrayList<>();
 
 		Element kits = root.element("kits");

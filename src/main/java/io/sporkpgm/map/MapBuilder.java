@@ -9,6 +9,8 @@ import io.sporkpgm.module.modules.info.InfoModule;
 import io.sporkpgm.region.Region;
 import io.sporkpgm.region.RegionBuilder;
 import io.sporkpgm.region.exception.InvalidRegionException;
+import io.sporkpgm.team.spawns.kits.SporkKit;
+import io.sporkpgm.team.spawns.kits.SporkKitBuilder;
 import org.dom4j.Document;
 import org.dom4j.Element;
 
@@ -24,6 +26,7 @@ public class MapBuilder {
 	private InfoModule info;
 	private List<Module> modules;
 	private List<Region> regions;
+	private List<SporkKit> kits;
 
 	public MapBuilder(Document document, File folder) throws ModuleLoadException, InvalidRegionException {
 		this.document = document;
@@ -38,6 +41,7 @@ public class MapBuilder {
 		}
 
 		this.modules = Spork.get().getModules(document);
+		this.kits = SporkKitBuilder.build(document);
 	}
 
 	public Document getDocument() {
@@ -62,6 +66,10 @@ public class MapBuilder {
 
 	public List<Region> getRegions() {
 		return regions;
+	}
+
+	public List<SporkKit> getKits() {
+		return kits;
 	}
 
 	public SporkMap getMap() throws ModuleLoadException, InvalidRegionException {

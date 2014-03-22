@@ -74,7 +74,7 @@ public class SporkMap {
 
 		this.regions = builder.getRegions();
 
-		// this.kits = SporkKitBuilder.build(this);
+		this.kits = builder.getKits();
 		this.spawns = SporkSpawnBuilder.build(this);
 
 		this.timer = (TimerModule) new TimerBuilder(this).build().get(0);
