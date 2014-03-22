@@ -467,7 +467,9 @@ public class SporkMap {
 		private static Class<?> CRAFT_SCORE = NMSUtil.getClassBukkit("scoreboard.CraftScore");
 		private static Class<?> CRAFT_OBJECTIVE = NMSUtil.getClassBukkit("scoreboard.CraftObjective");
 		private static Class<?> CRAFT_SCOREBOARD = NMSUtil.getClassBukkit("scoreboard.CraftScoreboard");
-		private static Class<?> SCOREBOARD = NMSUtil.getClassNMS("CraftScoreboard");
+		private static Class<?> SCOREBOARD = NMSUtil.getClassNMS("Scoreboard");
+		private static Class<?> SCOREBOARD_SCORE = NMSUtil.getClassNMS("ScoreboardScore");
+		private static Class<?> SCOREBOARD_OBJECTIVE = NMSUtil.getClassNMS("ScoreboardObjective");
 
 		public static boolean isSet(Score score) throws NoSuchMethodException, NoSuchFieldException, IllegalAccessException, InvocationTargetException {
 			Object craftScore = CRAFT_SCORE.cast(score);
@@ -477,7 +479,7 @@ public class SporkMap {
 			craftHandle.setAccessible(true);
 			Object craftObjectiveHandle = craftHandle.invoke(craftObjective);
 
-			Object craftScoreboard = CRAFT_SCOREBOARD.cast(score.getScoreboard());
+			Object craftScoreboard;
 
 			Method checkState = CRAFT_OBJECTIVE.getMethod("checkState");
 			checkState.setAccessible(true);
@@ -487,12 +489,55 @@ public class SporkMap {
 			Method playerObjectives = SCOREBOARD.getMethod("getPlayerObjectives", String.class);
 			playerObjectives.setAccessible(true);
 			Map map = (Map) playerObjectives.invoke(scoreboard, CRAFT_SCORE.getField("playerName").get(craftScore));
-			return map.containsKey(craftObjectiveHandle);
+
 			// return objective.checkState().board.getPlayerObjectives(playerName).containsKey(objective.getHandle());
+			return map.containsKey(craftObjectiveHandle);
 		}
 
-		public static void reset(Score score) {
+		public static void reset(Score score) throws NoSuchMethodException, NoSuchFieldException, IllegalAccessException, InvocationTargetException {
+			Object craftScore = CRAFT_SCORE.cast(score);
 
+			Object craftObjective = CRAFT_OBJECTIVE.cast(score.getObjective());
+			Method craftHandle = CRAFT_OBJECTIVE.getMethod("getHandle");
+			craftHandle.setAccessible(true);
+			Object craftObjectiveHandle = craftHandle.invoke(craftObjective);
+
+			Object craftScoreboard;
+
+			Method checkState = CRAFT_OBJECTIVE.getMethod("checkState");
+			checkState.setAccessible(true);
+			craftScoreboard = checkState.invoke(CRAFT_SCORE.getField("objective").get(craftScore));
+
+			Object scoreboard = CRAFT_SCOREBOARD.getField("board").get(craftScoreboard);
+			Method playerObjectives = SCOREBOARD.getMethod("getPlayerObjectives", String.class);
+			playerObjectives.setAccessible(true);
+
+			String playerName = (String) CRAFT_SCORE.getField("playerName").get(craftScore);
+			Map map = (Map) playerObjectives.invoke(scoreboard, playerName);
+
+			if(map.remove(craftObjectiveHandle) == null) {
+				// If they don't have a score to delete, don't delete it.
+				return;
+			}
+
+			Method resetScores = SCOREBOARD.getMethod("resetPlayerScores", String.class);
+			resetScores.setAccessible(true);
+			resetScores.invoke(scoreboard, playerName);
+
+			for(Object key : map.keySet()) {
+				Object value = map.get(key);
+				Method playerScoreMethod = SCOREBOARD.getMethod("getPlayerScoreForObjective", String.class, SCOREBOARD_OBJECTIVE);
+				playerScoreMethod.setAccessible(true);
+				Object scoreboardScore = playerScoreMethod.invoke(scoreboard, playerName, key);
+
+				Method getScore = SCOREBOARD_SCORE.getMethod("getScore");
+				getScore.setAccessible(true);
+				int setScoreTo = (int) getScore.invoke(value);
+
+				Method setScore = SCOREBOARD_SCORE.getMethod("setScore", int.class);
+				setScore.setAccessible(true);
+				setScore.invoke(scoreboardScore, setScoreTo);
+			}
 
 			/*
 			CraftScoreboard myBoard = objective.checkState();
