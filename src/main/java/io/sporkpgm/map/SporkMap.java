@@ -24,19 +24,27 @@ import io.sporkpgm.team.spawns.SporkSpawnBuilder;
 import io.sporkpgm.team.spawns.kits.SporkKit;
 import io.sporkpgm.util.FileUtil;
 import io.sporkpgm.util.Log;
+import io.sporkpgm.util.NMSUtil;
 import io.sporkpgm.util.NumberUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 import org.dom4j.Document;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class SporkMap {
 
@@ -141,13 +149,17 @@ public class SporkMap {
 					}
 				}
 			} else {
+				if(score != 1) {
+					OfflinePlayer space = Bukkit.getOfflinePlayer(" ");
+					this.objective.getScore(space)
+				}
+
 				for(ObjectiveModule objective : team.getObjectives()) {
 					this.objective.getScore(objective.getPlayer()).setScore(score);
 					score++;
 				}
 				objective.getScore(team.getPlayer()).setScore(score);
 				score++;
-				score++; // increment twice to present a space between teams
 			}
 		}
 	}
@@ -448,6 +460,50 @@ public class SporkMap {
 
 	public static SporkMap getMap() {
 		return RotationSlot.getRotation().getCurrent();
+	}
+
+	public static class ScoreAPI {
+
+		private static Class<?> CRAFT_SCORE = NMSUtil.getClassBukkit("scoreboard.CraftScore");
+		private static Class<?> CRAFT_OBJECTIVE = NMSUtil.getClassBukkit("scoreboard.CraftObjective");
+		private static Class<?> CRAFT_SCOREBOARD = NMSUtil.getClassBukkit("scoreboard.CraftScoreboard");
+		private static Class<?> SCOREBOARD = NMSUtil.getClassNMS("CraftScoreboard");
+
+		public static boolean isSet(Score score) throws NoSuchMethodException, NoSuchFieldException, IllegalAccessException, InvocationTargetException {
+			Object craftScore = CRAFT_SCORE.cast(score);
+
+			Object craftObjective = CRAFT_OBJECTIVE.cast(score.getObjective());
+
+			Object craftScoreboard = CRAFT_SCOREBOARD.cast(score.getScoreboard());
+			Method craftHandle = CRAFT_SCOREBOARD.getMethod("getHandle");
+			craftHandle.setAccessible(true);
+			Object craftScoreboardHandle = craftHandle.invoke(craftScoreboard);
+
+			Method checkState = CRAFT_OBJECTIVE.getMethod("checkState");
+			checkState.setAccessible(true);
+			craftScoreboard = checkState.invoke(CRAFT_SCORE.getField("objective").get(craftScore));
+
+			Field board = CRAFT_SCOREBOARD.getField("board").get()
+			// return objective.checkState().board.getPlayerObjectives(playerName).containsKey(objective.getHandle());
+		}
+
+		public static void reset(Score score) {
+
+
+			/*
+			CraftScoreboard myBoard = objective.checkState();
+			Map<ScoreboardObjective, ScoreboardScore> savedScores = myBoard.board.getPlayerObjectives(playerName);
+			if(savedScores.remove(objective.getHandle()) == null) {
+				// If they don't have a score to delete, don't delete it.
+				return;
+			}
+			myBoard.board.resetPlayerScores(playerName);
+			for(Map.Entry<ScoreboardObjective, ScoreboardScore> e : savedScores.entrySet()) {
+				myBoard.board.getPlayerScoreForObjective(playerName, e.getKey()).setScore(e.getValue().getScore());
+			}
+			*/
+		}
+
 	}
 
 }
