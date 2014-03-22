@@ -52,12 +52,12 @@ public class RegionBuilder {
 	public static BlockRegion parseBlock(Element ele) throws InvalidRegionException {
 		String name = ele.attributeValue("name");
 		if(ele.getText() == null) {
-			throw new InvalidRegionException("BlockRegions must have an X, a Y and a Z in the Element text");
+			throw new InvalidRegionException(ele, "BlockRegions must have an X, a Y and a Z in the Element text");
 		}
 
 		String[] split = ele.getText().split(",");
 		if(split.length != 3) {
-			throw new InvalidRegionException("BlockRegions must have an X, a Y and a Z");
+			throw new InvalidRegionException(ele, "BlockRegions must have an X, a Y and a Z");
 		}
 
 		String x = split[0];
@@ -74,13 +74,13 @@ public class RegionBuilder {
 	public static CuboidRegion parseRectange(Element ele) throws InvalidRegionException {
 		String name = ele.attributeValue("name");
 		if(ele.attributeValue("min") == null || ele.attributeValue("max") == null) {
-			throw new InvalidRegionException("Both the minimum and the maximum values can't be null");
+			throw new InvalidRegionException(ele, "Both the minimum and the maximum values can't be null");
 		}
 
 		String[] minS = ele.attributeValue("min").split(",");
 		String[] maxS = ele.attributeValue("max").split(",");
 		if(minS.length != 2 || maxS.length != 2) {
-			throw new InvalidRegionException("Both the minimum and maximum values should have an X and a Y");
+			throw new InvalidRegionException(ele, "Both the minimum and maximum values should have an X and a Y");
 		}
 
 		String y = "oo"; // infinite y
@@ -97,12 +97,12 @@ public class RegionBuilder {
 		for(String attr : values) {
 			Attribute attribute = ele.attribute(attr);
 			if(attribute == null) {
-				throw new InvalidRegionException("The " + attr + "imum value can't be null");
+				throw new InvalidRegionException(ele, "The " + attr + "imum value can't be null");
 			}
 
 			String[] split = attribute.getText().split(",");
 			if(split.length != 3) {
-				throw new InvalidRegionException("BlockRegions must have an X, a Y and a Z ('" + attr + "')");
+				throw new InvalidRegionException(ele, "BlockRegions must have an X, a Y and a Z ('" + attr + "')");
 			}
 
 			String x = split[0];
@@ -112,12 +112,12 @@ public class RegionBuilder {
 			if(isUsable(x) && isUsable(y) && isUsable(z)) {
 				blocks.add(new BlockRegion(name, x, y, z));
 			} else {
-				throw new InvalidRegionException("Unsupport X, Y or Z value for '" + attr + "'");
+				throw new InvalidRegionException(ele, "Unsupported X, Y or Z value for '" + attr + "'");
 			}
 		}
 
 		if(blocks.size() != 2) {
-			throw new InvalidRegionException("CuboidRegions require a minimum and a maximum value");
+			throw new InvalidRegionException(ele, "CuboidRegions require a minimum and a maximum value");
 		}
 
 		return new CuboidRegion(name, blocks.get(0), blocks.get(1));
@@ -129,16 +129,16 @@ public class RegionBuilder {
 		try {
 			radius = Double.parseDouble(ele.attributeValue("radius"));
 		} catch(Exception e) {
-			throw new InvalidRegionException("Radius was not a valid double");
+			throw new InvalidRegionException(ele, "Radius was not a valid double");
 		}
 
 		if(ele.attributeValue("center") == null) {
-			throw new InvalidRegionException("The center point of a circle can't be null");
+			throw new InvalidRegionException(ele, "The center point of a circle can't be null");
 		}
 
 		String[] split = ele.attributeValue("center").split(",");
 		if(split.length != 2) {
-			throw new InvalidRegionException("The center point of a circle only accepts X and Z values");
+			throw new InvalidRegionException(ele, "The center point of a circle only accepts X and Z values");
 		}
 
 		String x = split[0];
@@ -155,23 +155,23 @@ public class RegionBuilder {
 		try {
 			radius = Double.parseDouble(ele.attributeValue("radius"));
 		} catch(Exception e) {
-			throw new InvalidRegionException("Radius was not a valid double");
+			throw new InvalidRegionException(ele, "Radius was not a valid double");
 		}
 
 		double height;
 		try {
 			height = Double.parseDouble(ele.attributeValue("height"));
 		} catch(Exception e) {
-			throw new InvalidRegionException("Height was not a valid double");
+			throw new InvalidRegionException(ele, "Height was not a valid double");
 		}
 
 		if(ele.attributeValue("center") == null) {
-			throw new InvalidRegionException("The center point of a circle can't be null");
+			throw new InvalidRegionException(ele, "The center point of a circle can't be null");
 		}
 
 		String[] split = ele.attributeValue("center").split(",");
 		if(split.length != 3) {
-			throw new InvalidRegionException("The center point of a cylinder requires X, Y and Z values");
+			throw new InvalidRegionException(ele, "The center point of a cylinder requires X, Y and Z values");
 		}
 
 		String x = split[0];
@@ -188,16 +188,16 @@ public class RegionBuilder {
 		try {
 			radius = Double.parseDouble(ele.attributeValue("radius"));
 		} catch(Exception e) {
-			throw new InvalidRegionException("Radius was not a valid double");
+			throw new InvalidRegionException(ele, "Radius was not a valid double");
 		}
 
 		if(ele.attributeValue("center") == null) {
-			throw new InvalidRegionException("The center point of a sphere can't be null");
+			throw new InvalidRegionException(ele, "The center point of a sphere can't be null");
 		}
 
 		String[] split = ele.attributeValue("center").split(",");
 		if(split.length != 3) {
-			throw new InvalidRegionException("The center point of a sphere requires X, Y and Z values");
+			throw new InvalidRegionException(ele, "The center point of a sphere requires X, Y and Z values");
 		}
 
 		String x = split[0];
