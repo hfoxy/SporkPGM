@@ -12,6 +12,7 @@ import io.sporkpgm.region.RegionBuilder;
 import io.sporkpgm.region.exception.InvalidRegionException;
 import io.sporkpgm.team.spawns.kits.SporkKit;
 import io.sporkpgm.team.spawns.kits.SporkKitBuilder;
+import io.sporkpgm.util.Log;
 import org.dom4j.Document;
 import org.dom4j.Element;
 
@@ -42,6 +43,8 @@ public class MapBuilder {
 		}
 
 		this.modules = Spork.get().getModules(document);
+		Log.info("Loaded " + modules.size() + " Modules: " + modules);
+
 		this.kits = SporkKitBuilder.build(document);
 	}
 

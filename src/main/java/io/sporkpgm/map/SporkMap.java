@@ -80,6 +80,7 @@ public class SporkMap {
 
 		this.modules = builder.getModules();
 		this.modules.addAll(Spork.get().getModules(this));
+		Log.info("Loaded " + modules.size() + " Modules: " + modules);
 
 		this.regions = builder.getRegions();
 
