@@ -6,13 +6,13 @@ import org.bukkit.entity.Player;
 public class NMSUtil {
 
 	public static String getPackageName() {
-		return "net.minecraft.server." + Bukkit.getServer().getClass().getPackage().getName().replace(".", "," +
-				"" + "").split(",")[3];
+		return "net.minecraft.server." + Bukkit.getServer().getClass().getPackage().getName().replace(".", "," + "" + "").split(",")[3];
 	}
 
 	public static Class<?> getClass(String clazz) {
+		Log.info("Package: " + getPackageName());
 		try {
-			return Class.forName(getPackageName() + (clazz.endsWith(".") ? clazz : "." + clazz));
+			return Class.forName(getPackageName() + (clazz.startsWith(".") ? clazz : "." + clazz));
 		} catch(ClassNotFoundException ex) {
 			return null;
 		}
