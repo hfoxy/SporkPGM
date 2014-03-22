@@ -10,9 +10,10 @@ public class NMSUtil {
 	}
 
 	public static Class<?> getClass(String clazz) {
-		Log.info("Package: " + getPackageName());
+		String pack = getPackageName() + (clazz.startsWith(".") ? clazz : "." + clazz);
+		Log.info("Package: " + pack);
 		try {
-			return Class.forName(getPackageName() + (clazz.startsWith(".") ? clazz : "." + clazz));
+			return Class.forName(pack);
 		} catch(ClassNotFoundException ex) {
 			return null;
 		}
