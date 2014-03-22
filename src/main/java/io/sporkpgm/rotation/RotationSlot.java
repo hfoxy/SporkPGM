@@ -74,7 +74,7 @@ public class RotationSlot {
 
 	@Override
 	public String toString() {
-		return "RotationSlot{match=" + match.toString() + ",wasSet=" + wasSet + ",id=" + id + "}";
+		return "RotationSlot{match=" + (match != null ? match.toString() : "null") + ",wasSet=" + wasSet + ",id=" + id + "}";
 	}
 
 }
