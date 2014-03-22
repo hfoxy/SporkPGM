@@ -319,7 +319,7 @@ public class SporkMap {
 			if(!teams.contains(team)) {
 				String name = team.getName().toLowerCase();
 				String colour = team.getColor().name().replace("_", " ").toLowerCase();
-				if(name.startsWith(string) || colour.startsWith(string))
+				if(name.startsWith(string.toLowerCase()) || colour.startsWith(string.toLowerCase()))
 					teams.add(team);
 			}
 		}
