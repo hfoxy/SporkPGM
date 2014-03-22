@@ -122,12 +122,12 @@ public class SporkMap {
 	}
 
 	public List<ObjectiveModule> getObjectives() {
-		Log.info("There are " + modules.size() + " Modules to search through");
+		// Log.info("There are " + modules.size() + " Modules to search through");
 		List<ObjectiveModule> objectives = new ArrayList<>();
 
 		for(Module module : modules) {
-			if(!modules.contains(module) && module instanceof ObjectiveModule) {
-				Log.info("Found " + module);
+			if(module instanceof ObjectiveModule) {
+				// Log.info("Found " + module);
 				objectives.add((ObjectiveModule) module);
 			}
 		}
@@ -162,10 +162,10 @@ public class SporkMap {
 					score++;
 				}
 
-				Log.info(team.getName() + ": " + team.getObjectives().size() + " Objectives");
+				// Log.info(team.getName() + ": " + team.getObjectives().size() + " Objectives");
 				for(ObjectiveModule objective : team.getObjectives()) {
-					Log.info("Setting score of " + ChatColor.stripColor(objective.getPlayer().getName()) + " to " + score);
-					Log.info(ChatColor.stripColor(objective.getPlayer().getName()) + ": " + objective);
+					// Log.info("Setting score of " + ChatColor.stripColor(objective.getPlayer().getName()) + " to " + score);
+					// Log.info(ChatColor.stripColor(objective.getPlayer().getName()) + ": " + objective);
 					this.objective.getScore(objective.getPlayer()).setScore(score);
 					score++;
 				}
@@ -237,8 +237,8 @@ public class SporkMap {
 		for(Module toRemove : remove) {
 			modules.remove(toRemove);
 		}
-		
-		Log.info("Loaded " + modules.size() + " Modules: " + modules);
+
+		Log.info("Loaded " + modules.size() + " Modules");
 	}
 
 	public Document getDocument() {
@@ -313,7 +313,7 @@ public class SporkMap {
 				String name = team.getName().toLowerCase();
 				String colour = team.getColor().name().replace("_", " ").toLowerCase();
 				if(name.equalsIgnoreCase(string) || colour.equalsIgnoreCase(string)) {
-					Log.info("'" + string + "' equals ignore case '" + name + "' or '" + colour + "'");
+					// Log.info("'" + string + "' equals ignore case '" + name + "' or '" + colour + "'");
 					teams.add(team);
 				}
 			}
@@ -328,7 +328,7 @@ public class SporkMap {
 				String name = team.getName().toLowerCase();
 				String colour = team.getColor().name().replace("_", " ").toLowerCase();
 				if(name.startsWith(string.toLowerCase()) || colour.startsWith(string.toLowerCase())) {
-					Log.info("'" + string.toLowerCase() + "' starts with '" + name + "' or '" + colour + "'");
+					// Log.info("'" + string.toLowerCase() + "' starts with '" + name + "' or '" + colour + "'");
 					teams.add(team);
 				}
 			}
@@ -343,7 +343,7 @@ public class SporkMap {
 				String name = team.getName().toLowerCase();
 				String colour = team.getColor().name().replace("_", " ").toLowerCase();
 				if(name.contains(string.toLowerCase()) || colour.contains(string.toLowerCase())) {
-					Log.info("'" + string.toLowerCase() + "' contains '" + name + "' or '" + colour + "'");
+					// Log.info("'" + string.toLowerCase() + "' contains '" + name + "' or '" + colour + "'");
 					teams.add(team);
 				}
 			}

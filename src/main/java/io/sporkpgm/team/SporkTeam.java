@@ -65,7 +65,7 @@ public class SporkTeam {
 		String title = getColoredName();
 		if(title.length() > 16)
 			title = title.substring(0, 16);
-		Log.info("'" + title + "' is " + title.length() + " characters long");
+		// Log.info("'" + title + "' is " + title.length() + " characters long");
 		this.player = Spork.get().getServer().getOfflinePlayer(title);
 	}
 
@@ -201,7 +201,7 @@ public class SporkTeam {
 	}
 
 	public List<ObjectiveModule> getObjectives() {
-		Log.info(map.getName() + ": " + map.getObjectives().size() + " Objectives");
+		// Log.info(map.getName() + ": " + map.getObjectives().size() + " Objectives");
 
 		List<ObjectiveModule> objectives = new ArrayList<>();
 		for(ObjectiveModule objective : map.getObjectives())
