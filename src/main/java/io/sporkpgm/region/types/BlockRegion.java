@@ -6,7 +6,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -197,7 +196,6 @@ public class BlockRegion extends Region {
 		return one.distance(two);
 	}
 
-	@Override
 	public List<BlockRegion> getValues() {
 		List<BlockRegion> region = new ArrayList<>();
 		region.add(this);
