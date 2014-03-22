@@ -96,6 +96,8 @@ public class Spork extends JavaPlugin {
 			load.addAll(all);
 		}
 
+		this.maps = load;
+
 		if(load.isEmpty()) {
 			Log.severe("Unable to find any maps inside the repository! Disabling plugin...");
 			setEnabled(false);
