@@ -85,7 +85,7 @@ public class PlayerListener implements Listener {
 	public void onPlayerDropItem(PlayerDropItemEvent event) {
 		SporkPlayer player = SporkPlayer.getPlayer(event.getPlayer());
 		player.updateInventory();
-		if(player.isObserver()) {
+		if(!player.isParticipating()) {
 			event.setCancelled(true);
 		}
 	}
