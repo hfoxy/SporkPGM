@@ -323,7 +323,7 @@ public class SporkPlayer implements Listener {
 		}
 
 		try {
-			Object living = NMSUtil.getClass("entity.CraftLivingEntity").cast(getPlayer());
+			Object living = NMSUtil.getClassBukkit("entity.CraftLivingEntity").cast(getPlayer());
 
 			// getPlayer().setAffectsSpawning(update);
 			Method spawning = living.getClass().getMethod("setAffectsSpawning", Boolean.class);
@@ -353,7 +353,7 @@ public class SporkPlayer implements Listener {
 			 */
 
 			Player player = getPlayer();
-			Object craft = NMSUtil.getClass("entity.CraftPlayer").cast(player);
+			Object craft = NMSUtil.getClassBukkit("entity.CraftPlayer").cast(player);
 			Method method = craft.getClass().getMethod("getHandle");
 			method.setAccessible(true);
 			Object handle = method.invoke(craft);

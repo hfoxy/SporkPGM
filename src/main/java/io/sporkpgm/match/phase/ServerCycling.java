@@ -77,7 +77,7 @@ public class ServerCycling extends ServerPhase {
 				} catch(Exception e) {
 					Log.warning("Server isn't running a version of Bukkit which allows the use of Firework.detonate() - resorting to manual detonation.");
 					try {
-						Object craft = NMSUtil.getClass("CraftFirework").cast(firework);
+						Object craft = NMSUtil.getClassBukkit("entity.CraftFirework").cast(firework);
 						Method method = craft.getClass().getMethod("getHandle");
 						method.setAccessible(true);
 						Object handle = method.invoke(craft);

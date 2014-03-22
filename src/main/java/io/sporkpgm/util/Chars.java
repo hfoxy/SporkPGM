@@ -82,7 +82,7 @@ public enum Chars {
 	 */
 	private static void allowCharacters(String allow) {
 		try {
-			Field allowed = NMSUtil.getClass("SharedConstants").getDeclaredField("allowedCharacters");
+			Field allowed = NMSUtil.getClassNMS("SharedConstants").getDeclaredField("allowedCharacters");
 			allowed.setAccessible(true);
 			Field modifiersField = Field.class.getDeclaredField("modifiers");
 			modifiersField.setAccessible(true);
