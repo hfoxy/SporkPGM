@@ -36,7 +36,7 @@ public class ServerCycling extends ServerPhase {
 		Rotation rotation = Spork.get().getRotation();
 		RotationSlot next = rotation.getNextSlot();
 
-		if(next != null) {
+		if(next != null && next.getMap() != null) {
 			try {
 				next.load();
 			} catch(RotationLoadException e) {

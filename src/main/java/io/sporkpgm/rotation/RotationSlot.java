@@ -43,6 +43,10 @@ public class RotationSlot {
 	}
 
 	public SporkMap getMap() {
+		if(match == null) {
+			return null;
+		}
+
 		return match.getMap();
 	}
 
