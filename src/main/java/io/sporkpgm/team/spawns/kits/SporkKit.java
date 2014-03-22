@@ -34,6 +34,7 @@ public class SporkKit {
 	}
 
 	public SporkKit(Element element, String name, List<KitItem> items, List<PotionEffect> potions, List<SporkKit> parents, List<KitArmor> armor) {
+		this.element = element;
 		this.name = name;
 		this.items = items;
 		this.potions = potions;
