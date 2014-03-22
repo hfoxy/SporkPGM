@@ -311,11 +311,28 @@ public class SporkMap {
 			}
 		}
 
+		if(teams.size() > 0) {
+			return teams;
+		}
+
 		for(SporkTeam team : test) {
 			if(!teams.contains(team)) {
 				String name = team.getName().toLowerCase();
 				String colour = team.getColor().name().replace("_", " ").toLowerCase();
 				if(name.startsWith(string) || colour.startsWith(string))
+					teams.add(team);
+			}
+		}
+
+		if(teams.size() > 0) {
+			return teams;
+		}
+
+		for(SporkTeam team : test) {
+			if(!teams.contains(team)) {
+				String name = team.getName().toLowerCase();
+				String colour = team.getColor().name().replace("_", " ").toLowerCase();
+				if(name.contains(string.toLowerCase()) || colour.contains(string.toLowerCase()))
 					teams.add(team);
 			}
 		}
