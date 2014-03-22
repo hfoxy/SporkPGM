@@ -36,19 +36,23 @@ public class ServerCycling extends ServerPhase {
 		Rotation rotation = Spork.get().getRotation();
 		RotationSlot next = rotation.getNextSlot();
 
-		if(next.getMap() == null) {
-			try {
-				next.load();
-			} catch(RotationLoadException e) {
-				Log.severe(e.getMessage());
-				next = null;
-			} catch(InvalidRegionException e) {
-				Log.severe(e.getMessage());
-				next = null;
-			} catch(ModuleLoadException e) {
-				Log.severe(e.getMessage());
-				next = null;
+		try {
+			if(next.getMap() == null) {
+				try {
+					next.load();
+				} catch(RotationLoadException e) {
+					Log.severe(e.getMessage());
+					next = null;
+				} catch(InvalidRegionException e) {
+					Log.severe(e.getMessage());
+					next = null;
+				} catch(ModuleLoadException e) {
+					Log.severe(e.getMessage());
+					next = null;
+				}
 			}
+		} catch(NullPointerException e) {
+			next = null;
 		}
 
 		ChatColor colour = ChatColor.GRAY;
