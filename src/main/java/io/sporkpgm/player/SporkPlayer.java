@@ -533,6 +533,10 @@ public class SporkPlayer implements Listener {
 	public static void vanish() {
 		Match match = RotationSlot.getRotation().getCurrentMatch();
 		for(SporkPlayer player : getPlayers()) {
+			if(player.getTeam() == null) {
+				continue;
+			}
+
 			SporkMap map = player.getTeam().getMap();
 			List<SporkPlayer> observers = map.getObservers().getPlayers();
 			List<SporkPlayer> players = new ArrayList<>();
