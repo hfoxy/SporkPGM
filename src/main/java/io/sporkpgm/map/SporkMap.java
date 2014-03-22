@@ -79,9 +79,6 @@ public class SporkMap {
 		this.observers = SporkTeamBuilder.observers(this);
 
 		this.modules = builder.getModules();
-		this.modules.addAll(Spork.get().getModules(this));
-		Log.info("Loaded " + modules.size() + " Modules: " + modules);
-
 		this.regions = builder.getRegions();
 
 		this.kits = builder.getKits();
@@ -240,6 +237,8 @@ public class SporkMap {
 		for(Module toRemove : remove) {
 			modules.remove(toRemove);
 		}
+		
+		Log.info("Loaded " + modules.size() + " Modules: " + modules);
 	}
 
 	public Document getDocument() {
