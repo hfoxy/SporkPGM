@@ -227,9 +227,11 @@ public class Rotation {
 		id++;
 		List<RotationSlot> list = getCurrentList().subList(0, current);
 		list.add(new RotationSlot(map, id));
-		if(getNext() != null) {
-			list.addAll(getCurrentList().subList(current + 1, getCurrentList().size() - 1));
-		}
+		try {
+			if(getNext() != null) {
+				list.addAll(getCurrentList().subList(current + 1, getCurrentList().size() - 1));
+			}
+		} catch(Exception e) { /* nothing */ }
 	}
 
 	@Override

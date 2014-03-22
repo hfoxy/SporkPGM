@@ -41,7 +41,7 @@ public class RotationCommands {
 
 	@Command(aliases = {"setnext", "sn"}, desc = "Set the next map", usage = "[map]", min = 1, max = 1)
 	@CommandPermissions("spork.match.setnext")
-	public static void start(CommandContext cmd, CommandSender sender) throws CommandException {
+	public static void setnext(CommandContext cmd, CommandSender sender) throws CommandException {
 		Rotation rotation = RotationSlot.getRotation();
 		RotationSlot slot = rotation.getCurrentSlot();
 		Match match = slot.getMatch();
