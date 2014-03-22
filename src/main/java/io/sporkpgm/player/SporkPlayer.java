@@ -323,10 +323,12 @@ public class SporkPlayer implements Listener {
 		}
 
 		try {
+			Object living = NMSUtil.getClass("entity.CraftLivingEntity").cast(getPlayer());
+
 			// getPlayer().setAffectsSpawning(update);
-			Method spawning = getPlayer().getClass().getMethod("setAffectsSpawning", Boolean.class);
+			Method spawning = living.getClass().getMethod("setAffectsSpawning", Boolean.class);
 			spawning.setAccessible(true);
-			spawning.invoke(getPlayer(), update);
+			spawning.invoke(living, update);
 
 			// getPlayer().setCollidesWithEntities(update);
 			Method collides = getPlayer().getClass().getMethod("setCollidesWithEntities", Boolean.class);
@@ -334,9 +336,9 @@ public class SporkPlayer implements Listener {
 			collides.invoke(getPlayer(), update);
 
 			// getPlayer().setArrowsStuck(0);
-			Method arrows = getPlayer().getClass().getMethod("setArrowsStuck", Integer.class);
+			Method arrows = living.getClass().getMethod("setArrowsStuck", Integer.class);
 			collides.setAccessible(true);
-			arrows.invoke(getPlayer(), update);
+			arrows.invoke(living, update);
 		} catch(Exception e) {
 			Log.warning("Not running Spork or AthenaBukkit, skipping affects spawning...");
 			e.printStackTrace();
