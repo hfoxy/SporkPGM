@@ -12,6 +12,7 @@ import io.sporkpgm.rotation.exceptions.RotationLoadException;
 import io.sporkpgm.util.Log;
 import io.sporkpgm.util.NMSUtil;
 import io.sporkpgm.util.NumberUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
@@ -93,6 +94,15 @@ public class ServerCycling extends ServerPhase {
 			}
 		} catch(NullPointerException ignored) {
 
+		}
+
+		if(duration <= 0 && next == null) {
+			for(SporkPlayer player : SporkPlayer.getPlayers()) {
+				player.getPlayer().kickPlayer(ChatColor.GREEN + "Server restarting!");
+			}
+
+			Bukkit.getServer().shutdown();
+			return;
 		}
 
 		if(duration <= 0) {
