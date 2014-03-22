@@ -147,6 +147,7 @@ public class SporkMap {
 				}
 				objective.getScore(team.getPlayer()).setScore(score);
 				score++;
+				score++; // increment twice to present a space between teams
 			}
 		}
 	}
