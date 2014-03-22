@@ -225,8 +225,9 @@ public class Rotation {
 		}
 
 		id++;
+		int current = this.current + 1;
 		List<RotationSlot> list = getCurrentList().subList(0, current);
-		Log.info("list[" + 0 + ", " + current + "] = {" + list.size() + ": " + list + "}");
+		Log.info("list[" + 0 + ", " + (current) + "] = {" + list.size() + ": " + list + "}");
 
 		list.add(new RotationSlot(map, id));
 		try {
