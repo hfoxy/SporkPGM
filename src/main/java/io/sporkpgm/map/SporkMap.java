@@ -473,17 +473,21 @@ public class SporkMap {
 			Object craftScore = CRAFT_SCORE.cast(score);
 
 			Object craftObjective = CRAFT_OBJECTIVE.cast(score.getObjective());
+			Method craftHandle = CRAFT_OBJECTIVE.getMethod("getHandle");
+			craftHandle.setAccessible(true);
+			Object craftObjectiveHandle = craftHandle.invoke(craftObjective);
 
 			Object craftScoreboard = CRAFT_SCOREBOARD.cast(score.getScoreboard());
-			Method craftHandle = CRAFT_SCOREBOARD.getMethod("getHandle");
-			craftHandle.setAccessible(true);
-			Object craftScoreboardHandle = craftHandle.invoke(craftScoreboard);
 
 			Method checkState = CRAFT_OBJECTIVE.getMethod("checkState");
 			checkState.setAccessible(true);
 			craftScoreboard = checkState.invoke(CRAFT_SCORE.getField("objective").get(craftScore));
 
-			Field board = CRAFT_SCOREBOARD.getField("board").get()
+			Object scoreboard = CRAFT_SCOREBOARD.getField("board").get(craftScoreboard);
+			Method playerObjectives = SCOREBOARD.getMethod("getPlayerObjectives", String.class);
+			playerObjectives.setAccessible(true);
+			Map map = (Map) playerObjectives.invoke(scoreboard, CRAFT_SCORE.getField("playerName").get(craftScore));
+			return map.containsKey(craftObjectiveHandle);
 			// return objective.checkState().board.getPlayerObjectives(playerName).containsKey(objective.getHandle());
 		}
 
