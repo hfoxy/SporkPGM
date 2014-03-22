@@ -4,6 +4,7 @@ import io.sporkpgm.Spork;
 import io.sporkpgm.module.Module;
 import io.sporkpgm.module.builder.Builder;
 import io.sporkpgm.module.exceptions.ModuleLoadException;
+import io.sporkpgm.module.modules.info.Contributor;
 import io.sporkpgm.module.modules.info.InfoBuilder;
 import io.sporkpgm.module.modules.info.InfoModule;
 import io.sporkpgm.region.Region;
@@ -58,6 +59,35 @@ public class MapBuilder {
 
 	public String getName() {
 		return info.getName();
+	}
+
+	public String toString() {
+		return info.getName();
+	}
+
+	public String getVersion() {
+		return info.getVersion();
+	}
+
+	public List<Contributor> getAuthors() {
+		return info.getAuthors();
+	}
+
+	public List<String> getAuthorNames() {
+		List<String> names = new ArrayList<>();
+		for(Contributor author : getAuthors()) {
+			names.add(author.getUsername());
+		}
+
+		return names;
+	}
+
+	public List<Contributor> getContributors() {
+		return info.getContributors();
+	}
+
+	public String getFolderName() {
+		return folder.getName();
 	}
 
 	public List<Module> getModules() {

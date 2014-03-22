@@ -24,6 +24,7 @@ import io.sporkpgm.team.spawns.SporkSpawnBuilder;
 import io.sporkpgm.team.spawns.kits.SporkKit;
 import io.sporkpgm.util.FileUtil;
 import io.sporkpgm.util.Log;
+import io.sporkpgm.util.NumberUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
@@ -301,15 +302,44 @@ public class SporkMap {
 		return teams;
 	}
 
-	public List<SporkKit> getKits() {
-		return kits;
-	}
-
 	public SporkTeam getTeam(String string) {
 		List<SporkTeam> teams = getTeams(string);
 		if(teams.size() == 0)
 			return null;
 		return teams.get(0);
+	}
+
+	public List<SporkTeam> getLowestTeams() {
+		List<SporkTeam> teams = new ArrayList<>();
+
+		teams.add(this.teams.get(0));
+		int low = this.teams.get(0).getPlayers().size();
+
+		for(SporkTeam team : this.teams)
+			if(!teams.contains(team))
+				if(team.getPlayers().size() <= low)
+					if(team.getPlayers().size() == low)
+						teams.add(team);
+					else {
+						teams = new ArrayList<>();
+						teams.add(team);
+					}
+
+		return teams;
+	}
+
+	public SporkTeam getLowestTeam() {
+		List<SporkTeam> teams = getLowestTeams();
+		if(teams.size() == 1)
+			return teams.get(0);
+		if(teams.size() == 0)
+			return null;
+
+		return teams.get(NumberUtil.getRandom(0, teams.size() - 1));
+	}
+
+	public List<SporkKit> getKits() {
+		return kits;
 	}
 
 	public List<Region> getRegions() {

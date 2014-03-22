@@ -1,5 +1,8 @@
 package io.sporkpgm;
 
+import io.sporkpgm.commands.MapCommands;
+import io.sporkpgm.commands.MatchCommands;
+import io.sporkpgm.commands.RotationCommands;
 import io.sporkpgm.listeners.BlockListener;
 import io.sporkpgm.listeners.ConnectionListener;
 import io.sporkpgm.listeners.EntityListener;
@@ -8,9 +11,12 @@ import io.sporkpgm.listeners.PlayerListener;
 import io.sporkpgm.map.MapBuilder;
 import io.sporkpgm.map.MapLoader;
 import io.sporkpgm.map.SporkMap;
+import io.sporkpgm.match.Match;
 import io.sporkpgm.module.Module;
 import io.sporkpgm.module.builder.Builder;
 import io.sporkpgm.module.builder.BuilderAbout;
+import io.sporkpgm.module.exceptions.ModuleLoadException;
+import io.sporkpgm.region.exception.InvalidRegionException;
 import io.sporkpgm.rotation.Rotation;
 import io.sporkpgm.rotation.exceptions.RotationLoadException;
 import io.sporkpgm.util.Config;
@@ -111,14 +117,29 @@ public class Spork extends JavaPlugin {
 			reason = "Unable to save new Rotation";
 		}
 
+		registerCommands();
+		registerListeners();
+
+		failed = true;
+		try {
+			rotation.start();
+			failed = false;
+		} catch(RotationLoadException e) {
+			Log.severe(e.getMessage());
+			reason = e.getMessage();
+		} catch(ModuleLoadException e) {
+			Log.severe(e.getMessage());
+			reason = e.getMessage();
+		} catch(InvalidRegionException e) {
+			Log.severe(e.getMessage());
+			reason = e.getMessage();
+		}
+
 		if(failed) {
 			Log.severe(reason + "! Disabling plugin...");
 			setEnabled(false);
 			return;
 		}
-
-		registerCommands();
-		registerListeners();
 	}
 
 	private void registerCommands() {
@@ -128,6 +149,10 @@ public class Spork extends JavaPlugin {
 			}
 		};
 		CommandsManagerRegistration cmr = new CommandsManagerRegistration(this, this.commands);
+
+		this.commands.register(MapCommands.class);
+		this.commands.register(MatchCommands.class);
+		this.commands.register(RotationCommands.class);
 	}
 
 	@Override
@@ -226,8 +251,28 @@ public class Spork extends JavaPlugin {
 		return spork;
 	}
 
+	public Match getMatch() {
+		return rotation.getCurrentMatch();
+	}
+
 	public static List<MapBuilder> getMaps() {
 		return get().maps;
+	}
+
+	public MapBuilder getMap(String name) {
+		for(MapBuilder builder : getMaps()) {
+			if(builder.getName().equalsIgnoreCase(name)) {
+				return builder;
+			}
+		}
+
+		for(MapBuilder builder : getMaps()) {
+			if(builder.getName().toLowerCase().startsWith(name.toLowerCase())) {
+				return builder;
+			}
+		}
+
+		return null;
 	}
 
 	private void registerListeners() {
