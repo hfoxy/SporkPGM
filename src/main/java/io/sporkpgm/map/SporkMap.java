@@ -503,7 +503,11 @@ public class SporkMap {
 			Object scoreboard = CRAFT_SCOREBOARD.getDeclaredField("board").get(craftScoreboard);
 			Method playerObjectives = SCOREBOARD.getDeclaredMethod("getPlayerObjectives", String.class);
 			playerObjectives.setAccessible(true);
-			Map map = (Map) playerObjectives.invoke(scoreboard, CRAFT_SCORE.getDeclaredField("playerName").get(craftScore));
+
+			Field playerField = CRAFT_SCORE.getDeclaredField("playerName");
+			playerField.setAccessible(true);
+			String playerName = (String) playerField.get(craftScore);
+			Map map = (Map) playerObjectives.invoke(scoreboard, playerName);
 
 			// return objective.checkState().board.getPlayerObjectives(playerName).containsKey(objective.getHandle());
 			return map.containsKey(craftObjectiveHandle);
