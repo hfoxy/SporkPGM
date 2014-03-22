@@ -1,14 +1,13 @@
 package io.sporkpgm.commands;
 
-import com.mcath.commons.util.string.PaginatedResult;
-import com.mcath.commons.util.string.StringUtil;
-import com.mcath.manager.AthenaManager;
-import com.mcath.manager.map.MapBuilder;
-import com.mcath.manager.rotation.RotationSlot;
-import com.mcath.manager.util.MapUtil;
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
+import io.sporkpgm.Spork;
+import io.sporkpgm.map.MapBuilder;
+import io.sporkpgm.rotation.RotationSlot;
+import io.sporkpgm.util.PaginatedResult;
+import io.sporkpgm.util.StringUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -34,7 +33,7 @@ public class MapCommands {
 			MapBuilder currentmap = RotationSlot.getRotation().getCurrent().getBuilder();
 			sendInfo(sender, currentmap);
 		} else {
-			MapBuilder result = MapUtil.getMap(cmd.getJoinedStrings(0));
+			MapBuilder result = Spork.get().getMap(cmd.getJoinedStrings(0));
 			if(result == null)
 				throw new CommandException("No map matched query!");
 			sendInfo(sender, result);
@@ -48,7 +47,7 @@ public class MapCommands {
 				"of" + " " + ChatColor.AQUA + "[pages]" + ChatColor.DARK_AQUA + ")";
 		String header = bar + loaded + bar;
 		List<String> rows = new ArrayList<>();
-		for(MapBuilder loader : AthenaManager.get().getMaps()) {
+		for(MapBuilder loader : Spork.get().getMaps()) {
 			rows.add(ChatColor.GOLD + loader.getName() + " " + ChatColor.DARK_PURPLE + "by " + StringUtil
 					.listToEnglishCompound(loader.getAuthorNames(), ChatColor.RED.toString(), ChatColor.DARK_PURPLE
 							.toString()));

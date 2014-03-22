@@ -223,6 +223,10 @@ public class SporkMap {
 		return folder;
 	}
 
+	public MapBuilder getBuilder() {
+		return builder;
+	}
+
 	public InfoModule getInfo() {
 		return builder.getInfo();
 	}
