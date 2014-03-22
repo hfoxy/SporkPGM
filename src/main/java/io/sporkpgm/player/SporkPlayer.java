@@ -323,22 +323,20 @@ public class SporkPlayer implements Listener {
 		}
 
 		try {
-			Object living = NMSUtil.getClassBukkit("entity.CraftLivingEntity").cast(getPlayer());
-
 			// getPlayer().setAffectsSpawning(update);
-			Method spawning = living.getClass().getMethod("setAffectsSpawning", Boolean.class);
+			Method spawning = Player.class.getMethod("setAffectsSpawning", Boolean.class);
 			spawning.setAccessible(true);
-			spawning.invoke(living, update);
+			spawning.invoke(getPlayer(), update);
 
 			// getPlayer().setCollidesWithEntities(update);
-			Method collides = getPlayer().getClass().getMethod("setCollidesWithEntities", Boolean.class);
+			Method collides = Player.class.getMethod("setCollidesWithEntities", Boolean.class);
 			collides.setAccessible(true);
 			collides.invoke(getPlayer(), update);
 
 			// getPlayer().setArrowsStuck(0);
-			Method arrows = living.getClass().getMethod("setArrowsStuck", Integer.class);
+			Method arrows = Player.class.getMethod("setArrowsStuck", Integer.class);
 			collides.setAccessible(true);
-			arrows.invoke(living, update);
+			arrows.invoke(getPlayer(), update);
 		} catch(Exception e) {
 			Log.warning("Not running Spork or AthenaBukkit, skipping affects spawning...");
 			e.printStackTrace();
@@ -354,7 +352,7 @@ public class SporkPlayer implements Listener {
 
 			Player player = getPlayer();
 			Object craft = NMSUtil.getClassBukkit("entity.CraftPlayer").cast(player);
-			Method method = craft.getClass().getMethod("getHandle");
+			Method method = NMSUtil.getClassBukkit("entity.CraftPlayer").getMethod("getHandle");
 			method.setAccessible(true);
 			Object handle = method.invoke(craft);
 			method = handle.getClass().getMethod("p", Integer.class);
