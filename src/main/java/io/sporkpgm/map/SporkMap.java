@@ -306,8 +306,10 @@ public class SporkMap {
 			if(!teams.contains(team)) {
 				String name = team.getName().toLowerCase();
 				String colour = team.getColor().name().replace("_", " ").toLowerCase();
-				if(name.equalsIgnoreCase(string) || colour.equalsIgnoreCase(string))
+				if(name.equalsIgnoreCase(string) || colour.equalsIgnoreCase(string)) {
+					Log.info("'" + string + "' equals ignore case '" + name + "' or '" + colour + "'");
 					teams.add(team);
+				}
 			}
 		}
 
@@ -319,8 +321,10 @@ public class SporkMap {
 			if(!teams.contains(team)) {
 				String name = team.getName().toLowerCase();
 				String colour = team.getColor().name().replace("_", " ").toLowerCase();
-				if(name.startsWith(string.toLowerCase()) || colour.startsWith(string.toLowerCase()))
+				if(name.startsWith(string.toLowerCase()) || colour.startsWith(string.toLowerCase())) {
+					Log.info("'" + string.toLowerCase() + "' starts with '" + name + "' or '" + colour + "'");
 					teams.add(team);
+				}
 			}
 		}
 
@@ -332,8 +336,10 @@ public class SporkMap {
 			if(!teams.contains(team)) {
 				String name = team.getName().toLowerCase();
 				String colour = team.getColor().name().replace("_", " ").toLowerCase();
-				if(name.contains(string.toLowerCase()) || colour.contains(string.toLowerCase()))
+				if(name.contains(string.toLowerCase()) || colour.contains(string.toLowerCase())) {
+					Log.info("'" + string.toLowerCase() + "' contains '" + name + "' or '" + colour + "'");
 					teams.add(team);
+				}
 			}
 		}
 
