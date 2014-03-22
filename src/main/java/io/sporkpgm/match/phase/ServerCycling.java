@@ -101,6 +101,7 @@ public class ServerCycling extends ServerPhase {
 				player.getPlayer().kickPlayer(ChatColor.GREEN + "Server restarting!");
 			}
 
+			complete = true;
 			Bukkit.getServer().shutdown();
 			return;
 		}
