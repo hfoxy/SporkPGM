@@ -6,6 +6,7 @@ import io.sporkpgm.match.phase.ServerPhase;
 import io.sporkpgm.module.ModuleInfo;
 import io.sporkpgm.module.builder.Builder;
 import io.sporkpgm.objective.ObjectiveModule;
+import io.sporkpgm.player.SporkPlayer;
 import io.sporkpgm.region.types.BlockRegion;
 import io.sporkpgm.team.SporkTeam;
 import org.bukkit.Bukkit;
@@ -22,6 +23,8 @@ public class VictoryObjective extends ObjectiveModule {
 	DyeColor dye;
 	ChatColor color;
 	BlockRegion place;
+
+	SporkPlayer completer;
 	boolean complete;
 
 	SporkTeam team;
@@ -57,6 +60,8 @@ public class VictoryObjective extends ObjectiveModule {
 
 		StringBuilder builder = new StringBuilder();
 		builder.append(color).append(name).append(ChatColor.GRAY).append(" was completed by ");
+		builder.append(ChatColor.AQUA).append(completer.getName());
+
 		Bukkit.broadcastMessage(builder.toString());
 	}
 
