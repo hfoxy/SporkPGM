@@ -327,22 +327,30 @@ public class SporkPlayer implements Listener {
 			Method spawning = Player.class.getMethod("setAffectsSpawning", boolean.class);
 			spawning.setAccessible(true);
 			spawning.invoke(getPlayer(), update);
-
-			// getPlayer().setCollidesWithEntities(update);
-			Method collides = Player.class.getMethod("setCollidesWithEntities", boolean.class);
-			collides.setAccessible(true);
-			collides.invoke(getPlayer(), update);
-
-			// getPlayer().setArrowsStuck(0);
-			Method arrows = Player.class.getMethod("setArrowsStuck", int.class);
-			collides.setAccessible(true);
-			arrows.invoke(getPlayer(), update);
 		} catch(Exception e) {
 			Log.warning("Not running Spork or AthenaBukkit, skipping affects spawning...");
 			e.printStackTrace();
 		}
 
 		try {
+			// getPlayer().setCollidesWithEntities(update);
+			Method collides = Player.class.getMethod("setCollidesWithEntities", boolean.class);
+			collides.setAccessible(true);
+			collides.invoke(getPlayer(), update);
+		} catch(Exception e) {
+			Log.warning("Not running Spork or AthenaBukkit, skipping collides with entities...");
+			e.printStackTrace();
+		}
+
+		try {
+			// getPlayer().setArrowsStuck(0);
+			Method arrows = Player.class.getMethod("setArrowsStuck", int.class);
+			arrows.setAccessible(true);
+			arrows.invoke(getPlayer(), 0);
+		} catch(Exception e) {
+			Log.warning("Not running Spork or AthenaBukkit, attempting to set arrows stuck manually...");
+
+			try {
 			/*
 			 * CraftPlayer player = (CraftPlayer) getPlayer();
 			 * player.getHandle().p(0);
@@ -350,17 +358,18 @@ public class SporkPlayer implements Listener {
 			 * Set a players Arrows Stuck to 0
 			 */
 
-			Player player = getPlayer();
-			Object craft = NMSUtil.getClassBukkit("entity.CraftPlayer").cast(player);
-			Method method = NMSUtil.getClassBukkit("entity.CraftPlayer").getMethod("getHandle");
-			method.setAccessible(true);
-			Object handle = method.invoke(craft);
-			method = NMSUtil.getClassNMS("EntityLiving").getMethod("p", int.class);
-			method.setAccessible(true);
-			method.invoke(NMSUtil.getClassNMS("EntityLiving").cast(craft), 0);
-		} catch(Exception e) {
-			Log.warning("Failed to set Arrows Stuck manually");
-			e.printStackTrace();
+				Player player = getPlayer();
+				Object craft = NMSUtil.getClassBukkit("entity.CraftPlayer").cast(player);
+				Method method = NMSUtil.getClassBukkit("entity.CraftPlayer").getMethod("getHandle");
+				method.setAccessible(true);
+				Object handle = method.invoke(craft);
+				method = NMSUtil.getClassNMS("EntityLiving").getMethod("p", int.class);
+				method.setAccessible(true);
+				method.invoke(NMSUtil.getClassNMS("EntityLiving").cast(handle), 0);
+			} catch(Exception e2) {
+				Log.warning("Failed to set Arrows Stuck manually");
+				e2.printStackTrace();
+			}
 		}
 
 		getPlayer().setCanPickupItems(update);
