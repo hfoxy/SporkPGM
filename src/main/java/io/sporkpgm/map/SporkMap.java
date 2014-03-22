@@ -39,7 +39,6 @@ import org.dom4j.Document;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -491,20 +490,20 @@ public class SporkMap {
 			Object craftScore = CRAFT_SCORE.cast(score);
 
 			Object craftObjective = CRAFT_OBJECTIVE.cast(score.getObjective());
-			Method craftHandle = CRAFT_OBJECTIVE.getMethod("getHandle");
+			Method craftHandle = CRAFT_OBJECTIVE.getDeclaredMethod("getHandle");
 			craftHandle.setAccessible(true);
 			Object craftObjectiveHandle = craftHandle.invoke(craftObjective);
 
 			Object craftScoreboard;
 
-			Method checkState = CRAFT_OBJECTIVE.getMethod("checkState");
+			Method checkState = CRAFT_OBJECTIVE.getDeclaredMethod("checkState");
 			checkState.setAccessible(true);
-			craftScoreboard = checkState.invoke(CRAFT_SCORE.getField("objective").get(craftScore));
+			craftScoreboard = checkState.invoke(CRAFT_SCORE.getDeclaredField("objective").get(craftScore));
 
-			Object scoreboard = CRAFT_SCOREBOARD.getField("board").get(craftScoreboard);
-			Method playerObjectives = SCOREBOARD.getMethod("getPlayerObjectives", String.class);
+			Object scoreboard = CRAFT_SCOREBOARD.getDeclaredField("board").get(craftScoreboard);
+			Method playerObjectives = SCOREBOARD.getDeclaredMethod("getPlayerObjectives", String.class);
 			playerObjectives.setAccessible(true);
-			Map map = (Map) playerObjectives.invoke(scoreboard, CRAFT_SCORE.getField("playerName").get(craftScore));
+			Map map = (Map) playerObjectives.invoke(scoreboard, CRAFT_SCORE.getDeclaredField("playerName").get(craftScore));
 
 			// return objective.checkState().board.getPlayerObjectives(playerName).containsKey(objective.getHandle());
 			return map.containsKey(craftObjectiveHandle);
@@ -522,21 +521,21 @@ public class SporkMap {
 			Object craftScore = CRAFT_SCORE.cast(score);
 
 			Object craftObjective = CRAFT_OBJECTIVE.cast(score.getObjective());
-			Method craftHandle = CRAFT_OBJECTIVE.getMethod("getHandle");
+			Method craftHandle = CRAFT_OBJECTIVE.getDeclaredMethod("getHandle");
 			craftHandle.setAccessible(true);
 			Object craftObjectiveHandle = craftHandle.invoke(craftObjective);
 
 			Object craftScoreboard;
 
-			Method checkState = CRAFT_OBJECTIVE.getMethod("checkState");
+			Method checkState = CRAFT_OBJECTIVE.getDeclaredMethod("checkState");
 			checkState.setAccessible(true);
-			craftScoreboard = checkState.invoke(CRAFT_SCORE.getField("objective").get(craftScore));
+			craftScoreboard = checkState.invoke(CRAFT_SCORE.getDeclaredField("objective").get(craftScore));
 
-			Object scoreboard = CRAFT_SCOREBOARD.getField("board").get(craftScoreboard);
-			Method playerObjectives = SCOREBOARD.getMethod("getPlayerObjectives", String.class);
+			Object scoreboard = CRAFT_SCOREBOARD.getDeclaredField("board").get(craftScoreboard);
+			Method playerObjectives = SCOREBOARD.getDeclaredMethod("getPlayerObjectives", String.class);
 			playerObjectives.setAccessible(true);
 
-			String playerName = (String) CRAFT_SCORE.getField("playerName").get(craftScore);
+			String playerName = (String) CRAFT_SCORE.getDeclaredField("playerName").get(craftScore);
 			Map map = (Map) playerObjectives.invoke(scoreboard, playerName);
 
 			if(map.remove(craftObjectiveHandle) == null) {
@@ -544,21 +543,21 @@ public class SporkMap {
 				return;
 			}
 
-			Method resetScores = SCOREBOARD.getMethod("resetPlayerScores", String.class);
+			Method resetScores = SCOREBOARD.getDeclaredMethod("resetPlayerScores", String.class);
 			resetScores.setAccessible(true);
 			resetScores.invoke(scoreboard, playerName);
 
 			for(Object key : map.keySet()) {
 				Object value = map.get(key);
-				Method playerScoreMethod = SCOREBOARD.getMethod("getPlayerScoreForObjective", String.class, SCOREBOARD_OBJECTIVE);
+				Method playerScoreMethod = SCOREBOARD.getDeclaredMethod("getPlayerScoreForObjective", String.class, SCOREBOARD_OBJECTIVE);
 				playerScoreMethod.setAccessible(true);
 				Object scoreboardScore = playerScoreMethod.invoke(scoreboard, playerName, key);
 
-				Method getScore = SCOREBOARD_SCORE.getMethod("getScore");
+				Method getScore = SCOREBOARD_SCORE.getDeclaredMethod("getScore");
 				getScore.setAccessible(true);
 				int setScoreTo = (int) getScore.invoke(value);
 
-				Method setScore = SCOREBOARD_SCORE.getMethod("setScore", int.class);
+				Method setScore = SCOREBOARD_SCORE.getDeclaredMethod("setScore", int.class);
 				setScore.setAccessible(true);
 				setScore.invoke(scoreboardScore, setScoreTo);
 			}
