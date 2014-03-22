@@ -376,6 +376,7 @@ public class SporkPlayer implements Listener {
 		getPlayer().setFireTicks(0);
 		getPlayer().setFallDistance(0);
 		getPlayer().setExp(0);
+		getPlayer().setLevel(0);
 		getPlayer().setHealth(20);
 		getPlayer().setFoodLevel(20);
 		getPlayer().setSaturation(20);
@@ -396,12 +397,25 @@ public class SporkPlayer implements Listener {
 	}
 
 	public void empty() {
+		ItemStack air = new ItemStack(Material.AIR, 0);
+
 		clearPotionEffects();
-		getPlayer().getInventory().clear();
-		getPlayer().getInventory().setHelmet(null);
-		getPlayer().getInventory().setChestplate(null);
-		getPlayer().getInventory().setLeggings(null);
-		getPlayer().getInventory().setBoots(null);
+
+		boolean cancel = false;
+		for(int i = 0; !cancel; i++) {
+			try {
+				getPlayer().getInventory().setItem(i, air);
+			} catch(Exception e) {
+				cancel = true;
+			}
+			i++;
+		}
+
+		getPlayer().getInventory().setHelmet(air);
+		getPlayer().getInventory().setChestplate(air);
+		getPlayer().getInventory().setLeggings(air);
+		getPlayer().getInventory().setBoots(air);
+		getPlayer().updateInventory();
 	}
 
 	public void clearPotionEffects() {
