@@ -39,6 +39,7 @@ import org.dom4j.Document;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -495,7 +496,9 @@ public class SporkMap {
 			craftHandle.setAccessible(true);
 			Object craftObjectiveHandle = craftHandle.invoke(craftObjective);
 
-			Object craftScoreboard = checkState(CRAFT_SCORE.getDeclaredField("objective").get(craftScore));
+			Field objective = CRAFT_SCORE.getDeclaredField("objective");
+			objective.setAccessible(true);
+			Object craftScoreboard = checkState(objective.get(craftScore));
 
 			Object scoreboard = CRAFT_SCOREBOARD.getDeclaredField("board").get(craftScoreboard);
 			Method playerObjectives = SCOREBOARD.getDeclaredMethod("getPlayerObjectives", String.class);
@@ -522,7 +525,9 @@ public class SporkMap {
 			craftHandle.setAccessible(true);
 			Object craftObjectiveHandle = craftHandle.invoke(craftObjective);
 
-			Object craftScoreboard = checkState(CRAFT_SCORE.getDeclaredField("objective").get(craftScore));
+			Field objective = CRAFT_SCORE.getDeclaredField("objective");
+			objective.setAccessible(true);
+			Object craftScoreboard = checkState(objective);
 
 			/*
 			Method checkState = CRAFT_OBJECTIVE.getDeclaredMethod("checkState");
