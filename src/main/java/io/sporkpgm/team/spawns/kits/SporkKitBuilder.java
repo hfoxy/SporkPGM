@@ -118,7 +118,7 @@ public class SporkKitBuilder {
 	}
 
 	public static PotionEffect parsePotion(Element element, String name) throws ModuleLoadException {
-		PotionEffectType type = PotionEffectType.getByName(element.getText());
+		PotionEffectType type = StringUtil.convertStringToPotionEffectType(element.getText());
 		if(type == null) {
 			throw new ModuleLoadException(element, "Invalid potion type: '" + element.getText() + "' for '" + name + "'");
 		}
