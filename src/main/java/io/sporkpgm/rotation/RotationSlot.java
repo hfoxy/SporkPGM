@@ -5,6 +5,7 @@ import io.sporkpgm.map.MapBuilder;
 import io.sporkpgm.map.SporkMap;
 import io.sporkpgm.match.Match;
 import io.sporkpgm.module.exceptions.ModuleLoadException;
+import io.sporkpgm.region.exception.InvalidRegionException;
 import io.sporkpgm.rotation.exceptions.RotationLoadException;
 
 public class RotationSlot {
@@ -52,7 +53,7 @@ public class RotationSlot {
 		return match;
 	}
 
-	public Match load() throws RotationLoadException {
+	public Match load() throws RotationLoadException, InvalidRegionException, ModuleLoadException {
 		SporkMap map = loader.getMap();
 		Match match = new Match(map, id);
 		setMatch(match);

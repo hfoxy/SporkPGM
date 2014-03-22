@@ -3,7 +3,9 @@ package io.sporkpgm.match.phase;
 import io.sporkpgm.Spork;
 import io.sporkpgm.match.Match;
 import io.sporkpgm.match.MatchPhase;
+import io.sporkpgm.module.exceptions.ModuleLoadException;
 import io.sporkpgm.player.SporkPlayer;
+import io.sporkpgm.region.exception.InvalidRegionException;
 import io.sporkpgm.rotation.Rotation;
 import io.sporkpgm.rotation.RotationSlot;
 import io.sporkpgm.rotation.exceptions.RotationLoadException;
@@ -37,6 +39,12 @@ public class ServerCycling extends ServerPhase {
 			try {
 				next.load();
 			} catch(RotationLoadException e) {
+				Log.severe(e.getMessage());
+				next = null;
+			} catch(InvalidRegionException e) {
+				Log.severe(e.getMessage());
+				next = null;
+			} catch(ModuleLoadException e) {
 				Log.severe(e.getMessage());
 				next = null;
 			}
