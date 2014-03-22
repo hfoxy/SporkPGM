@@ -25,6 +25,9 @@ import java.util.List;
 
 public class Rotation {
 
+	static int attempts = 0;
+	static int maxAttempts = 5;
+
 	boolean started;
 	boolean cancel;
 
@@ -84,6 +87,11 @@ public class Rotation {
 
 			rotation.delete();
 			create(rotation);
+			attempts++;
+			if(attempts > maxAttempts) {
+				throw new RotationLoadException("Attempted to create the Rotation 5 times and failed every time");
+			}
+			return provide();
 		}
 
 		return new Rotation(slots);
