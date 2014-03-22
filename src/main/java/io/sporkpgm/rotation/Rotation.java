@@ -1,7 +1,6 @@
 package io.sporkpgm.rotation;
 
 import com.google.common.base.Charsets;
-import com.google.common.base.Objects;
 import io.sporkpgm.Spork;
 import io.sporkpgm.map.MapBuilder;
 import io.sporkpgm.map.SporkMap;
@@ -211,15 +210,8 @@ public class Rotation {
 
 	@Override
 	public String toString() {
-		return Objects.toStringHelper(this)
-				.add("started", started)
-				.add("cancel", cancel)
-				.add("id", id)
-				.add("list", list)
-				.add("slot", slot)
-				.add("current", current)
-				.add("slots", slots)
-				.toString();
+		return getClass().getSimpleName() + "{started=" + started + ",cancel=" + cancel
+				+ ",id=" + id + ",list=" + list + ",slot=" + slot + ",current=" + current + ",slots=" + slots.toString() + "}";
 	}
 
 }
