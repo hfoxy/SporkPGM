@@ -480,7 +480,7 @@ public class SporkMap {
 
 		public static boolean isSet(Score score) {
 			try {
-				return isSet(score);
+				return isSetException(score);
 			} catch(Exception e) {
 				e.printStackTrace();
 				return false;
@@ -512,7 +512,7 @@ public class SporkMap {
 
 		public static void reset(Score score) {
 			try {
-				reset(score);
+				resetException(score);
 			} catch(Exception e) {
 				e.printStackTrace();
 			}
