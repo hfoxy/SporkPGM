@@ -150,8 +150,15 @@ public class SporkMap {
 				}
 			} else {
 				if(score != 1) {
-					OfflinePlayer space = Bukkit.getOfflinePlayer(" ");
-					this.objective.getScore(space)
+					String spaces = " ";
+					OfflinePlayer space = Bukkit.getOfflinePlayer(spaces);
+					while(ScoreAPI.isSet(this.objective.getScore(space))) {
+						spaces += " ";
+						space = Bukkit.getOfflinePlayer(spaces);
+					}
+
+					this.objective.getScore(space).setScore(score + 1);
+					this.objective.getScore(space).setScore(score);
 				}
 
 				for(ObjectiveModule objective : team.getObjectives()) {
@@ -471,7 +478,16 @@ public class SporkMap {
 		private static Class<?> SCOREBOARD_SCORE = NMSUtil.getClassNMS("ScoreboardScore");
 		private static Class<?> SCOREBOARD_OBJECTIVE = NMSUtil.getClassNMS("ScoreboardObjective");
 
-		public static boolean isSet(Score score) throws NoSuchMethodException, NoSuchFieldException, IllegalAccessException, InvocationTargetException {
+		public static boolean isSet(Score score) {
+			try {
+				return isSet(score);
+			} catch(Exception e) {
+				e.printStackTrace();
+				return false;
+			}
+		}
+
+		private static boolean isSetException(Score score) throws NoSuchMethodException, NoSuchFieldException, IllegalAccessException, InvocationTargetException {
 			Object craftScore = CRAFT_SCORE.cast(score);
 
 			Object craftObjective = CRAFT_OBJECTIVE.cast(score.getObjective());
@@ -494,7 +510,15 @@ public class SporkMap {
 			return map.containsKey(craftObjectiveHandle);
 		}
 
-		public static void reset(Score score) throws NoSuchMethodException, NoSuchFieldException, IllegalAccessException, InvocationTargetException {
+		public static void reset(Score score) {
+			try {
+				reset(score);
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		private static void resetException(Score score) throws NoSuchMethodException, NoSuchFieldException, IllegalAccessException, InvocationTargetException {
 			Object craftScore = CRAFT_SCORE.cast(score);
 
 			Object craftObjective = CRAFT_OBJECTIVE.cast(score.getObjective());
