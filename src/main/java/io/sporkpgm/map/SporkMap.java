@@ -559,7 +559,7 @@ public class SporkMap {
 
 			Field objective = CRAFT_SCORE.getDeclaredField("objective");
 			objective.setAccessible(true);
-			Object craftScoreboard = checkState(objective);
+			Object craftScoreboard = checkState(objective.get(craftScore));
 
 			/*
 			Method checkState = CRAFT_OBJECTIVE.getDeclaredMethod("checkState");
