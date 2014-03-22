@@ -202,7 +202,12 @@ public class SporkKitBuilder {
 	public static int parseAmount(Element element, String name) throws ModuleLoadException {
 		int amount;
 		try {
-			amount = Integer.parseInt(element.attributeValue("amount"));
+			String string = element.attributeValue("amount");
+			if(string == null) {
+				throw new NullPointerException(string);
+			}
+
+			amount = Integer.parseInt(string);
 		} catch(NumberFormatException e) {
 			throw new ModuleLoadException(element, "Could not parse kit because amount was provided but was not a valid number for '" + name + "'");
 		} catch(NullPointerException e) {
