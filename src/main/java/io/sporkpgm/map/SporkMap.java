@@ -473,6 +473,7 @@ public class SporkMap {
 		private static Class<?> CRAFT_SCORE = NMSUtil.getClassBukkit("scoreboard.CraftScore");
 		private static Class<?> CRAFT_OBJECTIVE = NMSUtil.getClassBukkit("scoreboard.CraftObjective");
 		private static Class<?> CRAFT_SCOREBOARD = NMSUtil.getClassBukkit("scoreboard.CraftScoreboard");
+		private static Class<?> CRAFT_SCOREBOARD_COMPONENT = NMSUtil.getClassBukkit("scoreboard.CraftScoreboardComponent");
 		private static Class<?> SCOREBOARD = NMSUtil.getClassNMS("Scoreboard");
 		private static Class<?> SCOREBOARD_SCORE = NMSUtil.getClassNMS("ScoreboardScore");
 		private static Class<?> SCOREBOARD_OBJECTIVE = NMSUtil.getClassNMS("ScoreboardObjective");
@@ -525,11 +526,13 @@ public class SporkMap {
 			craftHandle.setAccessible(true);
 			Object craftObjectiveHandle = craftHandle.invoke(craftObjective);
 
-			Object craftScoreboard;
+			Object craftScoreboard = checkState(CRAFT_SCORE.getDeclaredField("objective").get(craftScore));
 
+			/*
 			Method checkState = CRAFT_OBJECTIVE.getDeclaredMethod("checkState");
 			checkState.setAccessible(true);
 			craftScoreboard = checkState.invoke(CRAFT_SCORE.getDeclaredField("objective").get(craftScore));
+			*/
 
 			Object scoreboard = CRAFT_SCOREBOARD.getDeclaredField("board").get(craftScoreboard);
 			Method playerObjectives = SCOREBOARD.getDeclaredMethod("getPlayerObjectives", String.class);
@@ -573,6 +576,35 @@ public class SporkMap {
 			for(Map.Entry<ScoreboardObjective, ScoreboardScore> e : savedScores.entrySet()) {
 				myBoard.board.getPlayerScoreForObjective(playerName, e.getKey()).setScore(e.getValue().getScore());
 			}
+			*/
+		}
+
+		public static Object checkState(Object craftObjective) {
+			try {
+				return checkStateException(craftObjective);
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+
+			return null;
+		}
+
+		public static Object checkStateException(Object craftObjective) throws NoSuchFieldException, IllegalAccessException {
+			Object boardComponent = CRAFT_SCOREBOARD_COMPONENT.cast(craftObjective);
+			Object craftBoard = CRAFT_SCOREBOARD_COMPONENT.getDeclaredField("scoreboard").get(boardComponent);
+
+			if(craftBoard == null) {
+				throw new IllegalStateException("Unregistered scoreboard component");
+			}
+
+			return craftBoard;
+
+			/*
+			CraftScoreboard scoreboard = this.scoreboard;
+			if(scoreboard == null) {
+				throw new IllegalStateException("Unregistered scoreboard component");
+			}
+			return scoreboard;
 			*/
 		}
 
