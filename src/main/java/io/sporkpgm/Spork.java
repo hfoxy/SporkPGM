@@ -206,13 +206,15 @@ public class Spork extends JavaPlugin {
 		List<Module> modules = new ArrayList<>();
 
 		for(Class<? extends Builder> clazz : builders) {
-			try {
-				Constructor constructor = clazz.getConstructor(Document.class);
-				constructor.setAccessible(true);
-				Builder builder = (Builder) constructor.newInstance(document);
-				modules.addAll(builder.build());
-			} catch(Exception e) {
-				getLogger().warning("Error when loading '" + clazz.getSimpleName() + "' due to " + e.getClass().getSimpleName());
+			if(isDocumentable(clazz)) {
+				try {
+					Constructor constructor = clazz.getConstructor(Document.class);
+					constructor.setAccessible(true);
+					Builder builder = (Builder) constructor.newInstance(document);
+					modules.addAll(builder.build());
+				} catch(Exception e) {
+					getLogger().warning("Error when loading '" + clazz.getSimpleName() + "' due to " + e.getClass().getSimpleName());
+				}
 			}
 		}
 
@@ -223,13 +225,15 @@ public class Spork extends JavaPlugin {
 		List<Module> modules = new ArrayList<>();
 
 		for(Class<? extends Builder> clazz : builders) {
-			try {
-				Constructor constructor = clazz.getConstructor(SporkMap.class, Document.class);
-				constructor.setAccessible(true);
-				Builder builder = (Builder) constructor.newInstance(map, map.getDocument());
-				modules.addAll(builder.build());
-			} catch(Exception e) {
-				getLogger().warning("Error when loading '" + clazz.getSimpleName() + "' due to " + e.getClass().getSimpleName());
+			if(!isDocumentable(clazz)) {
+				try {
+					Constructor constructor = clazz.getConstructor(SporkMap.class);
+					constructor.setAccessible(true);
+					Builder builder = (Builder) constructor.newInstance(map);
+					modules.addAll(builder.build());
+				} catch(Exception e) {
+					getLogger().warning("Error when loading '" + clazz.getSimpleName() + "' due to " + e.getClass().getSimpleName());
+				}
 			}
 		}
 
