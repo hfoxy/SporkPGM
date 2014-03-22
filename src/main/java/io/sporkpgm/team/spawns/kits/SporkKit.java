@@ -7,36 +7,43 @@ import io.sporkpgm.util.Log;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
+import org.dom4j.Element;
 
 import java.util.List;
 
 public class SporkKit {
 
+	private Element element;
+
 	private String name;
-	private List<KitItem> kitItems;
+	private List<KitItem> items;
 	private List<PotionEffect> potions;
-	private List<KitArmor> kitArmor;
+	private List<KitArmor> armors;
 	private List<SporkKit> parents;
 
-	public SporkKit(String name, List<KitItem> kitItems) {
-		this(name, kitItems, null, null, null);
+	public SporkKit(Element element, String name, List<KitItem> items) {
+		this(element, name, items, null, null, null);
 	}
 
-	public SporkKit(String name, List<KitItem> kitItems, List<PotionEffect> potions) {
-		this(name, kitItems, potions, null, null);
+	public SporkKit(Element element, String name, List<KitItem> items, List<PotionEffect> potions) {
+		this(element, name, items, potions, null, null);
 	}
 
-	public SporkKit(String name, List<KitItem> kitItems, List<PotionEffect> potions, List<KitArmor> armor) {
-		this(name, kitItems, potions, null, armor);
+	public SporkKit(Element element, String name, List<KitItem> items, List<PotionEffect> potions, List<KitArmor> armor) {
+		this(element, name, items, potions, null, armor);
 	}
 
-	public SporkKit(String name, List<KitItem> kitItems, List<PotionEffect> potions, List<SporkKit> parents, List<KitArmor> armor) {
+	public SporkKit(Element element, String name, List<KitItem> items, List<PotionEffect> potions, List<SporkKit> parents, List<KitArmor> armor) {
 		this.name = name;
-		this.kitItems = kitItems;
+		this.items = items;
 		this.potions = potions;
-		this.parents = parents;
-		this.kitArmor = armor;
-		this.parents = Lists.newArrayList();
+		this.armors = armor;
+
+		if(parents != null && !parents.isEmpty()) {
+			this.parents = parents;
+		} else {
+			this.parents = Lists.newArrayList();
+		}
 	}
 
 	public void apply(SporkPlayer player) {
@@ -47,12 +54,12 @@ public class SporkKit {
 		PlayerInventory inv = player.getInventory();
 		Log.info("Actually applying kit..." + name);
 
-		if(kitItems != null) {
-			Log.info(kitItems.size() + " items in '" + name + "'");
+		if(items != null) {
+			Log.info(items.size() + " items in '" + name + "'");
 		}
 
-		for(KitItem item : kitItems) {
-			inv.setItem(item.getSlot(), item.getItem());
+		for(KitItem item : items) {
+			inv.setItem(item.getSlot(), item.getItem().clone());
 		}
 
 		if(potions != null) {
@@ -60,18 +67,18 @@ public class SporkKit {
 			// player.addPotionEffects(potions);
 		}
 
-		if(kitArmor != null) {
-			Log.info(kitArmor.size() + " armor slots used in '" + name + "'");
-			for(KitArmor armor : kitArmor) {
+		if(armors != null) {
+			Log.info(armors.size() + " armor slots used in '" + name + "'");
+			for(KitArmor armor : armors) {
 				switch(armor.getSlot()) {
 					case HELMET:
-						inv.setHelmet(armor.getItem());
+						inv.setHelmet(armor.getItem().clone());
 					case CHESTPLATE:
-						inv.setChestplate(armor.getItem());
+						inv.setChestplate(armor.getItem().clone());
 					case LEGGINGS:
-						inv.setLeggings(armor.getItem());
+						inv.setLeggings(armor.getItem().clone());
 					case BOOTS:
-						inv.setBoots(armor.getItem());
+						inv.setBoots(armor.getItem().clone());
 				}
 			}
 		}
@@ -89,16 +96,20 @@ public class SporkKit {
 		}
 	}
 
-	public List<PotionEffect> getPotions() {
-		return potions;
-	}
-
-	public List<KitItem> getKitItems() {
-		return kitItems;
+	public Element getElement() {
+		return element;
 	}
 
 	public String getName() {
 		return name;
+	}
+
+	public List<PotionEffect> getPotions() {
+		return potions;
+	}
+
+	public List<KitItem> getItems() {
+		return items;
 	}
 
 	public List<SporkKit> getParents() {

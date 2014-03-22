@@ -207,7 +207,7 @@ public class StringUtil {
 	}
 
 	public static String colorize(String string) {
-		return string.replaceAll("&", "§");
+		return string.replace("&", "§").replace("`", "§");
 	}
 
 	/**
