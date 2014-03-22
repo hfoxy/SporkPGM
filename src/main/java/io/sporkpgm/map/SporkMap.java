@@ -159,6 +159,7 @@ public class SporkMap {
 
 					this.objective.getScore(space).setScore(score + 1);
 					this.objective.getScore(space).setScore(score);
+					score++;
 				}
 
 				for(ObjectiveModule objective : team.getObjectives()) {
