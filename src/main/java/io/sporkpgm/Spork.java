@@ -62,6 +62,7 @@ public class Spork extends JavaPlugin {
 			getConfig().set("settings.maps.repository", "maps/");
 		}
 
+		builders();
 		repository = Map.DIRECTORY;
 		maps = new ArrayList<>();
 
