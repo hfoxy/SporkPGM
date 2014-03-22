@@ -54,17 +54,12 @@ public class Rotation {
 		}
 
 		if(!rotation.exists()) {
-			BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(rotation), "UTF8"));
-			for(MapBuilder loader : Spork.getMaps()) {
-				Log.info("Printing out " + loader.getName() + " into the Rotation file");
-				out.write(loader.getName());
-			}
-
-			out.close();
+			create(rotation);
 		}
 
+		List<String> lines = Files.readAllLines(rotation.toPath(), Charsets.UTF_8);
 		List<MapBuilder> loaders = new ArrayList<>();
-		for(String rawLine : Files.readAllLines(rotation.toPath(), Charsets.UTF_8)) {
+		for(String rawLine : lines) {
 			if(MapBuilder.getLoader(rawLine) == null) {
 				Log.warning("Failed to find a map for '" + rawLine + "' in the rotation file");
 				continue;
@@ -80,7 +75,28 @@ public class Rotation {
 			id++;
 		}
 
+		if(lines.size() == 0 || slots.size() == 0) {
+			if(lines.size() == 0) {
+				Log.warning("Creating a new rotation.txt because the old one was empty");
+			} else {
+				Log.warning("Creating a new rotation.txt because the old one had no valid entries");
+			}
+
+			rotation.delete();
+			create(rotation);
+		}
+
 		return new Rotation(slots);
+	}
+
+	private static void create(File rotation) throws IOException {
+		BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(rotation), "UTF8"));
+		for(MapBuilder loader : Spork.getMaps()) {
+			Log.info("Printing out " + loader.getName() + " into the Rotation file");
+			out.write(loader.getName());
+		}
+
+		out.close();
 	}
 
 	public void start() throws ModuleLoadException, RotationLoadException, InvalidRegionException {
