@@ -163,6 +163,7 @@ public class SporkMap {
 					score++;
 				}
 
+				Log.info(team.getName() + ": " + team.getObjectives().size() + " Objectives");
 				for(ObjectiveModule objective : team.getObjectives()) {
 					Log.info("Setting score of " + ChatColor.stripColor(objective.getPlayer().getName()) + " to " + score);
 					Log.info(ChatColor.stripColor(objective.getPlayer().getName()) + ": " + objective);
