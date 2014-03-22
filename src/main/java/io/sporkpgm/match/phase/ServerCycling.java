@@ -10,6 +10,7 @@ import io.sporkpgm.rotation.Rotation;
 import io.sporkpgm.rotation.RotationSlot;
 import io.sporkpgm.rotation.exceptions.RotationLoadException;
 import io.sporkpgm.util.Log;
+import io.sporkpgm.util.NMSUtil;
 import io.sporkpgm.util.NumberUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -76,7 +77,7 @@ public class ServerCycling extends ServerPhase {
 				} catch(Exception e) {
 					Log.warning("Server isn't running a version of Bukkit which allows the use of Firework.detonate() - resorting to manual detonation.");
 					try {
-						Object craft = firework.getClass().cast(firework);
+						Object craft = NMSUtil.getClass("CraftFirework").cast(firework);
 						Method method = craft.getClass().getMethod("getHandle");
 						method.setAccessible(true);
 						Object handle = method.invoke(craft);
