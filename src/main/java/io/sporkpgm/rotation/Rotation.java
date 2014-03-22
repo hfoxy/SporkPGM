@@ -211,7 +211,7 @@ public class Rotation {
 	@Override
 	public String toString() {
 		return getClass().getSimpleName() + "{started=" + started + ",cancel=" + cancel
-				+ ",id=" + id + ",list=" + list + ",slot=" + slot + ",current=" + current + ",slots=" + slots.toString() + "}";
+				+ ",id=" + id + ",list=" + list + ",slot=" + slot + ",current=" + current + ",slots=(" + slots.size() + ") " + slots.toString() + "}";
 	}
 
 }
