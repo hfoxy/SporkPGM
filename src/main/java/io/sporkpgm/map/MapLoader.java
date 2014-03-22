@@ -33,7 +33,7 @@ public class MapLoader {
 				try {
 					SAXReader reader = new SAXReader();
 					Document document = reader.read(xml);
-					MapBuilder builder = new MapBuilder(document, folder);
+					MapBuilder builder = new MapBuilder(document, map);
 					builders.add(builder);
 				} catch(Exception ex) {
 					ex.printStackTrace();
