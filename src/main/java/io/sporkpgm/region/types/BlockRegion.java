@@ -80,7 +80,8 @@ public class BlockRegion extends Region {
 			if(isInfinite(value)) {
 				return isNegative(value) ? INFINITE_NEGATIVE : INFINITE_POSITIVE;
 			}
-			throw new NumberFormatException(value);
+
+			return (int) parseDouble(value);
 		}
 	}
 
