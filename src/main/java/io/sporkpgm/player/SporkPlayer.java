@@ -324,17 +324,17 @@ public class SporkPlayer implements Listener {
 
 		try {
 			// getPlayer().setAffectsSpawning(update);
-			Method spawning = Player.class.getMethod("setAffectsSpawning", Boolean.class);
+			Method spawning = Player.class.getMethod("setAffectsSpawning", boolean.class);
 			spawning.setAccessible(true);
 			spawning.invoke(getPlayer(), update);
 
 			// getPlayer().setCollidesWithEntities(update);
-			Method collides = Player.class.getMethod("setCollidesWithEntities", Boolean.class);
+			Method collides = Player.class.getMethod("setCollidesWithEntities", boolean.class);
 			collides.setAccessible(true);
 			collides.invoke(getPlayer(), update);
 
 			// getPlayer().setArrowsStuck(0);
-			Method arrows = Player.class.getMethod("setArrowsStuck", Integer.class);
+			Method arrows = Player.class.getMethod("setArrowsStuck", int.class);
 			collides.setAccessible(true);
 			arrows.invoke(getPlayer(), update);
 		} catch(Exception e) {
@@ -355,9 +355,9 @@ public class SporkPlayer implements Listener {
 			Method method = NMSUtil.getClassBukkit("entity.CraftPlayer").getMethod("getHandle");
 			method.setAccessible(true);
 			Object handle = method.invoke(craft);
-			method = handle.getClass().getMethod("p", Integer.class);
+			method = NMSUtil.getClassNMS("EntityLiving").getMethod("p", int.class);
 			method.setAccessible(true);
-			method.invoke(craft, 0);
+			method.invoke(NMSUtil.getClassNMS("EntityLiving").cast(craft), 0);
 		} catch(Exception e) {
 			Log.warning("Failed to set Arrows Stuck manually");
 			e.printStackTrace();
