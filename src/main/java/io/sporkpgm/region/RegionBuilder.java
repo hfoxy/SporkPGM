@@ -165,13 +165,13 @@ public class RegionBuilder {
 			throw new InvalidRegionException(ele, "Height was not a valid double");
 		}
 
-		if(ele.attributeValue("center") == null) {
-			throw new InvalidRegionException(ele, "The center point of a circle can't be null");
+		if(ele.attributeValue("base") == null) {
+			throw new InvalidRegionException(ele, "The base point of a cylinder can't be null");
 		}
 
-		String[] split = ele.attributeValue("center").split(",");
+		String[] split = ele.attributeValue("base").split(",");
 		if(split.length != 3) {
-			throw new InvalidRegionException(ele, "The center point of a cylinder requires X, Y and Z values");
+			throw new InvalidRegionException(ele, "The base point of a cylinder requires X, Y and Z values");
 		}
 
 		String x = split[0];
