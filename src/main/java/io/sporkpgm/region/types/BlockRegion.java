@@ -222,4 +222,9 @@ public class BlockRegion extends Region {
 		return matchesXZ(block) && block.getIntegerY() < getIntegerY();
 	}
 
+	@Override
+	public String toString() {
+		return "BlockRegion{name=" + getName() + ",x=" + x + ",y=" + y + ",z=" + z + "}";
+	}
+
 }

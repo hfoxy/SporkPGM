@@ -114,4 +114,9 @@ public class VictoryObjective extends ObjectiveModule {
 		return VictoryBuilder.class;
 	}
 
+	@Override
+	public String toString() {
+		return "VictoryObjective{name=" + name + ",dye=" + dye.name() + ",color=" + color.name() + ",place=" + place.toString() + ",complete=" + complete + "}";
+	}
+
 }
