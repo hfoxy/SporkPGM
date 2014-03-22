@@ -645,4 +645,9 @@ public class SporkMap {
 
 	}
 
+	@Override
+	public String toString() {
+		return "SporkMap{name=" + getName() + ",loaded=" + (world != null) + "}";
+	}
+
 }

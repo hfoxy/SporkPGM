@@ -72,4 +72,9 @@ public class RotationSlot {
 		return Spork.get().getRotation();
 	}
 
+	@Override
+	public String toString() {
+		return "RotationSlot{match=" + match.toString() + ",wasSet=" + wasSet + ",id=" + id + "}";
+	}
+
 }

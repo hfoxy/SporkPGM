@@ -163,4 +163,9 @@ public class Match {
 		return RotationSlot.getRotation().getCurrentMatch();
 	}
 
+	@Override
+	public String toString() {
+		return "Match{map=" + map.toString() + ",phase=" + phase.name() + "}";
+	}
+
 }
