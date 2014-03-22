@@ -120,12 +120,12 @@ public class SporkKitBuilder {
 	public static PotionEffect parsePotion(Element element, String name) throws ModuleLoadException {
 		PotionEffectType type = PotionEffectType.getByName(element.getText());
 		if(type == null) {
-			throw new ModuleLoadException("Invalid potion type: '" + element.getText() + "' for '" + name + "'");
+			throw new ModuleLoadException(element, "Invalid potion type: '" + element.getText() + "' for '" + name + "'");
 		}
 		String rawDuration = element.attributeValue("duration");
 		String rawAmplifier = element.attributeValue("amplifier");
 		if(rawDuration == null || rawAmplifier == null) {
-			throw new ModuleLoadException("Potion duration or amplifier cannot be blank for '" + name + "'");
+			throw new ModuleLoadException(element, "Potion duration or amplifier cannot be blank for '" + name + "'");
 		}
 		int duration = Integer.parseInt(rawDuration);
 		int amplifier = Integer.parseInt(rawAmplifier);
@@ -140,7 +140,7 @@ public class SporkKitBuilder {
 
 		if(!supportsColor().contains(stack.getType())) {
 			String material = StringUtils.capitalize(stack.getType().name().replace("_", " "));
-			throw new ModuleLoadException("'" + material + "' can't have a color set for '" + name + "'");
+			throw new ModuleLoadException(element, "'" + material + "' can't have a color set for '" + name + "'");
 		}
 
 		String attribute = element.attributeValue("color");
@@ -149,7 +149,7 @@ public class SporkKitBuilder {
 		try {
 			color = StringUtil.convertHexStringToColor(attribute);
 		} catch(Exception e) {
-			throw new ModuleLoadException("Invalid Color supplied for '" + name + "'");
+			throw new ModuleLoadException(element, "Invalid Color supplied for '" + name + "'");
 		}
 
 		ItemUtil.setColor(stack, color);
@@ -164,7 +164,7 @@ public class SporkKitBuilder {
 		KitArmorSlot slot = KitArmorSlot.getSlot(element.getName());
 
 		if(slot == null) {
-			throw new ModuleLoadException("Unable to find armour slot named '" + element.getName() + "' for '" + name + "'");
+			throw new ModuleLoadException(element, "Unable to find armour slot named '" + element.getName() + "' for '" + name + "'");
 		}
 
 		return slot;
@@ -175,7 +175,7 @@ public class SporkKitBuilder {
 		try {
 			slot = Integer.parseInt(element.attributeValue("slot"));
 		} catch(NumberFormatException | NullPointerException e) {
-			throw new ModuleLoadException("Could not parse kit because slot was not a valid number for '" + name + "'");
+			throw new ModuleLoadException(element, "Could not parse kit because slot was not a valid number for '" + name + "'");
 		}
 
 		return slot;
@@ -186,7 +186,7 @@ public class SporkKitBuilder {
 		try {
 			damage = (short) Integer.parseInt(element.attributeValue("damage"));
 		} catch(NumberFormatException e) {
-			throw new ModuleLoadException("Could not parse kit because damage was provided but was not a valid number for '" + name + "'");
+			throw new ModuleLoadException(element, "Could not parse kit because damage was provided but was not a valid number for '" + name + "'");
 		} catch(NullPointerException e) {
 			damage = 0;
 		}
@@ -199,7 +199,7 @@ public class SporkKitBuilder {
 		try {
 			amount = Integer.parseInt(element.attributeValue("amount"));
 		} catch(NumberFormatException e) {
-			throw new ModuleLoadException("Could not parse kit because amount was provided but was not a valid number for '" + name + "'");
+			throw new ModuleLoadException(element, "Could not parse kit because amount was provided but was not a valid number for '" + name + "'");
 		} catch(NullPointerException e) {
 			amount = 1;
 		}
@@ -210,7 +210,7 @@ public class SporkKitBuilder {
 	public static Material parseMaterial(Element element, String name) throws ModuleLoadException {
 		Material material = StringUtil.convertStringToMaterial(element.getText());
 		if(material == null) {
-			throw new ModuleLoadException("Invalid Material name supplied for '" + name + "'");
+			throw new ModuleLoadException(element, "Invalid Material name supplied for '" + name + "'");
 		}
 
 		return material;
@@ -225,11 +225,11 @@ public class SporkKitBuilder {
 		Map<Enchantment, Integer> res = new HashMap<>();
 		for(String s : enchants.split(";")) {
 			if(s.split(":").length < 2) {
-				throw new ModuleLoadException("Cannot parse enchantment: '" + s + "' for '" + name + "'");
+				throw new ModuleLoadException(element, "Cannot parse enchantment: '" + s + "' for '" + name + "'");
 			}
 			Enchantment e = StringUtil.convertStringToEnchantment(s.split(":")[0]);
 			if(e == null) {
-				throw new ModuleLoadException("Invalid enchantment: '" + s + "' for '" + name + "'");
+				throw new ModuleLoadException(element, "Invalid enchantment: '" + s + "' for '" + name + "'");
 			}
 			res.put(e, XMLUtil.parseInteger(s.split(":")[2]));
 		}
