@@ -125,10 +125,11 @@ public class SporkMap {
 	}
 
 	public List<ObjectiveModule> getObjectives() {
+		Log.info("There are " + modules.size() + " Modules to search through");
 		List<ObjectiveModule> objectives = new ArrayList<>();
 
 		for(Module module : modules) {
-			if(module instanceof ObjectiveModule) {
+			if(!modules.contains(module) && module instanceof ObjectiveModule) {
 				Log.info("Found " + module);
 				objectives.add((ObjectiveModule) module);
 			}
