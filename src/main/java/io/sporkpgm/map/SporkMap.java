@@ -300,9 +300,6 @@ public class SporkMap {
 		List<SporkTeam> test = new ArrayList<>();
 		test.addAll(getTeams());
 		test.add(getObservers());
-		List<String> names = new ArrayList<>();
-		for(SporkTeam team : getTeams())
-			names.add(team.getName());
 
 		List<SporkTeam> teams = new ArrayList<>();
 		for(SporkTeam team : test) {
