@@ -241,7 +241,7 @@ public class SporkKitBuilder {
 			if(e == null) {
 				throw new ModuleLoadException(element, "Invalid enchantment: '" + s + "' for '" + name + "'");
 			}
-			res.put(e, XMLUtil.parseInteger(s.split(":")[2]));
+			res.put(e, XMLUtil.parseInteger(s.split(":")[1]));
 		}
 		return res;
 	}
