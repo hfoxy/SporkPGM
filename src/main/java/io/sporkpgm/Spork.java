@@ -16,6 +16,7 @@ import io.sporkpgm.module.Module;
 import io.sporkpgm.module.builder.Builder;
 import io.sporkpgm.module.builder.BuilderAbout;
 import io.sporkpgm.module.exceptions.ModuleLoadException;
+import io.sporkpgm.objective.victory.VictoryBuilder;
 import io.sporkpgm.region.exception.InvalidRegionException;
 import io.sporkpgm.rotation.Rotation;
 import io.sporkpgm.rotation.exceptions.RotationLoadException;
@@ -245,6 +246,7 @@ public class Spork extends JavaPlugin {
 
 	protected void builders() {
 		builders = new ArrayList<>();
+		builders.add(VictoryBuilder.class);
 	}
 
 	public Rotation getRotation() {

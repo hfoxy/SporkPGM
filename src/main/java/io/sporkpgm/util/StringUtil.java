@@ -2,6 +2,7 @@ package io.sporkpgm.util;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.potion.PotionEffectType;
@@ -47,6 +48,57 @@ public class StringUtil {
 		}
 
 		return builder.toString();
+	}
+
+	public static DyeColor convertStringToDyeColor(String string) {
+		if(string == null)
+			return null;
+		for(DyeColor dye : DyeColor.values()) {
+			if(dye.name().replaceAll("_", " ").equalsIgnoreCase(string) || dye.name().equalsIgnoreCase(string)) {
+				return dye;
+			}
+		}
+
+		return null;
+	}
+
+	public static ChatColor convertDyeColorToChatColor(DyeColor dye) {
+		switch(dye) {
+			case WHITE:
+				return ChatColor.WHITE;
+			case ORANGE:
+				return ChatColor.GOLD;
+			case MAGENTA:
+				return ChatColor.LIGHT_PURPLE;
+			case LIGHT_BLUE:
+				return ChatColor.AQUA;
+			case YELLOW:
+				return ChatColor.YELLOW;
+			case LIME:
+				return ChatColor.GREEN;
+			case PINK:
+				return ChatColor.LIGHT_PURPLE;
+			case GRAY:
+				return ChatColor.GRAY;
+			case SILVER:
+				return ChatColor.GRAY;
+			case CYAN:
+				return ChatColor.DARK_AQUA;
+			case PURPLE:
+				return ChatColor.DARK_PURPLE;
+			case BLUE:
+				return ChatColor.BLUE;
+			case BROWN:
+				return ChatColor.GOLD;
+			case GREEN:
+				return ChatColor.DARK_GREEN;
+			case RED:
+				return ChatColor.DARK_RED;
+			case BLACK:
+				return ChatColor.BLACK;
+		}
+
+		return ChatColor.WHITE;
 	}
 
 	public static ChatColor convertStringToChatColor(String string) {

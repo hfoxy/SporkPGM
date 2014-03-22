@@ -3,7 +3,9 @@ package io.sporkpgm.module.builder;
 import io.sporkpgm.map.SporkMap;
 import io.sporkpgm.module.Module;
 import io.sporkpgm.module.exceptions.ModuleLoadException;
+import io.sporkpgm.region.exception.InvalidRegionException;
 import org.dom4j.Document;
+import org.dom4j.Element;
 
 import java.lang.reflect.Constructor;
 import java.util.List;
@@ -22,9 +24,13 @@ public abstract class Builder {
 		this.map = map;
 	}
 
-	public abstract List<Module> build() throws ModuleLoadException;
+	public Element getRoot() {
+		return document.getRootElement();
+	}
 
-	BuilderAbout getInfo() {
+	public abstract List<Module> build() throws ModuleLoadException, InvalidRegionException;
+
+	public BuilderAbout getInfo() {
 		return new BuilderAbout(this.getClass());
 	}
 
