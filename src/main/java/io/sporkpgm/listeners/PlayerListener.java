@@ -148,7 +148,10 @@ public class PlayerListener implements Listener {
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
 		if(event.getRightClicked() instanceof Player) {
 			SporkPlayer player = SporkPlayer.getPlayer((Player) event.getRightClicked());
-			event.getPlayer().openInventory(player.getInventory());
+
+			if(!player.isParticipating()) {
+				event.getPlayer().openInventory(player.getInventory());
+			}
 		}
 	}
 
