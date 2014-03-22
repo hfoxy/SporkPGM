@@ -27,7 +27,7 @@ public class SporkSpawnBuilder {
 			int noname = 1;
 			for(Element element : XMLUtil.getElements(spawns, "spawn", "default")) {
 				String nameS = null;
-				teamS = (teamS == null ? element.attributeValue("team") : teamS);
+				teamS = (element.attributeValue("team") != null ? element.attributeValue("team") : teamS);
 				String yawS = element.attributeValue("yaw");
 				String pitchS = element.attributeValue("pitch");
 				String kitS = element.attributeValue("kit");
