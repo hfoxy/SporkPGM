@@ -10,13 +10,28 @@ import java.util.List;
 
 public class XMLUtil {
 
-	public static List<Element> getElements(Element root, String name) {
+	public static List<Object> elements(Element root, String... names) {
+		return elements(root, Lists.newArrayList(names));
+	}
+
+	public static List<Object> elements(Element root, List<String> names) {
+		List<Object> objects = new ArrayList<>();
+		for(Element element : getElements(root)) {
+			if(names.contains(element.getName())) {
+				objects.add(element);
+			}
+		}
+		return objects;
+	}
+
+	public static List<Element> getElements(Element root, String... names) {
 		List<Element> elements = new ArrayList<>();
+
 		if(root == null) {
 			return elements;
 		}
 
-		for(Object object : root.elements(name)) {
+		for(Object object : elements(root, names)) {
 			if(object instanceof Element) {
 				elements.add((Element) object);
 			}

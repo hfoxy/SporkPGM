@@ -21,7 +21,7 @@ public class SporkSpawnBuilder {
 		Document document = map.getDocument();
 		Element root = document.getRootElement();
 
-		for(Element spawns : XMLUtil.getElements(root, "spawns")) {
+		for(Element spawns : XMLUtil.getElements(root, "spawns", "default")) {
 			String teamS = spawns.attributeValue("team");
 
 			int noname = 1;
@@ -34,6 +34,9 @@ public class SporkSpawnBuilder {
 
 				String name = (nameS == null ? "noname-" + noname : nameS);
 				SporkTeam team = map.getTeam(teamS);
+				if(element.getName().equalsIgnoreCase("default")) {
+					team = map.getObservers();
+				}
 
 				List<Region> regions = RegionBuilder.parseSubRegions(element);
 				float yaw = 0;
