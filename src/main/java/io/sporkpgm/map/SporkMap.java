@@ -495,11 +495,7 @@ public class SporkMap {
 			craftHandle.setAccessible(true);
 			Object craftObjectiveHandle = craftHandle.invoke(craftObjective);
 
-			Object craftScoreboard;
-
-			Method checkState = CRAFT_OBJECTIVE.getDeclaredMethod("checkState");
-			checkState.setAccessible(true);
-			craftScoreboard = checkState.invoke(CRAFT_SCORE.getDeclaredField("objective").get(craftScore));
+			Object craftScoreboard = checkState(CRAFT_SCORE.getDeclaredField("objective").get(craftScore));
 
 			Object scoreboard = CRAFT_SCOREBOARD.getDeclaredField("board").get(craftScoreboard);
 			Method playerObjectives = SCOREBOARD.getDeclaredMethod("getPlayerObjectives", String.class);
