@@ -201,6 +201,8 @@ public class SporkTeam {
 	}
 
 	public List<ObjectiveModule> getObjectives() {
+		Log.info(map.getName() + ": " + map.getObjectives().size() + " Objectives");
+
 		List<ObjectiveModule> objectives = new ArrayList<>();
 		for(ObjectiveModule objective : map.getObjectives())
 			if(objective.getTeam() == this)
