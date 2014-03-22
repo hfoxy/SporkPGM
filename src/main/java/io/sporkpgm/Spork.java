@@ -154,9 +154,9 @@ public class Spork extends JavaPlugin {
 		};
 		CommandsManagerRegistration cmr = new CommandsManagerRegistration(this, this.commands);
 
-		this.commands.register(MapCommands.class);
-		this.commands.register(MatchCommands.class);
-		this.commands.register(RotationCommands.class);
+		cmr.register(MapCommands.class);
+		cmr.register(MatchCommands.class);
+		cmr.register(RotationCommands.class);
 	}
 
 	@Override
