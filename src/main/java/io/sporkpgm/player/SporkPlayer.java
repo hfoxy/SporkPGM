@@ -351,7 +351,7 @@ public class SporkPlayer implements Listener {
 			 */
 
 			Player player = getPlayer();
-			Object craft = NMSUtil.getClass("CraftPlayer").cast(player);
+			Object craft = NMSUtil.getClass("entity.CraftPlayer").cast(player);
 			Method method = craft.getClass().getMethod("getHandle");
 			method.setAccessible(true);
 			Object handle = method.invoke(craft);
