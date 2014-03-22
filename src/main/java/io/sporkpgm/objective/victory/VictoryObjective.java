@@ -67,6 +67,7 @@ public class VictoryObjective extends ObjectiveModule {
 		builder.append(ChatColor.AQUA).append(completer.getName());
 
 		Bukkit.broadcastMessage(builder.toString());
+		update();
 	}
 
 	@Override
