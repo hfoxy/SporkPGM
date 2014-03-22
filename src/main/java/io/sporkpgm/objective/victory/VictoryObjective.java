@@ -2,6 +2,7 @@ package io.sporkpgm.objective.victory;
 
 import io.sporkpgm.Spork;
 import io.sporkpgm.map.SporkMap.ScoreAPI;
+import io.sporkpgm.map.event.BlockChangeEvent;
 import io.sporkpgm.match.phase.ServerPhase;
 import io.sporkpgm.module.ModuleInfo;
 import io.sporkpgm.module.builder.Builder;
@@ -14,7 +15,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Type;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.block.Block;
+import org.bukkit.event.EventHandler;
 
 @ModuleInfo(name = "VictoryObjective", description = "Defines a region where blocks fall")
 public class VictoryObjective extends ObjectiveModule {
@@ -104,6 +108,42 @@ public class VictoryObjective extends ObjectiveModule {
 	@Override
 	public OfflinePlayer getPlayer() {
 		return player;
+	}
+
+	@EventHandler
+	public void onBlockChange(BlockChangeEvent event) {
+		if(!event.hasPlayer()) {
+			if(place.isInside(event.getLocation())) {
+				event.setCancelled(true);
+			}
+
+			return;
+		}
+
+		SporkPlayer player = event.getPlayer();
+		if(place.isInside(event.getLocation())) {
+			if(event.isBreak()) {
+				event.setCancelled(true);
+				player.getPlayer().sendMessage(ChatColor.RED + "You can't break that block");
+				return;
+			} else {
+				if(player.getTeam() != team) {
+					event.setCancelled(true);
+					player.getPlayer().sendMessage(ChatColor.RED + "You can't place blocks there");
+					return;
+				}
+
+				Block block = event.getNewBlock();
+				if(block.getType() != Material.WOOL || block.getState().getData().getData() != dye.getWoolData()) {
+					event.setCancelled(true);
+					player.getPlayer().sendMessage(ChatColor.RED + "You can't place that block there");
+					return;
+				}
+
+				completer = player;
+				setComplete(true);
+			}
+		}
 	}
 
 	public FireworkEffect getFirework() {
