@@ -62,9 +62,17 @@ public class FilterBuilder {
 					split = new String[]{parents};
 				}
 
+				List<Condition> parentList = new ArrayList<>();
 				for(String parent : split) {
-					conditionList.add(new FilterCondition(null, State.ALLOW, parent));
+					parentList.add(new FilterCondition(null, State.ALLOW, parent));
 				}
+
+				Condition[] cons = new Condition[parentList.size()];
+				for(int i = 0; i < parentList.size(); i++) {
+					cons[i] = parentList.get(i);
+				}
+
+				conditionList.add(new MultiCondition(name, State.ALLOW, Modifier.ANY, cons));
 			}
 
 			// TODO: needs spawn condition
