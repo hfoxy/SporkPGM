@@ -1,5 +1,7 @@
 package io.sporkpgm.filter;
 
+import io.sporkpgm.util.Log;
+
 public abstract class Condition implements Filter {
 
 	private String name;
@@ -14,10 +16,14 @@ public abstract class Condition implements Filter {
 
 	@Override
 	public State matches(FilterContext context) {
+		State match = match(context);
+		Log.info(match.toBoolean() + ": " + match.name() + " for checking matches on " + getClass().getSimpleName());
+
+		Log.info(state.toBoolean() + ": " + state.name() + " for checking matches on " + getClass().getSimpleName());
 		if(state.toBoolean()) {
-			return match(context);
+			return match;
 		} else {
-			return match(context).reverse();
+			return match.reverse();
 		}
 	}
 
