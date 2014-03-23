@@ -469,9 +469,9 @@ public class SporkMap {
 	public List<Region> getContainingRegions(Location location) {
 		List<Region> regionList = new ArrayList<>();
 		for(Region region : regions) {
-			BlockRegion block = new BlockRegion(location.getX(), location.getY(), location.getZ());
+			BlockRegion block = new BlockRegion(location.getBlockX(), location.getBlockY(), location.getBlockZ());
 			Log.info("Checking '" + region.getName() + "' (" + region.getClass().getSimpleName() + ") for " + block);
-			if(region.isInside(location)) {
+			if(region.isInside(block)) {
 				Log.info(block + " was found inside '" + region.getName() + "' (" + region.getClass().getSimpleName() + ")");
 				regionList.add(region);
 			}
