@@ -28,6 +28,7 @@ import io.sporkpgm.util.NMSUtil;
 import io.sporkpgm.util.NumberUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
@@ -394,6 +395,16 @@ public class SporkMap {
 
 	public List<Region> getRegions() {
 		return regions;
+	}
+
+	public List<Region> getContainingRegions(Location location) {
+		List<Region> regionList = new ArrayList<>();
+		for(Region r : regions) {
+			if(r.isInside(location)) {
+				regionList.add(r);
+			}
+		}
+		return regionList;
 	}
 
 	public Region getRegion(String string) {
