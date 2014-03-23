@@ -53,6 +53,20 @@ public class FilterBuilder {
 				parseEntity(condition);
 			}
 
+			String parents = condition.getParent().attributeValue("parents");
+			if(parents != null) {
+				String[] split;
+				if(parents.contains(" ")) {
+					split = parents.split(" ");
+				} else {
+					split = new String[]{parents};
+				}
+
+				for(String parent : split) {
+					conditionList.add(new FilterCondition(null, State.ALLOW, parent));
+				}
+			}
+
 			// TODO: needs spawn condition
 		}
 
