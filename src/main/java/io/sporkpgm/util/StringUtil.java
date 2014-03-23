@@ -5,6 +5,7 @@ import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EntityType;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.Collection;
@@ -131,6 +132,19 @@ public class StringUtil {
 		} catch(NumberFormatException e) {
 			return fallback;
 		}
+	}
+
+	public static EntityType convertStringToEntityType(String string) {
+		if(string == null)
+			return null;
+
+		for(EntityType type : EntityType.values()) {
+			if(type.name().replaceAll("_", " ").equalsIgnoreCase(string) || type.name().equalsIgnoreCase(string)) {
+				return type;
+			}
+		}
+
+		return null;
 	}
 
 	public static Material convertStringToMaterial(String string) {

@@ -6,6 +6,7 @@ import io.sporkpgm.team.SporkTeam;
 import io.sporkpgm.util.StringUtil;
 import io.sporkpgm.util.XMLUtil;
 import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 import org.dom4j.Document;
 import org.dom4j.Element;
 
@@ -48,6 +49,8 @@ public class FilterBuilder {
 				parseTeam(condition, map);
 			} else if(condition.getName().equalsIgnoreCase("block")) {
 				parseBlock(condition);
+			} else if(condition.getName().equalsIgnoreCase("entity")) {
+				parseEntity(condition);
 			}
 
 			// TODO: needs spawn condition
@@ -82,6 +85,15 @@ public class FilterBuilder {
 		}
 
 		return new BlockCondition(null, State.DENY, material);
+	}
+
+	public static EntityCondition parseEntity(Element element) throws InvalidFilterException {
+		EntityType type = StringUtil.convertStringToEntityType(element.getText());
+		if(type == null) {
+			throw new InvalidFilterException("'" + element.getText() + "' is not a valid entity type for EntityCondition");
+		}
+
+		return new EntityCondition(null, State.DENY, type);
 	}
 
 	private static List<Filter> defaults() {
