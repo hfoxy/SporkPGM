@@ -17,7 +17,9 @@ import io.sporkpgm.module.modules.timer.TimerModule;
 import io.sporkpgm.objective.ObjectiveModule;
 import io.sporkpgm.objective.scored.ScoredObjective;
 import io.sporkpgm.player.SporkPlayer;
+import io.sporkpgm.region.FilteredRegion;
 import io.sporkpgm.region.Region;
+import io.sporkpgm.region.RegionBuilder;
 import io.sporkpgm.region.exception.InvalidRegionException;
 import io.sporkpgm.rotation.RotationSlot;
 import io.sporkpgm.team.SporkTeam;
@@ -29,6 +31,7 @@ import io.sporkpgm.util.FileUtil;
 import io.sporkpgm.util.Log;
 import io.sporkpgm.util.NMSUtil;
 import io.sporkpgm.util.NumberUtil;
+import io.sporkpgm.util.XMLUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -40,6 +43,7 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 import org.dom4j.Document;
+import org.dom4j.Element;
 
 import java.io.File;
 import java.io.IOException;
@@ -87,11 +91,23 @@ public class SporkMap {
 
 		this.filters = FilterBuilder.build(this);
 		this.regions = builder.getRegions();
+		this.regions.addAll(filtered());
 
 		this.kits = builder.getKits();
 		this.spawns = SporkSpawnBuilder.build(this);
 
 		this.timer = (TimerModule) new TimerBuilder(this).build().get(0);
+	}
+
+	private List<FilteredRegion> filtered() throws InvalidRegionException {
+		List<FilteredRegion> filtered = new ArrayList<>();
+
+		Element regions = document.getRootElement().element("regions");
+		for(Element region : XMLUtil.getElements(regions, "apply")) {
+			filtered.add(RegionBuilder.parseFiltered(this, region));
+		}
+
+		return filtered;
 	}
 
 	public boolean load(Match match) {

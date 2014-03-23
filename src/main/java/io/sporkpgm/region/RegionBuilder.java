@@ -1,12 +1,15 @@
 package io.sporkpgm.region;
 
 import com.google.common.collect.Lists;
+import io.sporkpgm.map.SporkMap;
 import io.sporkpgm.region.exception.InvalidRegionException;
 import io.sporkpgm.region.types.BlockRegion;
 import io.sporkpgm.region.types.CuboidRegion;
 import io.sporkpgm.region.types.CylinderRegion;
 import io.sporkpgm.region.types.SphereRegion;
+import io.sporkpgm.region.types.groups.ComplementRegion;
 import io.sporkpgm.region.types.groups.IntersectRegion;
+import io.sporkpgm.region.types.groups.NegativeRegion;
 import io.sporkpgm.region.types.groups.UnionRegion;
 import io.sporkpgm.util.XMLUtil;
 import org.dom4j.Attribute;
@@ -32,7 +35,20 @@ public class RegionBuilder {
 			return parseCylinder(ele);
 		} else if(type.equalsIgnoreCase("sphere")) {
 			return parseSphere(ele);
-		}
+		} else if(type.equalsIgnoreCase("negative")) {
+			return parseNegative(ele);
+		} else if(type.equalsIgnoreCase("union")) {
+			return parseUnion(ele);
+		} else if(type.equalsIgnoreCase("complement")) {
+			return parseComplement(ele);
+		} else if(type.equalsIgnoreCase("intersect")) {
+			return parseIntersect(ele);
+		} else if(type.equalsIgnoreCase("region")) {
+			String name = ele.attributeValue("name");
+			return new SearchRegion(null, name);
+		} /* else if(type.equalsIgnoreCase("apply")) {
+			return parseFiltered(ele); // can't parse filtered regions here because they require Filters
+		} */
 
 		return null;
 	}
@@ -208,9 +224,20 @@ public class RegionBuilder {
 		return new SphereRegion(name, center, radius, false);
 	}
 
-	public static UnionRegion parseMulti(Element ele) throws InvalidRegionException {
+	public static NegativeRegion parseNegative(Element ele) throws InvalidRegionException {
+		String name = ele.attributeValue("name");
+		return new NegativeRegion(name, parseSubRegions(ele));
+	}
+
+	public static UnionRegion parseUnion(Element ele) throws InvalidRegionException {
 		String name = ele.attributeValue("name");
 		return new UnionRegion(name, parseSubRegions(ele));
+	}
+
+	public static ComplementRegion parseComplement(Element ele) throws InvalidRegionException {
+		String name = ele.attributeValue("name");
+		List<Region> regions = parseSubRegions(ele);
+		return new ComplementRegion(name, regions.get(0), regions.subList(1, regions.size()));
 	}
 
 	public static IntersectRegion parseIntersect(Element ele) throws InvalidRegionException {
@@ -218,9 +245,8 @@ public class RegionBuilder {
 		return new IntersectRegion(name, parseSubRegions(ele));
 	}
 
-	public static IntersectRegion parseNegative(Element ele) throws InvalidRegionException {
-		String name = ele.attributeValue("name");
-		return new IntersectRegion(name, parseSubRegions(ele));
+	public static FilteredRegion parseFiltered(SporkMap map, Element element) throws InvalidRegionException {
+
 	}
 
 	public static boolean isUsable(String value) {
