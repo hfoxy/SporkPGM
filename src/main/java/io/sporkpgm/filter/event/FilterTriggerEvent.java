@@ -64,6 +64,7 @@ public class FilterTriggerEvent extends Event {
 			if(region instanceof FilteredRegion) {
 				FilteredRegion filtered = (FilteredRegion) region;
 				List<Filter> regionFilters = filtered.getFilters();
+				Log.info("Checking '" + filtered.getName() + "' for " + context.toString() + " contains " + regionFilters.size() + " Filters");
 				for(Filter filter : regionFilters) {
 					filterList.add(filter);
 				}
