@@ -3,6 +3,7 @@ package io.sporkpgm.region;
 import io.sporkpgm.map.SporkMap;
 import io.sporkpgm.match.Match;
 import io.sporkpgm.region.types.BlockRegion;
+import io.sporkpgm.util.Log;
 
 import java.util.List;
 
@@ -39,12 +40,20 @@ public class SearchRegion extends Region {
 	}
 
 	private void get() {
+		Log.info(toString());
 		if(region != null && map == Match.getMatch().getMap()) {
+			Log.info("Already found the Region and the map hasn't changed");
 			return;
 		}
 
 		this.map = Match.getMatch().getMap();
 		this.region = map.getRegion(search);
+		Log.info("Set new Region for " + toString());
+	}
+
+	@Override
+	public String toString() {
+		return "SearchRegion{map=" + map + ",search=" + search + ",region=" + region + "}";
 	}
 
 }
