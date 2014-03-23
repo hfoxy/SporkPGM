@@ -17,14 +17,18 @@ public abstract class Condition implements Filter {
 	@Override
 	public State matches(FilterContext context) {
 		State match = match(context);
-		Log.info(match.toBoolean() + ": " + match.name() + " for checking matches on " + getClass().getSimpleName());
+		debug(match);
 
-		Log.info(state.toBoolean() + ": " + state.name() + " for checking matches on " + getClass().getSimpleName());
+		debug(state);
 		if(state.toBoolean()) {
 			return match;
 		} else {
 			return match.reverse();
 		}
+	}
+
+	private void debug(State state) {
+		Log.info(state.toBoolean() + ": " + state.name() + " for checking matches on '" + getName() + "' (" + getClass().getSimpleName() + ")");
 	}
 
 	public State getState() {
