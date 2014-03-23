@@ -21,6 +21,7 @@ import io.sporkpgm.region.FilteredRegion;
 import io.sporkpgm.region.Region;
 import io.sporkpgm.region.RegionBuilder;
 import io.sporkpgm.region.exception.InvalidRegionException;
+import io.sporkpgm.region.types.BlockRegion;
 import io.sporkpgm.rotation.RotationSlot;
 import io.sporkpgm.team.SporkTeam;
 import io.sporkpgm.team.SporkTeamBuilder;
@@ -467,9 +468,12 @@ public class SporkMap {
 
 	public List<Region> getContainingRegions(Location location) {
 		List<Region> regionList = new ArrayList<>();
-		for(Region r : regions) {
-			if(r.isInside(location)) {
-				regionList.add(r);
+		for(Region region : regions) {
+			BlockRegion block = new BlockRegion(location.getX(), location.getY(), location.getZ());
+			Log.info("Checking '" + region.getName() + "' (" + region.getClass().getSimpleName() + ") for " + block);
+			if(region.isInside(location)) {
+				Log.info(block + " was found inside '" + region.getName() + "' (" + region.getClass().getSimpleName() + ")");
+				regionList.add(region);
 			}
 		}
 		return regionList;
