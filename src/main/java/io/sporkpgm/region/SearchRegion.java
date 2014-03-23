@@ -42,7 +42,7 @@ public class SearchRegion extends Region {
 	private void get() {
 		// Log.info(toString());
 		if(region != null && map == Match.getMatch().getMap()) {
-			Log.info("Already found the Region and the map hasn't changed");
+			// Log.info("Already found the Region and the map hasn't changed");
 			return;
 		}
 
