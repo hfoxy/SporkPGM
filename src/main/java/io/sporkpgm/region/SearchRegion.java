@@ -46,8 +46,12 @@ public class SearchRegion extends Region {
 			return;
 		}
 
-		this.map = Match.getMatch().getMap();
-		this.region = map.getRegion(search);
+		try {
+			this.map = Match.getMatch().getMap();
+			this.region = map.getRegion(search);
+		} catch(NullPointerException e) {
+			Log.info("Unable to fetch info about the map just yet!");
+		}
 		// Log.info("Set new Region for " + toString());
 	}
 

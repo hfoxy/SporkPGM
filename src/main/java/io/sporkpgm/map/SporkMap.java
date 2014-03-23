@@ -116,7 +116,11 @@ public class SporkMap {
 			String message = region(region);
 			if(region instanceof FilteredRegion) {
 				FilteredRegion filtered = (FilteredRegion) region;
-				message = message + " (" + filtered.getUnion().getValues().size() + ")";
+				try {
+					message = message + " (" + filtered.getUnion().getValues().size() + ")";
+				} catch(NullPointerException e) {
+					message = message + " (Unknown)";
+				}
 			}
 
 			Log.info(message);
