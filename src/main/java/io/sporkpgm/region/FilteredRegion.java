@@ -45,6 +45,14 @@ public class FilteredRegion extends Region {
 		// add support for velocities
 	}
 
+	public Map<AppliedValue, Object> getHashMap() {
+		return values;
+	}
+
+	public UnionRegion getUnion() {
+		return region;
+	}
+
 	public List<BlockRegion> getValues() {
 		return region.getValues();
 	}

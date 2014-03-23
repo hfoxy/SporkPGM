@@ -103,14 +103,28 @@ public class SporkMap {
 
 	private void filters() {
 		for(Filter filter : filters) {
-			Log.info(filter.getName() + ": " + filter.getClass().getSimpleName());
+			Log.info(filter(filter));
 		}
+	}
+
+	private String filter(Filter filter) {
+		return filter.getName() + ": " + filter.getClass().getSimpleName();
 	}
 
 	private void regions() {
 		for(Region region : regions) {
-			Log.info(region.getName() + ": " + region.getClass().getSimpleName());
+			String message = region(region);
+			if(region instanceof FilteredRegion) {
+				FilteredRegion filtered = (FilteredRegion) region;
+				message = message + " (" + filtered.getUnion().getValues().size() + ")";
+			}
+
+			Log.info(message);
 		}
+	}
+
+	private String region(Region region) {
+		return region.getName() + ": " + region.getClass().getSimpleName();
 	}
 
 	private List<FilteredRegion> filtered() throws InvalidRegionException {
