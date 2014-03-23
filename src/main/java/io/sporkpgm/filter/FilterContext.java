@@ -4,7 +4,7 @@ import io.sporkpgm.filter.event.FilterTriggerEvent;
 import io.sporkpgm.team.SporkTeam;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
-import org.bukkit.event.Cancellable;
+import org.bukkit.event.Event;
 
 public class FilterContext {
 
@@ -12,7 +12,7 @@ public class FilterContext {
 	private Block block;
 	private EntityType entity;
 	private FilterTriggerEvent triggerEvent;
-	private Cancellable cause;
+	private Event cause;
 
 	public FilterContext(FilterTriggerEvent triggerEvent, SporkTeam team, Block block, EntityType entity) {
 		this.triggerEvent = triggerEvent;
@@ -31,8 +31,8 @@ public class FilterContext {
 				this.entity = (EntityType) o;
 			} else if(o instanceof FilterTriggerEvent) {
 				this.triggerEvent = (FilterTriggerEvent) o;
-			} else if(o instanceof Cancellable) {
-				this.cause = (Cancellable) o;
+			} else if(o instanceof Event) {
+				this.cause = (Event) o;
 			}
 		}
 	}
@@ -53,7 +53,7 @@ public class FilterContext {
 		return triggerEvent;
 	}
 
-	public Cancellable getCause() {
+	public Event getCause() {
 		return cause;
 	}
 
