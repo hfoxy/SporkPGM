@@ -90,15 +90,27 @@ public class SporkMap {
 		this.modules = builder.getModules();
 
 		this.filters = FilterBuilder.build(this);
-		Log.info("Filters: " + filters);
+		filters();
 		this.regions = builder.getRegions();
 		this.regions.addAll(filtered());
-		Log.info("Regions: " + regions);
+		regions();
 
 		this.kits = builder.getKits();
 		this.spawns = SporkSpawnBuilder.build(this);
 
 		this.timer = (TimerModule) new TimerBuilder(this).build().get(0);
+	}
+
+	private void filters() {
+		for(Filter filter : filters) {
+			Log.info(filter.getName() + ": " + filter.getClass().getSimpleName());
+		}
+	}
+
+	private void regions() {
+		for(Region region : regions) {
+			Log.info(region.getName() + ": " + region.getClass().getSimpleName());
+		}
 	}
 
 	private List<FilteredRegion> filtered() throws InvalidRegionException {
