@@ -24,7 +24,7 @@ public class CylinderRegion extends Region {
 		super(name);
 		this.values = new ArrayList<>();
 		if(!(centre.isXInfinite() || centre.isYInfinite() || centre.isZInfinite())) {
-			this.values = RegionUtil.cylinder(centre, radius, height, hollow, false);
+			this.values = RegionUtil.cylinder(centre, radius, 1, hollow, false);
 		} else if(centre.isYInfinite() && !(centre.isXInfinite() || centre.isZInfinite())) {
 			this.values = RegionUtil.cylinder(new BlockRegion(centre.getX() + "", "@", centre.getZ() + ""), radius, 1, hollow, false);
 			this.infinite = true;
@@ -42,8 +42,15 @@ public class CylinderRegion extends Region {
 
 	@Override
 	public boolean isInside(BlockRegion block) {
+		if(infinite) {
+			return matchesXZ(block);
+		}
+
+		BlockRegion check = new BlockRegion(block.getStringX(), values.get(0).getStringY(), block.getStringZ());
+		double max = check.getDoubleY() + height;
+
 		for(BlockRegion region : getValues()) {
-			if(region.isInside(block)) {
+			if(region.isInside(check) && block.getDoubleY() <= max) {
 				return true;
 			}
 		}

@@ -6,6 +6,7 @@ import io.sporkpgm.map.SporkMap;
 import io.sporkpgm.region.FilteredRegion.AppliedValue;
 import io.sporkpgm.region.exception.InvalidRegionException;
 import io.sporkpgm.region.types.BlockRegion;
+import io.sporkpgm.region.types.CircleRegion;
 import io.sporkpgm.region.types.CuboidRegion;
 import io.sporkpgm.region.types.CylinderRegion;
 import io.sporkpgm.region.types.RectangleRegion;
@@ -157,7 +158,7 @@ public class RegionBuilder {
 		return new CuboidRegion(name, blocks.get(0), blocks.get(1));
 	}
 
-	public static CylinderRegion parseCircle(Element ele) throws InvalidRegionException {
+	public static CircleRegion parseCircle(Element ele) throws InvalidRegionException {
 		String name = ele.attributeValue("name");
 		double radius;
 		try {
@@ -180,7 +181,7 @@ public class RegionBuilder {
 		String z = split[1];
 		BlockRegion center = new BlockRegion(x, y, z);
 
-		return new CylinderRegion(name, center, radius, 1, false);
+		return new CircleRegion(name, center, radius, false);
 	}
 
 	public static CylinderRegion parseCylinder(Element ele) throws InvalidRegionException {

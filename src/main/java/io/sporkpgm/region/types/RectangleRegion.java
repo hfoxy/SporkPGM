@@ -6,6 +6,7 @@ public class RectangleRegion extends CuboidRegion {
 		super(name, new BlockRegion(min.getStringX(), "-oo", min.getStringZ()), new BlockRegion(max.getStringX(), "oo", max.getStringZ()));
 	}
 
+	@Override
 	public boolean isInside(BlockRegion block) {
 		double xMin, xMax, zMin, zMax;
 		xMin = getPoints()[1].getX();
