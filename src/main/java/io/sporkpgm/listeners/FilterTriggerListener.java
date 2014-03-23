@@ -11,7 +11,7 @@ public class FilterTriggerListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onFilterTriggerEvent(FilterTriggerEvent event) {
 		for(Filter filter : event.getFilterMatches()) {
-			if(!filter.matches(event.getFilterContext()).toBoolean()) {
+			if(filter != null && !filter.matches(event.getFilterContext()).toBoolean()) {
 				event.cancel();
 			}
 		}
