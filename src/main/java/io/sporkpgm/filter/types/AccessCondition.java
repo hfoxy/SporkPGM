@@ -30,7 +30,7 @@ public class AccessCondition extends Condition {
 
 	@Override
 	public String toString() {
-		return "AccessCondition{team=" + team.getName() + ",state=" + getState().toString() + "}";
+		return "AccessCondition{team=" + (team != null ? team.getName() : "null") + ",state=" + getState().toString() + "}";
 	}
 
 }

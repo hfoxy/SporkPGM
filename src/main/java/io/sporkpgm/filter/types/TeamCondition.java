@@ -18,8 +18,7 @@ public class TeamCondition extends Condition {
 	public State match(FilterContext context) {
 		if(context.getTeam() == null) {
 			return State.ABSTAIN;
-		}
-		if(context.getTeam() == team) {
+		} else if(context.getTeam() == team) {
 			return State.ALLOW;
 		} else {
 			return State.DENY;
@@ -32,7 +31,7 @@ public class TeamCondition extends Condition {
 
 	@Override
 	public String toString() {
-		return "TeamCondition{team=" + team.getName() + ",state=" + getState().toString() + "}";
+		return "TeamCondition{team=" + (team != null ? team.getName() : "null") + ",state=" + getState().toString() + "}";
 	}
 
 }
