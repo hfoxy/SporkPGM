@@ -416,6 +416,10 @@ public class SporkMap {
 	}
 
 	public SporkKit getKit(String string) {
+		if(kits == null) {
+			return null;
+		}
+
 		for(SporkKit kit : kits) {
 			String name = kit.getName();
 			if(kit.getName() != null && name.equalsIgnoreCase(string))
