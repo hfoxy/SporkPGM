@@ -17,9 +17,9 @@ public abstract class Condition implements Filter {
 	@Override
 	public State matches(FilterContext context) {
 		State match = match(context);
-		debug(match);
+		debug(match, context);
 
-		debug(state);
+		debug(state, context);
 		if(state.toBoolean()) {
 			return match;
 		} else {
@@ -27,8 +27,8 @@ public abstract class Condition implements Filter {
 		}
 	}
 
-	private void debug(State state) {
-		Log.info(state.toBoolean() + ": " + state.name() + " for checking matches on '" + getName() + "' (" + toString() + ")");
+	private void debug(State state, FilterContext context) {
+		Log.info(state.toBoolean() + ": " + state.name() + " for checking matches on '" + getName() + "' (" + toString() + ") with context " + context);
 	}
 
 	public State getState() {
