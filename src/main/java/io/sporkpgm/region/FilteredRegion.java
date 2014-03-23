@@ -1,10 +1,11 @@
 package io.sporkpgm.region;
 
 import io.sporkpgm.filter.Filter;
+import io.sporkpgm.player.SporkPlayer;
 import io.sporkpgm.region.types.BlockRegion;
 import io.sporkpgm.region.types.groups.UnionRegion;
 import io.sporkpgm.team.spawns.kits.SporkKit;
-import org.bukkit.util.Vector;
+import org.bukkit.ChatColor;
 
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,24 @@ public class FilteredRegion extends Region {
 		this.values = values;
 		this.region = new UnionRegion(null, regions);
 		this.filters = filters;
+	}
+
+	public void apply(SporkPlayer player) {
+		Object msg = values.get(AppliedValue.MESSAGE);
+		if(msg != null) {
+			String message = (String) msg;
+			message = message.replace("`", "§").replace("&", "§");
+
+			player.getPlayer().sendMessage(ChatColor.RED + message);
+		}
+
+		Object kit = values.get(AppliedValue.KIT);
+		if(kit != null) {
+			SporkKit sporkKit = (SporkKit) kit;
+			sporkKit.apply(player);
+		}
+
+		// add support for velocities
 	}
 
 	public List<BlockRegion> getValues() {
@@ -52,7 +71,7 @@ public class FilteredRegion extends Region {
 		USE("use", Filter.class),
 		KIT("kit", SporkKit.class),
 		MESSAGE("message", String.class),
-		VELOCITY("velocity", Vector.class);
+		VELOCITY("velocity", String.class);
 
 		private String attribute;
 		private Class<?> returns;
@@ -68,6 +87,14 @@ public class FilteredRegion extends Region {
 
 		public Class<?> getReturns() {
 			return returns;
+		}
+
+		public static String[] getAttributes() {
+			String[] attributes = new String[values().length];
+			for(int i = 0; i < values().length; i++) {
+				attributes[i] = values()[i].name();
+			}
+			return attributes;
 		}
 
 	}

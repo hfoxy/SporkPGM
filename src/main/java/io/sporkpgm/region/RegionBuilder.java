@@ -1,7 +1,9 @@
 package io.sporkpgm.region;
 
 import com.google.common.collect.Lists;
+import io.sporkpgm.filter.Filter;
 import io.sporkpgm.map.SporkMap;
+import io.sporkpgm.region.FilteredRegion.AppliedValue;
 import io.sporkpgm.region.exception.InvalidRegionException;
 import io.sporkpgm.region.types.BlockRegion;
 import io.sporkpgm.region.types.CuboidRegion;
@@ -11,12 +13,16 @@ import io.sporkpgm.region.types.groups.ComplementRegion;
 import io.sporkpgm.region.types.groups.IntersectRegion;
 import io.sporkpgm.region.types.groups.NegativeRegion;
 import io.sporkpgm.region.types.groups.UnionRegion;
+import io.sporkpgm.team.spawns.kits.SporkKit;
 import io.sporkpgm.util.XMLUtil;
 import org.dom4j.Attribute;
 import org.dom4j.Element;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class RegionBuilder {
 
@@ -246,7 +252,29 @@ public class RegionBuilder {
 	}
 
 	public static FilteredRegion parseFiltered(SporkMap map, Element element) throws InvalidRegionException {
+		String name = element.attributeValue("name");
+		List<Region> regions = parseSubRegions(element);
+		List<Filter> filters = new ArrayList<>();
 
+		Map<AppliedValue, Object> hash = new HashMap<>();
+		for(AppliedValue key : AppliedValue.values()) {
+			Object value = null;
+			if(key.getReturns() == Filter.class) {
+				Filter filter = map.getFilter(element.attributeValue(key.getAttribute()));
+				value = filter;
+				if(!filters.contains(filter)) {
+					filters.add(filter);
+				}
+			} else if(key.getReturns() == SporkKit.class) {
+				value = map.getKit(element.attributeValue(key.getAttribute()));
+			} else if(key.getReturns() == String.class) {
+				value = element.attributeValue(key.getAttribute());
+			}
+
+			hash.put(key, value);
+		}
+
+		return new FilteredRegion(name, hash, regions, filters);
 	}
 
 	public static boolean isUsable(String value) {

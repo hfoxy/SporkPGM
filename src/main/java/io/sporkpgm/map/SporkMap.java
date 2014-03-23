@@ -415,6 +415,16 @@ public class SporkMap {
 		return kits;
 	}
 
+	public SporkKit getKit(String string) {
+		for(SporkKit kit : kits) {
+			String name = kit.getName();
+			if(kit.getName() != null && name.equalsIgnoreCase(string))
+				return kit;
+		}
+
+		return null;
+	}
+
 	public List<Region> getRegions() {
 		return regions;
 	}
@@ -430,11 +440,6 @@ public class SporkMap {
 	}
 
 	public Region getRegion(String string) {
-		List<String> names = new ArrayList<>();
-		for(Region region : getRegions())
-			if(region.getName() != null)
-				names.add(region.getName());
-
 		for(Region region : regions) {
 			String name = region.getName();
 			if(region.getName() != null && name.equalsIgnoreCase(string))

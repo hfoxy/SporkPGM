@@ -41,6 +41,17 @@ public class FilterTriggerEvent extends Event {
 		return location;
 	}
 
+	public List<FilteredRegion> getRegionMatches() {
+		List<FilteredRegion> filterList = new ArrayList<>();
+		for(Region region : Spork.get().getMatch().getMap().getContainingRegions(location)) {
+			if(region instanceof FilteredRegion) {
+				FilteredRegion filtered = (FilteredRegion) region;
+				filterList.add(filtered);
+			}
+		}
+		return filterList;
+	}
+
 	public List<Filter> getFilterMatches() {
 		List<Filter> filterList = new ArrayList<>();
 		for(Region region : Spork.get().getMatch().getMap().getContainingRegions(location)) {
@@ -68,6 +79,10 @@ public class FilterTriggerEvent extends Event {
 				((BlockChangeEvent) event).setCancelled(true);
 			} else if(event instanceof Cancellable) {
 				((Cancellable) event).setCancelled(true);
+			}
+
+			for(FilteredRegion region : getRegionMatches()) {
+
 			}
 		} catch(NullPointerException e) {
 			Log.severe(e.getMessage());
