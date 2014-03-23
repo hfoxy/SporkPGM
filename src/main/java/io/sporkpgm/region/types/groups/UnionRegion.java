@@ -25,9 +25,9 @@ public class UnionRegion extends Region {
 	@Override
 	public boolean isInside(BlockRegion block) {
 		for(Region region : regions) {
-			Log.info("Checking '" + region.getName() + "' (" + region.getClass().getSimpleName() + ") for " + block);
+			// Log.info("Checking '" + region.getName() + "' (" + region.getClass().getSimpleName() + ") for " + block);
 			if(region.isInside(block)) {
-				Log.info(block + " was found inside '" + region.getName() + "'");
+				// Log.info(block + " was found inside '" + region.getName() + "'");
 				return true;
 			}
 		}

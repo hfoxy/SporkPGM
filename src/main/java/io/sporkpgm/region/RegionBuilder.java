@@ -8,6 +8,7 @@ import io.sporkpgm.region.exception.InvalidRegionException;
 import io.sporkpgm.region.types.BlockRegion;
 import io.sporkpgm.region.types.CuboidRegion;
 import io.sporkpgm.region.types.CylinderRegion;
+import io.sporkpgm.region.types.RectangleRegion;
 import io.sporkpgm.region.types.SphereRegion;
 import io.sporkpgm.region.types.groups.ComplementRegion;
 import io.sporkpgm.region.types.groups.IntersectRegion;
@@ -104,7 +105,7 @@ public class RegionBuilder {
 		return null;
 	}
 
-	public static CuboidRegion parseRectange(Element ele) throws InvalidRegionException {
+	public static RectangleRegion parseRectange(Element ele) throws InvalidRegionException {
 		String name = ele.attributeValue("name");
 		if(ele.attributeValue("min") == null || ele.attributeValue("max") == null) {
 			throw new InvalidRegionException(ele, "Both the minimum and the maximum values can't be null");
@@ -119,7 +120,7 @@ public class RegionBuilder {
 		String y = "oo"; // infinite y
 		BlockRegion min = new BlockRegion(minS[0], "-" + y, minS[1]);
 		BlockRegion max = new BlockRegion(maxS[0], y, maxS[1]);
-		return new CuboidRegion(name, min, max);
+		return new RectangleRegion(name, min, max);
 	}
 
 	public static CuboidRegion parseCuboid(Element ele) throws InvalidRegionException {
