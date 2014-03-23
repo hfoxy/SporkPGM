@@ -17,7 +17,7 @@ public class SearchRegion extends Region {
 	private Region region;
 
 	public SearchRegion(String name, String search) {
-		super(name);
+		super((name != null ? name : "search-" + search));
 		this.search = search;
 	}
 
