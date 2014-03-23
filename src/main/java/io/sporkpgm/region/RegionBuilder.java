@@ -30,38 +30,38 @@ public class RegionBuilder {
 		String type = ele.getName();
 
 		if(type.equalsIgnoreCase("block") || type.equalsIgnoreCase("point")) {
-			Log.info("block: " + ele.asXML());
+			// Log.info("block: " + ele.asXML());
 			return parseBlock(ele);
 		} else if(type.equalsIgnoreCase("rectange")) {
-			Log.info("rectangle: " + ele.asXML());
+			// Log.info("rectangle: " + ele.asXML());
 			return parseRectange(ele);
 		} else if(type.equalsIgnoreCase("cuboid")) {
-			Log.info("cuboid: " + ele.asXML());
+			// Log.info("cuboid: " + ele.asXML());
 			return parseCuboid(ele);
 		} else if(type.equalsIgnoreCase("circle")) {
-			Log.info("circle: " + ele.asXML());
+			// Log.info("circle: " + ele.asXML());
 			return parseCircle(ele);
 		} else if(type.equalsIgnoreCase("cylinder")) {
-			Log.info("cylinder: " + ele.asXML());
+			// Log.info("cylinder: " + ele.asXML());
 			return parseCylinder(ele);
 		} else if(type.equalsIgnoreCase("sphere")) {
-			Log.info("sphere: " + ele.asXML());
+			// Log.info("sphere: " + ele.asXML());
 			return parseSphere(ele);
 		} else if(type.equalsIgnoreCase("negative")) {
-			Log.info("negative: " + ele.asXML());
+			// Log.info("negative: " + ele.asXML());
 			return parseNegative(ele);
 		} else if(type.equalsIgnoreCase("union")) {
-			Log.info("union: " + ele.asXML());
+			// Log.info("union: " + ele.asXML());
 			return parseUnion(ele);
 		} else if(type.equalsIgnoreCase("complement")) {
-			Log.info("complement: " + ele.asXML());
+			// Log.info("complement: " + ele.asXML());
 			return parseComplement(ele);
 		} else if(type.equalsIgnoreCase("intersect")) {
-			Log.info("intersect: " + ele.asXML());
+			// Log.info("intersect: " + ele.asXML());
 			return parseIntersect(ele);
 		} else if(type.equalsIgnoreCase("region")) {
 			String name = ele.attributeValue("name");
-			Log.info("region: " + ele.asXML());
+			// Log.info("region: " + ele.asXML());
 			return new SearchRegion(null, name);
 		} /* else if(type.equalsIgnoreCase("apply")) {
 			return parseFiltered(ele); // can't parse filtered regions here because they require Filters

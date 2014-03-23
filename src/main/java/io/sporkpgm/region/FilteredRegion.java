@@ -19,17 +19,21 @@ public class FilteredRegion extends Region {
 	public FilteredRegion(String name, Map<AppliedValue, Object> values, List<Region> regions, List<Filter> filters) {
 		super(name);
 		this.values = values;
-		this.region = new UnionRegion(null, regions);
+		this.region = new UnionRegion(name + "-union", regions);
 		this.filters = filters;
 	}
 
-	public void apply(SporkPlayer player) {
-		Object msg = values.get(AppliedValue.MESSAGE);
-		if(msg != null) {
-			String message = (String) msg;
-			message = message.replace("`", "§").replace("&", "§");
+	public void apply(AppliedValue value, SporkPlayer player) {
+		if(value == AppliedValue.ENTER || value == AppliedValue.LEAVE) {
+			Object msg = values.get(AppliedValue.MESSAGE);
+			if(msg != null) {
+				String message = (String) msg;
+				message = message.replace("`", "§").replace("&", "§");
 
-			player.getPlayer().sendMessage(ChatColor.RED + message);
+				player.getPlayer().sendMessage(ChatColor.RED + message);
+			}
+
+			return;
 		}
 
 		Object kit = values.get(AppliedValue.KIT);
