@@ -118,7 +118,7 @@ public class SporkMap {
 			if(region instanceof FilteredRegion) {
 				FilteredRegion filtered = (FilteredRegion) region;
 				try {
-					message = message + " (" + filtered.getUnion().getValues().size() + ")";
+					message = message + " (" + filtered.getValues().size() + ")";
 				} catch(NullPointerException e) {
 					message = message + " (Unknown)";
 				}
@@ -470,7 +470,8 @@ public class SporkMap {
 		List<Region> regionList = new ArrayList<>();
 		for(Region region : regions) {
 			BlockRegion block = new BlockRegion(location.getBlockX(), location.getBlockY(), location.getBlockZ());
-			Log.info("Checking '" + region.getName() + "' (" + region.getClass().getSimpleName() + ") for " + block);
+			// Log.info("Checking '" + region.getName() + "' (" + region.getClass().getSimpleName() + ") for " + block);
+
 			if(region.isInside(block)) {
 				Log.info(block + " was found inside '" + region.getName() + "' (" + region.getClass().getSimpleName() + ")");
 				regionList.add(region);

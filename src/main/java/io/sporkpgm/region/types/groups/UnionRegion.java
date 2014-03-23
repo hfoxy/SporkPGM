@@ -2,6 +2,7 @@ package io.sporkpgm.region.types.groups;
 
 import io.sporkpgm.region.Region;
 import io.sporkpgm.region.types.BlockRegion;
+import io.sporkpgm.util.Log;
 import org.bukkit.Material;
 import org.bukkit.World;
 
@@ -24,7 +25,9 @@ public class UnionRegion extends Region {
 	@Override
 	public boolean isInside(BlockRegion block) {
 		for(Region region : regions) {
+			Log.info("Checking '" + region.getName() + "' (" + region.getClass().getSimpleName() + ") for " + block);
 			if(region.isInside(block)) {
+				Log.info(block + " was found inside '" + region.getName() + "'");
 				return true;
 			}
 		}

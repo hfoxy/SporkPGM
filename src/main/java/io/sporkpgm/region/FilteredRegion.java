@@ -2,7 +2,6 @@ package io.sporkpgm.region;
 
 import io.sporkpgm.filter.Filter;
 import io.sporkpgm.player.SporkPlayer;
-import io.sporkpgm.region.types.BlockRegion;
 import io.sporkpgm.region.types.groups.UnionRegion;
 import io.sporkpgm.team.spawns.kits.SporkKit;
 import org.bukkit.ChatColor;
@@ -10,16 +9,14 @@ import org.bukkit.ChatColor;
 import java.util.List;
 import java.util.Map;
 
-public class FilteredRegion extends Region {
+public class FilteredRegion extends UnionRegion {
 
 	private Map<AppliedValue, Object> values;
-	private UnionRegion region;
 	private List<Filter> filters;
 
 	public FilteredRegion(String name, Map<AppliedValue, Object> values, List<Region> regions, List<Filter> filters) {
-		super(name);
+		super("filtered-" + name + "-union", regions);
 		this.values = values;
-		this.region = new UnionRegion(name + "-union", regions);
 		this.filters = filters;
 	}
 
@@ -47,26 +44,6 @@ public class FilteredRegion extends Region {
 
 	public Map<AppliedValue, Object> getHashMap() {
 		return values;
-	}
-
-	public UnionRegion getUnion() {
-		return region;
-	}
-
-	public List<BlockRegion> getValues() {
-		return region.getValues();
-	}
-
-	public boolean isInside(BlockRegion block) {
-		return region.isInside(block);
-	}
-
-	public boolean isAbove(BlockRegion block) {
-		return region.isAbove(block);
-	}
-
-	public boolean isBelow(BlockRegion block) {
-		return region.isBelow(block);
 	}
 
 	public List<Filter> getFilters() {
