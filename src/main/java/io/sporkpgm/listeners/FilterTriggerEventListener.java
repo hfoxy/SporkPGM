@@ -13,7 +13,7 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 public class FilterTriggerEventListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onBlockPlace(BlockChangeEvent event) {
+	public void onBlockChange(BlockChangeEvent event) {
 		FilterContext context = new FilterContext(event, event.getNewBlock(), event.getPlayer().getTeam());
 		callEvent(new FilterTriggerEvent(event, event.getLocation(), event.getPlayer(), context));
 	}

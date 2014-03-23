@@ -7,6 +7,7 @@ import io.sporkpgm.map.event.BlockChangeEvent;
 import io.sporkpgm.player.SporkPlayer;
 import io.sporkpgm.player.event.PlayingPlayerMoveEvent;
 import io.sporkpgm.region.FilteredRegion;
+import io.sporkpgm.region.FilteredRegion.AppliedValue;
 import io.sporkpgm.region.Region;
 import io.sporkpgm.util.Log;
 import org.bukkit.Location;
@@ -43,6 +44,10 @@ public class FilterTriggerEvent extends Event {
 	}
 
 	public List<FilteredRegion> getRegionMatches() {
+		return getRegionMatches(location);
+	}
+
+	public List<FilteredRegion> getRegionMatches(Location location) {
 		List<FilteredRegion> filterList = new ArrayList<>();
 		for(Region region : Spork.get().getMatch().getMap().getContainingRegions(location)) {
 			if(region instanceof FilteredRegion) {
@@ -83,8 +88,11 @@ public class FilterTriggerEvent extends Event {
 			}
 
 			SporkPlayer player = null;
+			AppliedValue value = null;
 			if(event instanceof PlayingPlayerMoveEvent) {
-				player = ((PlayingPlayerMoveEvent) event).getPlayer();
+				PlayingPlayerMoveEvent move = (PlayingPlayerMoveEvent) event;
+				player = move.getPlayer();
+				value = AppliedValue.ENTER;
 			} else if(event instanceof BlockChangeEvent) {
 				player = ((BlockChangeEvent) event).getPlayer();
 			} else if(event instanceof PlayerEvent) {

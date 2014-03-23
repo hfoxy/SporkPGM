@@ -61,6 +61,14 @@ public class FilteredRegion extends Region {
 		return filters;
 	}
 
+	public boolean hasValue(AppliedValue value) {
+		return getValue(value) != null;
+	}
+
+	public Object getValue(AppliedValue value) {
+		return values.get(value);
+	}
+
 	public enum AppliedValue {
 
 		ENTER("enter", Filter.class),
