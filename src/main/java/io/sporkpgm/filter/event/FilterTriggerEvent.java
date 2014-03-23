@@ -101,7 +101,7 @@ public class FilterTriggerEvent extends Event {
 
 			for(FilteredRegion region : getRegionMatches()) {
 				if(player != null) {
-					region.apply(player);
+					region.apply(value, player);
 				}
 			}
 		} catch(NullPointerException e) {
