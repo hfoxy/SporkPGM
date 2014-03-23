@@ -44,13 +44,13 @@ public class FilterBuilder {
 				conditionList.add(multi);
 				continue;
 			} else if(condition.getName().equalsIgnoreCase("filter")) {
-				parseFilter(condition);
+				conditionList.add(parseFilter(condition));
 			} else if(condition.getName().equalsIgnoreCase("team")) {
-				parseTeam(condition, map);
+				conditionList.add(parseTeam(condition, map));
 			} else if(condition.getName().equalsIgnoreCase("block")) {
-				parseBlock(condition);
+				conditionList.add(parseBlock(condition));
 			} else if(condition.getName().equalsIgnoreCase("entity")) {
-				parseEntity(condition);
+				conditionList.add(parseEntity(condition));
 			}
 
 			String parents = condition.getParent().attributeValue("parents");
