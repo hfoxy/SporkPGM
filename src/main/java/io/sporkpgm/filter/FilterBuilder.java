@@ -44,7 +44,7 @@ public class FilterBuilder {
 
 			Modifier modifier = Modifier.getModifier(condition.getName());
 			if(modifier != null) {
-				MultiCondition multi = new MultiCondition(null, State.DENY, modifier, parseCondition(name, element, map));
+				MultiCondition multi = new MultiCondition(null, State.DENY, modifier, parseCondition(name, condition, map));
 				conditionList.add(multi);
 				continue;
 			} else if(condition.getName().equalsIgnoreCase("filter")) {
