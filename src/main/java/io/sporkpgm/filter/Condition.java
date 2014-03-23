@@ -21,7 +21,7 @@ public abstract class Condition implements Filter {
 			match = match.reverse();
 		}
 
-		debug(match, context);
+		// debug(match, context);
 		return match;
 	}
 

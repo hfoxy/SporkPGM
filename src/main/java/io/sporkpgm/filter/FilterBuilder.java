@@ -170,7 +170,7 @@ public class FilterBuilder {
 		defaults.add(allowEntities);
 		MultiCondition denyEntities = new MultiCondition("deny-entities", State.DENY, Modifier.NOT, allowEntities);
 		defaults.add(denyEntities);
-		
+
 		Condition[] allow = new Condition[]{ allowPlayers, allowBlocks, allowWorld, allowEntities };
 		MultiCondition allowAll = new MultiCondition("allow-all", State.DENY, Modifier.ANY, allow);
 		defaults.add(allowAll);
