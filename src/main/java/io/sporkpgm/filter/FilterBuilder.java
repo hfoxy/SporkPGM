@@ -75,12 +75,23 @@ public class FilterBuilder {
 			cons[i] = conditionList.get(i);
 		}
 
-		return new MultiCondition(name, State.DENY, Modifier.ANY, cons);
+		State state = State.ALLOW;
+		if(element.getParent().getName().equalsIgnoreCase("deny")) {
+			state = State.DENY;
+		}
+
+		return new MultiCondition(name, state, Modifier.ANY, cons);
 	}
 
 	public static FilterCondition parseFilter(Element element) {
 		String name = element.attributeValue("name");
-		return new FilterCondition(null, State.DENY, name);
+
+		State state = State.ALLOW;
+		if(element.getParent().getName().equalsIgnoreCase("deny")) {
+			state = State.DENY;
+		}
+
+		return new FilterCondition(null, state, name);
 	}
 
 	public static TeamCondition parseTeam(Element element, SporkMap map) throws InvalidFilterException {
@@ -89,7 +100,12 @@ public class FilterBuilder {
 			throw new InvalidFilterException("'" + element.getText() + "' is not a valid team for TeamCondition");
 		}
 
-		return new TeamCondition(null, State.DENY, team);
+		State state = State.ALLOW;
+		if(element.getParent().getName().equalsIgnoreCase("deny")) {
+			state = State.DENY;
+		}
+
+		return new TeamCondition(null, state, team);
 	}
 
 	public static BlockCondition parseBlock(Element element) throws InvalidFilterException {
@@ -98,7 +114,12 @@ public class FilterBuilder {
 			throw new InvalidFilterException("'" + element.getText() + "' is not a valid material for BlockCondition");
 		}
 
-		return new BlockCondition(null, State.DENY, material);
+		State state = State.ALLOW;
+		if(element.getParent().getName().equalsIgnoreCase("deny")) {
+			state = State.DENY;
+		}
+
+		return new BlockCondition(null, state, material);
 	}
 
 	public static EntityCondition parseEntity(Element element) throws InvalidFilterException {
@@ -107,7 +128,12 @@ public class FilterBuilder {
 			throw new InvalidFilterException("'" + element.getText() + "' is not a valid entity type for EntityCondition");
 		}
 
-		return new EntityCondition(null, State.DENY, type);
+		State state = State.ALLOW;
+		if(element.getParent().getName().equalsIgnoreCase("deny")) {
+			state = State.DENY;
+		}
+
+		return new EntityCondition(null, state, type);
 	}
 
 	private static List<Filter> defaults() {
