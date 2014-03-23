@@ -10,8 +10,8 @@ import org.bukkit.event.Event;
 
 public class WorldCondition extends Condition {
 
-	public WorldCondition(State state) {
-		super(state);
+	public WorldCondition(String name, State state) {
+		super(name, state);
 	}
 
 	@Override

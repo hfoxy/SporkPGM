@@ -9,8 +9,8 @@ public class TeamCondition extends Condition {
 
 	private SporkTeam team;
 
-	public TeamCondition(State state, SporkTeam team) {
-		super(state);
+	public TeamCondition(String name, State state, SporkTeam team) {
+		super(name, state);
 		this.team = team;
 	}
 

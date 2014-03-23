@@ -10,8 +10,8 @@ public class BlockCondition extends Condition {
 
 	private Material material;
 
-	public BlockCondition(State state, Material material) {
-		super(state);
+	public BlockCondition(String name, State state, Material material) {
+		super(name, state);
 		this.material = material;
 	}
 

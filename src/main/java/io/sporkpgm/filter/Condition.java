@@ -2,9 +2,11 @@ package io.sporkpgm.filter;
 
 public abstract class Condition implements Filter {
 
+	private String name;
 	private State state;
 
-	public Condition(State state) {
+	public Condition(String name, State state) {
+		this.name = name;
 		this.state = state;
 	}
 
@@ -25,7 +27,7 @@ public abstract class Condition implements Filter {
 
 	@Override
 	public String getName() {
-		return "condition-name";
+		return name;
 	}
 
 	@Override

@@ -9,8 +9,8 @@ public class AccessCondition extends Condition {
 
 	private SporkTeam team;
 
-	public AccessCondition(State state, SporkTeam team) {
-		super(state);
+	public AccessCondition(String name, State state, SporkTeam team) {
+		super(name, state);
 		this.team = team;
 	}
 

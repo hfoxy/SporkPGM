@@ -9,8 +9,8 @@ public class EntityCondition extends Condition {
 
 	private EntityType entity;
 
-	public EntityCondition(State state, EntityType entity) {
-		super(state);
+	public EntityCondition(String name, State state, EntityType entity) {
+		super(name, state);
 		this.entity = entity;
 	}
 

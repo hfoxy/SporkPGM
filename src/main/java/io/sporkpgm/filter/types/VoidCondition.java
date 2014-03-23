@@ -9,8 +9,8 @@ import org.bukkit.World;
 
 public class VoidCondition extends Condition {
 
-	public VoidCondition(State state) {
-		super(state);
+	public VoidCondition(String name, State state) {
+		super(name, state);
 	}
 
 	@Override

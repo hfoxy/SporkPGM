@@ -16,8 +16,8 @@ public class MultiCondition extends Condition {
 	private Modifier modifier;
 	private List<Condition> conditions;
 
-	public MultiCondition(State state, Modifier modifier, Condition... conditions) {
-		super(state);
+	public MultiCondition(String name, State state, Modifier modifier, Condition... conditions) {
+		super(name, state);
 		this.modifier = modifier;
 		this.conditions = Lists.newArrayList(conditions);
 	}
