@@ -38,6 +38,10 @@ public class FilterBuilder {
 		List<Element> conditions = XMLUtil.getElements(element);
 
 		for(Element condition : conditions) {
+			if(condition.getName().equalsIgnoreCase("allow") || condition.getName().equalsIgnoreCase("deny")) {
+				condition = (Element) condition.elements().get(0);
+			}
+
 			Modifier modifier = Modifier.getModifier(condition.getName());
 			if(modifier != null) {
 				MultiCondition multi = new MultiCondition(null, State.DENY, modifier, parseCondition(name, element, map));
