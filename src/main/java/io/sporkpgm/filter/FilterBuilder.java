@@ -19,7 +19,7 @@ public class FilterBuilder {
 		Document document = map.getDocument();
 		Element root = document.getRootElement();
 		List<Filter> filterList = new ArrayList<>();
-		filterList.addAll(defaults(map));
+		filterList.addAll(defaults());
 
 		Element filters = root.element("filters");
 		if(filters == null) {
@@ -144,7 +144,7 @@ public class FilterBuilder {
 		return new EntityCondition(null, state, type);
 	}
 
-	private static List<Filter> defaults(SporkMap map) {
+	private static List<Filter> defaults() {
 		List<Filter> defaults = new ArrayList<>();
 
 		AccessCondition allowPlayers = new AccessCondition("allow-players", State.DENY, null);
