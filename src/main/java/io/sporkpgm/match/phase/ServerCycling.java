@@ -1,6 +1,7 @@
 package io.sporkpgm.match.phase;
 
 import io.sporkpgm.Spork;
+import io.sporkpgm.filter.InvalidFilterException;
 import io.sporkpgm.match.Match;
 import io.sporkpgm.match.MatchPhase;
 import io.sporkpgm.module.exceptions.ModuleLoadException;
@@ -48,6 +49,9 @@ public class ServerCycling extends ServerPhase {
 					Log.severe(e.getMessage());
 					next = null;
 				} catch(ModuleLoadException e) {
+					Log.severe(e.getMessage());
+					next = null;
+				} catch(InvalidFilterException e) {
 					Log.severe(e.getMessage());
 					next = null;
 				}

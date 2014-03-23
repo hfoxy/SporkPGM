@@ -9,10 +9,10 @@ import org.bukkit.event.Listener;
 public class FilterTriggerListener implements Listener {
 
 	@EventHandler(priority = EventPriority.NORMAL)
-	public void onFilterTriggerEvent(FilterTriggerEvent e) {
-		for(Filter f : e.getFilterMatches()) {
-			if(!f.matches(e.getFilterContext()).toBoolean()) {
-				e.cancel();
+	public void onFilterTriggerEvent(FilterTriggerEvent event) {
+		for(Filter filter : event.getFilterMatches()) {
+			if(!filter.matches(event.getFilterContext()).toBoolean()) {
+				event.cancel();
 			}
 		}
 	}

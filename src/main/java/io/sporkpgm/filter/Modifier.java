@@ -7,4 +7,14 @@ public enum Modifier {
 	ALL,
 	ANY;
 
+	public static Modifier getModifier(String name) {
+		for(Modifier modifier : values()) {
+			if(modifier.name().equalsIgnoreCase(name)) {
+				return modifier;
+			}
+		}
+
+		return null;
+	}
+
 }

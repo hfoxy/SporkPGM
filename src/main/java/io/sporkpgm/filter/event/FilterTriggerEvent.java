@@ -6,6 +6,7 @@ import io.sporkpgm.filter.FilterContext;
 import io.sporkpgm.map.event.BlockChangeEvent;
 import io.sporkpgm.player.SporkPlayer;
 import io.sporkpgm.player.event.PlayingPlayerMoveEvent;
+import io.sporkpgm.region.FilteredRegion;
 import io.sporkpgm.region.Region;
 import io.sporkpgm.util.Log;
 import org.bukkit.Location;
@@ -42,10 +43,13 @@ public class FilterTriggerEvent extends Event {
 
 	public List<Filter> getFilterMatches() {
 		List<Filter> filterList = new ArrayList<>();
-		for(Region r : Spork.get().getMatch().getMap().getContainingRegions(location)) {
-			List<Filter> regionFilters = r.getFilters();
-			for(Filter f : regionFilters) {
-				filterList.add(f);
+		for(Region region : Spork.get().getMatch().getMap().getContainingRegions(location)) {
+			if(region instanceof FilteredRegion) {
+				FilteredRegion filtered = (FilteredRegion) region;
+				List<Filter> regionFilters = filtered.getFilters();
+				for(Filter filter : regionFilters) {
+					filterList.add(filter);
+				}
 			}
 		}
 		return filterList;

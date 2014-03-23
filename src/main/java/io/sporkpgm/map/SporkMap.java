@@ -1,6 +1,9 @@
 package io.sporkpgm.map;
 
 import io.sporkpgm.Spork;
+import io.sporkpgm.filter.Filter;
+import io.sporkpgm.filter.FilterBuilder;
+import io.sporkpgm.filter.InvalidFilterException;
 import io.sporkpgm.map.generator.NullChunkGenerator;
 import io.sporkpgm.match.Match;
 import io.sporkpgm.module.Module;
@@ -61,6 +64,7 @@ public class SporkMap {
 	protected List<SporkSpawn> spawns;
 	protected List<SporkKit> kits;
 	protected List<Region> regions;
+	protected List<Filter> filters;
 
 	protected World world;
 	protected Scoreboard scoreboard;
@@ -68,7 +72,7 @@ public class SporkMap {
 	protected SporkTeam winner;
 	protected boolean ended;
 
-	public SporkMap(MapBuilder builder) throws ModuleLoadException, InvalidRegionException {
+	public SporkMap(MapBuilder builder) throws ModuleLoadException, InvalidRegionException, InvalidFilterException {
 		this.builder = builder;
 		this.document = builder.getDocument();
 		this.folder = builder.getFolder();
@@ -80,6 +84,8 @@ public class SporkMap {
 		this.observers = SporkTeamBuilder.observers(this);
 
 		this.modules = builder.getModules();
+
+		this.filters = FilterBuilder.build(this);
 		this.regions = builder.getRegions();
 
 		this.kits = builder.getKits();
@@ -414,9 +420,23 @@ public class SporkMap {
 				names.add(region.getName());
 
 		for(Region region : regions) {
-			String name = region.getName() != null ? region.getName() : "null";
+			String name = region.getName();
 			if(region.getName() != null && name.equalsIgnoreCase(string))
 				return region;
+		}
+
+		return null;
+	}
+
+	public List<Filter> getFilters() {
+		return filters;
+	}
+
+	public Filter getFilter(String string) {
+		for(Filter filter : filters) {
+			String name = filter.getName();
+			if(filter.getName() != null && name.equalsIgnoreCase(string))
+				return filter;
 		}
 
 		return null;

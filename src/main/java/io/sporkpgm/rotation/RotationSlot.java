@@ -1,6 +1,7 @@
 package io.sporkpgm.rotation;
 
 import io.sporkpgm.Spork;
+import io.sporkpgm.filter.InvalidFilterException;
 import io.sporkpgm.map.MapBuilder;
 import io.sporkpgm.map.SporkMap;
 import io.sporkpgm.match.Match;
@@ -57,7 +58,7 @@ public class RotationSlot {
 		return match;
 	}
 
-	public Match load() throws RotationLoadException, InvalidRegionException, ModuleLoadException {
+	public Match load() throws RotationLoadException, InvalidRegionException, ModuleLoadException, InvalidFilterException {
 		SporkMap map = loader.getMap();
 		Match match = new Match(map, id);
 		setMatch(match);

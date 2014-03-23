@@ -15,11 +15,9 @@ import java.util.List;
 
 public abstract class Region {
 
-	private List<Filter> filters;
 	private String name;
 
 	public Region(String name) {
-		this.filters = new ArrayList<>();
 		this.name = name;
 	}
 
@@ -157,14 +155,6 @@ public abstract class Region {
 
 	public List<Entity> getEntities(Class<? extends Entity>[] classes, World world) {
 		return getEntities(Lists.newArrayList(classes), world);
-	}
-
-	public List<Filter> getFilters() {
-		return filters;
-	}
-
-	public void addFilter(Filter f) {
-		filters.add(f);
 	}
 
 }
