@@ -21,8 +21,8 @@ import java.util.List;
 public class RotationCommands {
 
 	@Command(aliases = {"rotation", "rot"}, desc = "View the current rotation", usage = "[page]", max = 1)
-	public static void maps(CommandContext cmd, CommandSender sender) throws CommandException {
-		String bar = ChatColor.RED + " ----------- ";
+	public static void rotation(CommandContext cmd, CommandSender sender) throws CommandException {
+		String bar = ChatColor.RED + "" + ChatColor.STRIKETHROUGH + " ----------- ";
 		String loaded = ChatColor.DARK_AQUA + "Rotation (" + ChatColor.AQUA + "[page]" + ChatColor.DARK_AQUA + " of "
 				+ ChatColor.AQUA + "[pages]" + ChatColor.DARK_AQUA + ")";
 
@@ -39,7 +39,7 @@ public class RotationCommands {
 		result.display(sender, cmd.getInteger(0, 1));
 	}
 
-	@Command(aliases = {"setnext", "sn"}, desc = "Set the next map", usage = "[map]", min = 1, max = 1)
+	@Command(aliases = {"setnext", "sn"}, desc = "Set the next map", usage = "[map]", min = 1)
 	@CommandPermissions("spork.match.setnext")
 	public static void setnext(CommandContext cmd, CommandSender sender) throws CommandException {
 		Rotation rotation = RotationSlot.getRotation();

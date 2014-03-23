@@ -17,7 +17,7 @@ import java.util.List;
 public class MapCommands {
 
 	public static void sendInfo(CommandSender sender, MapBuilder loader) {
-		String bar = ChatColor.RED + " ----------- ";
+		String bar = ChatColor.RED + "" + ChatColor.STRIKETHROUGH + " ----------- ";
 		sender.sendMessage(bar + ChatColor.GOLD + loader.getName() + bar);
 		sender.sendMessage(ChatColor.DARK_AQUA + "Version: " + loader.getVersion());
 		sender.sendMessage(ChatColor.DARK_AQUA + "Authors: " + StringUtil.listToEnglishCompound(
@@ -42,7 +42,7 @@ public class MapCommands {
 
 	@Command(aliases = {"maps"}, desc = "View all the currently loaded maps", usage = "[page]", max = 1)
 	public static void maps(CommandContext cmd, CommandSender sender) throws CommandException {
-		String bar = ChatColor.RED + " ----------- ";
+		String bar = ChatColor.RED + "" + ChatColor.STRIKETHROUGH + " ----------- ";
 		String loaded = ChatColor.DARK_AQUA + "Loaded Maps (" + ChatColor.AQUA + "[page]" + ChatColor.DARK_AQUA + " " +
 				"of" + " " + ChatColor.AQUA + "[pages]" + ChatColor.DARK_AQUA + ")";
 		String header = bar + loaded + bar;
