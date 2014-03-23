@@ -13,6 +13,7 @@ import org.bukkit.Location;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.player.PlayerEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,8 +82,19 @@ public class FilterTriggerEvent extends Event {
 				((Cancellable) event).setCancelled(true);
 			}
 
-			for(FilteredRegion region : getRegionMatches()) {
+			SporkPlayer player = null;
+			if(event instanceof PlayingPlayerMoveEvent) {
+				player = ((PlayingPlayerMoveEvent) event).getPlayer();
+			} else if(event instanceof BlockChangeEvent) {
+				player = ((BlockChangeEvent) event).getPlayer();
+			} else if(event instanceof PlayerEvent) {
+				player = SporkPlayer.getPlayer(((PlayerEvent) event).getPlayer());
+			}
 
+			for(FilteredRegion region : getRegionMatches()) {
+				if(player != null) {
+					region.apply(player);
+				}
 			}
 		} catch(NullPointerException e) {
 			Log.severe(e.getMessage());
