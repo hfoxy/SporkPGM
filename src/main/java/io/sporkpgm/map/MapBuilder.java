@@ -47,6 +47,9 @@ public class MapBuilder {
 		Log.info("Loaded " + modules.size() + " Modules: " + modules);
 
 		this.kits = SporkKitBuilder.build(document);
+		if(kits == null) {
+			this.kits = new ArrayList<>();
+		}
 	}
 
 	public Document getDocument() {
