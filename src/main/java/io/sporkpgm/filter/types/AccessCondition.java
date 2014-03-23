@@ -16,12 +16,16 @@ public class AccessCondition extends Condition {
 
 	@Override
 	public State match(FilterContext context) {
-		if(context.getTeam() == null)
+		if(context.getTeam() == null) {
 			return State.ABSTAIN;
-		else if(context.getTeam() == team)
+		} else if(context.getTeam() == team) {
 			return State.ALLOW;
-		else
+		} else {
+			if(team == null) {
+				return State.fromBoolean(true);
+			}
 			return State.DENY;
+		}
 	}
 
 	public SporkTeam getTeam() {

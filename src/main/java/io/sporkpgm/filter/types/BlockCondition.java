@@ -18,8 +18,12 @@ public class BlockCondition extends Condition {
 	@Override
 	public State match(FilterContext context) {
 		if(context.getBlock() != null) {
+			if(material == null) {
+				return State.fromBoolean(true);
+			}
 			return match(context.getBlock());
 		}
+
 		return State.ABSTAIN;
 	}
 

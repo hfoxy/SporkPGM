@@ -21,6 +21,9 @@ public class TeamCondition extends Condition {
 		} else if(context.getTeam() == team) {
 			return State.ALLOW;
 		} else {
+			if(team == null) {
+				return State.fromBoolean(true);
+			}
 			return State.DENY;
 		}
 	}

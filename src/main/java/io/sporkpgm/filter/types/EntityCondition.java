@@ -18,9 +18,10 @@ public class EntityCondition extends Condition {
 	public State match(FilterContext context) {
 		if(context.getEntity() == null) {
 			return State.ABSTAIN;
-		}
-		if(context.getEntity() == entity) {
+		} else if(context.getEntity() == entity) {
 			return State.ALLOW;
+		} else if(entity == null) {
+			return State.fromBoolean(true);
 		}
 		return State.DENY;
 	}
