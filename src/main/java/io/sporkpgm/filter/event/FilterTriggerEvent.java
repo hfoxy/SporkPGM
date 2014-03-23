@@ -8,11 +8,14 @@ import io.sporkpgm.region.Region;
 import io.sporkpgm.util.Log;
 import org.bukkit.Location;
 import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FilterTriggerEvent {
+public class FilterTriggerEvent extends Event {
+
+	private static final HandlerList handlers = new HandlerList();
 
 	private Event event;
 	private Location location;
@@ -55,6 +58,14 @@ public class FilterTriggerEvent {
 		} catch(NullPointerException e) {
 			Log.severe(e.getMessage());
 		}
+	}
+
+	public HandlerList getHandlers() {
+		return handlers;
+	}
+
+	public static HandlerList getHandlerList() {
+		return handlers;
 	}
 
 }

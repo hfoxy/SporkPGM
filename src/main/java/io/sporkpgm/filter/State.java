@@ -28,4 +28,8 @@ public enum State {
 		return ABSTAIN;
 	}
 
+	public static State fromBoolean(Boolean b) {
+		return b ? ALLOW : DENY;
+	}
+
 }

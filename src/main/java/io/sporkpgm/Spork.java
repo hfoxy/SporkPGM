@@ -6,6 +6,8 @@ import io.sporkpgm.commands.RotationCommands;
 import io.sporkpgm.listeners.BlockListener;
 import io.sporkpgm.listeners.ConnectionListener;
 import io.sporkpgm.listeners.EntityListener;
+import io.sporkpgm.listeners.FilterTriggerEventListener;
+import io.sporkpgm.listeners.FilterTriggerListener;
 import io.sporkpgm.listeners.MapListener;
 import io.sporkpgm.listeners.PlayerListener;
 import io.sporkpgm.map.MapBuilder;
@@ -292,6 +294,8 @@ public class Spork extends JavaPlugin {
 		registerListener(new EntityListener());
 		registerListener(new MapListener());
 		registerListener(new PlayerListener());
+		registerListener(new FilterTriggerListener());
+		registerListener(new FilterTriggerEventListener());
 	}
 
 	public static void registerListeners(Listener... listeners) {
