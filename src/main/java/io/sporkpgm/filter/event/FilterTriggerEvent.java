@@ -3,10 +3,13 @@ package io.sporkpgm.filter.event;
 import io.sporkpgm.Spork;
 import io.sporkpgm.filter.Filter;
 import io.sporkpgm.filter.FilterContext;
+import io.sporkpgm.map.event.BlockChangeEvent;
 import io.sporkpgm.player.SporkPlayer;
+import io.sporkpgm.player.event.PlayingPlayerMoveEvent;
 import io.sporkpgm.region.Region;
 import io.sporkpgm.util.Log;
 import org.bukkit.Location;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -54,7 +57,14 @@ public class FilterTriggerEvent extends Event {
 
 	public void cancel() {
 		try {
-			context.getCause().setCancelled(true);
+			if(event instanceof PlayingPlayerMoveEvent) {
+				PlayingPlayerMoveEvent move = (PlayingPlayerMoveEvent) event;
+				move.getPlayer().getPlayer().teleport(move.getFrom());
+			} else if(event instanceof BlockChangeEvent) {
+				((BlockChangeEvent) event).setCancelled(true);
+			} else if(event instanceof Cancellable) {
+				((Cancellable) event).setCancelled(true);
+			}
 		} catch(NullPointerException e) {
 			Log.severe(e.getMessage());
 		}
