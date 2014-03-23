@@ -3,6 +3,7 @@ package io.sporkpgm;
 import io.sporkpgm.commands.MapCommands;
 import io.sporkpgm.commands.MatchCommands;
 import io.sporkpgm.commands.RotationCommands;
+import io.sporkpgm.filter.InvalidFilterException;
 import io.sporkpgm.listeners.BlockListener;
 import io.sporkpgm.listeners.ConnectionListener;
 import io.sporkpgm.listeners.EntityListener;
@@ -138,6 +139,9 @@ public class Spork extends JavaPlugin {
 			Log.severe(e.getMessage());
 			reason = e.getMessage();
 		} catch(InvalidRegionException e) {
+			Log.severe(e.getMessage());
+			reason = e.getMessage();
+		} catch(InvalidFilterException e) {
 			Log.severe(e.getMessage());
 			reason = e.getMessage();
 		}

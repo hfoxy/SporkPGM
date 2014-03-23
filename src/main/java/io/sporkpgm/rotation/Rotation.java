@@ -2,6 +2,7 @@ package io.sporkpgm.rotation;
 
 import com.google.common.base.Charsets;
 import io.sporkpgm.Spork;
+import io.sporkpgm.filter.InvalidFilterException;
 import io.sporkpgm.map.MapBuilder;
 import io.sporkpgm.map.SporkMap;
 import io.sporkpgm.match.Match;
@@ -107,7 +108,7 @@ public class Rotation {
 		out.close();
 	}
 
-	public void start() throws ModuleLoadException, RotationLoadException, InvalidRegionException {
+	public void start() throws ModuleLoadException, RotationLoadException, InvalidRegionException, InvalidFilterException {
 		Match match = getCurrentSlot().load();
 		this.started = true;
 		match.start();
