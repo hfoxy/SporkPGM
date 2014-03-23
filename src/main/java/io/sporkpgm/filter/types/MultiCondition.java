@@ -86,4 +86,10 @@ public class MultiCondition extends Condition {
 
 		return State.ABSTAIN;
 	}
+
+	@Override
+	public String toString() {
+		return "MultiCondition{state=" + getState() + ",modifier=" + modifier.name() + ",conditions=" + conditions + "}";
+	}
+
 }

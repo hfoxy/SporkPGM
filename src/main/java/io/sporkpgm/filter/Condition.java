@@ -28,7 +28,7 @@ public abstract class Condition implements Filter {
 	}
 
 	private void debug(State state) {
-		Log.info(state.toBoolean() + ": " + state.name() + " for checking matches on '" + getName() + "' (" + getClass().getSimpleName() + ")");
+		Log.info(state.toBoolean() + ": " + state.name() + " for checking matches on '" + getName() + "' (" + toString() + ")");
 	}
 
 	public State getState() {
@@ -42,7 +42,7 @@ public abstract class Condition implements Filter {
 
 	@Override
 	public String toString() {
-		return "Condition{state=" + state.toString() + "}";
+		return getClass().getSimpleName() +  "{state=" + state.toString() + "}";
 	}
 
 }
