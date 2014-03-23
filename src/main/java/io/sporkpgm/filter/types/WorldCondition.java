@@ -33,7 +33,7 @@ public class WorldCondition extends Condition {
 
 	@Override
 	public String toString() {
-		return "BlockCondition{state=" + getState().toString() + "}";
+		return "WorldCondition{state=" + getState().toString() + "}";
 	}
 
 }

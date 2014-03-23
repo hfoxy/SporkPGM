@@ -32,9 +32,7 @@ public class FilterCondition extends Condition {
 
 	@Override
 	public String toString() {
-		return "AccessCondition{" +
-				"filter=" + (filter != null ? filter.toString() : filter)
-				+ ",state=" + getState().toString() + "}";
+		return "AccessCondition{filter=" + (filter != null ? filter.toString() : filter) + ",state=" + getState().toString() + "}";
 	}
 
 }

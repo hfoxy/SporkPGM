@@ -33,7 +33,7 @@ public class BlockCondition extends Condition {
 
 	@Override
 	public String toString() {
-		return "BlockCondition{block=" + material.toString() + ",state=" + getState().toString() + "}";
+		return "BlockCondition{block=" + (material != null ? material.name() : "null") + ",state=" + getState().toString() + "}";
 	}
 
 }

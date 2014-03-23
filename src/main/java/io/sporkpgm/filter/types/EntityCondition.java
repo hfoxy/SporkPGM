@@ -31,7 +31,7 @@ public class EntityCondition extends Condition {
 
 	@Override
 	public String toString() {
-		return "EntityCondition{entity=" + entity.toString() + ",state=" + getState().toString() + "}";
+		return "EntityCondition{entity=" + (entity != null ? entity.name() : "null") + ",state=" + getState().toString() + "}";
 	}
 
 }
