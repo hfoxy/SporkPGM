@@ -2,9 +2,11 @@ package io.sporkpgm.region;
 
 import io.sporkpgm.map.SporkMap;
 import io.sporkpgm.match.Match;
+import io.sporkpgm.region.exception.InvalidRegionException;
 import io.sporkpgm.region.types.BlockRegion;
 import io.sporkpgm.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SearchRegion extends Region {
@@ -20,26 +22,46 @@ public class SearchRegion extends Region {
 	}
 
 	public List<BlockRegion> getValues() {
-		get();
-		return region.getValues();
+		try {
+			get();
+			return region.getValues();
+		} catch(InvalidRegionException e) {
+			Log.info(e.getMessage());
+			return new ArrayList<>();
+		}
 	}
 
 	public boolean isInside(BlockRegion block) {
-		get();
-		return region.isInside(block);
+		try {
+			get();
+			return region.isInside(block);
+		} catch(InvalidRegionException e) {
+			Log.info(e.getMessage());
+			return false;
+		}
 	}
 
 	public boolean isAbove(BlockRegion block) {
-		get();
-		return region.isAbove(block);
+		try {
+			get();
+			return region.isAbove(block);
+		} catch(InvalidRegionException e) {
+			Log.info(e.getMessage());
+			return false;
+		}
 	}
 
 	public boolean isBelow(BlockRegion block) {
-		get();
-		return region.isBelow(block);
+		try {
+			get();
+			return region.isBelow(block);
+		} catch(InvalidRegionException e) {
+			Log.info(e.getMessage());
+			return false;
+		}
 	}
 
-	private void get() {
+	private void get() throws InvalidRegionException {
 		// Log.info(toString());
 		if(region != null && map == Match.getMatch().getMap()) {
 			// Log.info("Already found the Region and the map hasn't changed");
@@ -50,7 +72,7 @@ public class SearchRegion extends Region {
 			this.map = Match.getMatch().getMap();
 			this.region = map.getRegion(search);
 		} catch(NullPointerException e) {
-			Log.info("Unable to fetch info about the map just yet!");
+			throw new InvalidRegionException(null, "Unable to fetch info about the map just yet!");
 		}
 		// Log.info("Set new Region for " + toString());
 	}
