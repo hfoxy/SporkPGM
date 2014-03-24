@@ -92,10 +92,10 @@ public class SporkMap {
 		this.modules = builder.getModules();
 
 		this.filters = FilterBuilder.build(this);
-		filters();
+		// filters();
 		this.regions = builder.getRegions();
 		this.regions.addAll(filtered());
-		regions();
+		// regions();
 
 		this.kits = builder.getKits();
 		this.spawns = SporkSpawnBuilder.build(this);
@@ -468,7 +468,7 @@ public class SporkMap {
 	}
 
 	public List<Region> getContainingRegions(Location location) {
-		BlockRegion block = new BlockRegion(location.getBlockX(), location.getBlockY(), location.getBlockZ());
+		/*
 		if(getName().equalsIgnoreCase("Race for Victory 2")) {
 			String[] checks = new String[]{"blue-wool-rooms", "red-wool-rooms"};
 			for(String check : checks) {
@@ -487,7 +487,9 @@ public class SporkMap {
 				}
 			}
 		}
+		*/
 
+		BlockRegion block = new BlockRegion(location.getBlockX(), location.getBlockY(), location.getBlockZ());
 		List<Region> regionList = new ArrayList<>();
 		for(Region region : regions) {
 			if(region.isInside(block)) {

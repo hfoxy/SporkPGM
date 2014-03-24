@@ -250,8 +250,7 @@ public class RegionBuilder {
 
 	public static UnionRegion parseUnion(Element ele) throws InvalidRegionException {
 		String name = ele.attributeValue("name");
-		List<Region> regions = parseSubRegions(ele);
-		return new UnionRegion(name, regions);
+		return new UnionRegion(name, parseSubRegions(ele));
 	}
 
 	public static ComplementRegion parseComplement(Element ele) throws InvalidRegionException {
