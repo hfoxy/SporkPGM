@@ -30,7 +30,7 @@ public class UnionRegion extends Region {
 
 	@Override
 	public boolean isInside(BlockRegion block, boolean log) {
-		Log.info("'" + getName() + "' (UnionRegion) has " + regions.size() + " Regions inside it");
+		// Log.info("'" + getName() + "' (UnionRegion) has " + regions.size() + " Regions inside it");
 		for(Region region : regions) {
 			if(log) {
 				Log.info("Checking '" + region.getName() + "' (" + region.getClass().getSimpleName() + ") for " + block);
