@@ -28,7 +28,9 @@ public class ServerStarting extends ServerPhase {
 		}
 
 		if(duration <= 0) {
-			broadcast(ChatColor.GREEN + "Match starting!");
+			broadcast(ChatColor.DARK_PURPLE+"# # # # # # # # # # # # # # # # ");
+			broadcast(ChatColor.DARK_PURPLE+"# # "+ ChatColor.GREEN + "The match has started!" + ChatColor.DARK_PURPLE+" # #");
+			broadcast(ChatColor.DARK_PURPLE+"# # # # # # # # # # # # # # # #");
 			match.setPhase(getPhase().getNextPhase());
 
 			for(SporkTeam team : match.getMap().getTeams())

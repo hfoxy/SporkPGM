@@ -161,11 +161,13 @@ public class MatchCommands {
 
 		if(phase == MatchPhase.PLAYING) {
 			match.getMap().setEnded(true);
+			sender.sendMessage(ChatColor.GREEN + "Countdowns cancelled");
 			return;
 		}
 
 		if(phase == MatchPhase.STARTING || phase == MatchPhase.CYCLING) {
 			match.stop();
+			sender.sendMessage(ChatColor.GREEN + "Countdowns cancelled");
 			return;
 		}
 
