@@ -120,9 +120,9 @@ public class MatchCommands {
 	@Command(aliases = {"ready"}, desc = "Set a team's readiness state", usage = "{team}", max = 1)
 	@CommandPermissions("spork.match.ready")
 	public static void ready(CommandContext cmd, CommandSender sender) throws CommandException {
+		Match match = Spork.get().getRotation().getCurrentMatch();
 		if(cmd.argsLength() == 1) {
 			if(!sender.hasPermission("spork.match.ready.force")) throw new CommandException("You don't have permission");
-			Match match = Spork.get().getRotation().getCurrentMatch();
 			List<SporkTeam> matchingTeams = match.getMap().getTeams(cmd.getString(1));
 			if(matchingTeams.size() == 0) throw new CommandException("No matching teams found");
 			SporkTeam matched = matchingTeams.get(0);
@@ -138,9 +138,7 @@ public class MatchCommands {
 			}
 		} else {
 			if(!(sender instanceof Player)) throw new CommandException("Only a player may use this command");
-			SporkPlayer player = SporkPlayer.getPlayer((Player) sender);
-			SporkTeam player_team = player.getTeam();
-			Match match = Spork.get().getRotation().getCurrentMatch();
+			SporkTeam player_team = SporkPlayer.getPlayer((Player) sender).getTeam();
 			player_team.setReady(true);
 			Bukkit.broadcastMessage(player_team.getColoredName() + ChatColor.WHITE + " has been toggled ready!");
 			boolean ready = true;
