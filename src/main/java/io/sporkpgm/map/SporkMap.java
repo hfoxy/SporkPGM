@@ -29,6 +29,7 @@ import io.sporkpgm.team.SporkTeamBuilder;
 import io.sporkpgm.team.spawns.SporkSpawn;
 import io.sporkpgm.team.spawns.SporkSpawnBuilder;
 import io.sporkpgm.team.spawns.kits.SporkKit;
+import io.sporkpgm.team.spawns.kits.SporkKitBuilder;
 import io.sporkpgm.util.FileUtil;
 import io.sporkpgm.util.Log;
 import io.sporkpgm.util.NMSUtil;
@@ -101,6 +102,19 @@ public class SporkMap {
 		this.spawns = SporkSpawnBuilder.build(this);
 
 		this.timer = (TimerModule) new TimerBuilder(this).build().get(0);
+
+		Element root = document.getRootElement();
+		if(root.element("regions") != null) {
+			this.regions = RegionBuilder.parseSubRegions(root.element("regions"));
+		}
+
+		this.modules = Spork.get().getModules(document);
+		Log.info("Loaded " + modules.size() + " Modules: " + modules);
+
+		this.kits = SporkKitBuilder.build(document);
+		if(kits == null) {
+			this.kits = new ArrayList<>();
+		}
 	}
 
 	private void filters() {
