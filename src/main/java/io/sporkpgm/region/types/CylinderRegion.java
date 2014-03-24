@@ -2,12 +2,14 @@ package io.sporkpgm.region.types;
 
 import io.sporkpgm.region.Region;
 import io.sporkpgm.util.RegionUtil;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CylinderRegion extends Region {
 
+	Vector origin;
 	BlockRegion center;
 	double radius;
 	double height;
@@ -16,21 +18,23 @@ public class CylinderRegion extends Region {
 	List<BlockRegion> values;
 	boolean infinite;
 
-	public CylinderRegion(BlockRegion centre, double radius, double height, boolean hollow) {
-		this(null, centre, radius, height, hollow);
+	public CylinderRegion(BlockRegion center, double radius, double height, boolean hollow) {
+		this(null, center, radius, height, hollow);
 	}
 
-	public CylinderRegion(String name, BlockRegion centre, double radius, double height, boolean hollow) {
+	public CylinderRegion(String name, BlockRegion center, double radius, double height, boolean hollow) {
 		super(name);
 		this.values = new ArrayList<>();
-		if(!(centre.isXInfinite() || centre.isYInfinite() || centre.isZInfinite())) {
-			this.values = RegionUtil.cylinder(centre, radius, 1, hollow, false);
-		} else if(centre.isYInfinite() && !(centre.isXInfinite() || centre.isZInfinite())) {
-			this.values = RegionUtil.cylinder(new BlockRegion(centre.getX() + "", "@", centre.getZ() + ""), radius, 1, hollow, false);
+		if(!(center.isXInfinite() || center.isYInfinite() || center.isZInfinite())) {
+			this.values = RegionUtil.cylinder(center, radius, height, hollow, false);
+		} else if(center.isYInfinite() && !(center.isXInfinite() || center.isZInfinite())) {
+			this.values = RegionUtil.cylinder(new BlockRegion(center.getX() + "", "@", center.getZ() + ""), radius, 1, hollow, false);
 			this.infinite = true;
 		}
 
-		this.center = centre;
+		this.center = center;
+		this.origin = new Vector(center.getX(), center.getY(), center.getZ());
+
 		this.radius = radius;
 		this.height = height;
 		this.hollow = hollow;
@@ -42,6 +46,14 @@ public class CylinderRegion extends Region {
 
 	@Override
 	public boolean isInside(BlockRegion block) {
+		Vector point = new Vector(block.getX(), block.getY(), block.getZ());
+		if(point.getY() >= origin.getY() && point.getY() <= origin.getY() + height) {
+			return Math.pow(point.getX() - origin.getX(), 2.0D) + Math.pow(point.getZ() - origin.getZ(), 2.0D) < (radius * radius);
+		}
+
+		return false;
+
+		/*
 		if(infinite) {
 			return matchesXZ(block);
 		}
@@ -56,6 +68,7 @@ public class CylinderRegion extends Region {
 		}
 
 		return false;
+		*/
 	}
 
 	public boolean matchesXZ(BlockRegion region) {

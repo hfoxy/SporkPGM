@@ -1,7 +1,6 @@
 package io.sporkpgm.region;
 
 import com.google.common.collect.Lists;
-import io.sporkpgm.filter.Filter;
 import io.sporkpgm.region.types.BlockRegion;
 import org.bukkit.Location;
 import org.bukkit.Material;

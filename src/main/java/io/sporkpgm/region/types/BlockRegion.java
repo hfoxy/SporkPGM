@@ -208,9 +208,9 @@ public class BlockRegion extends Region {
 	}
 
 	public boolean isInside(BlockRegion block) {
-		boolean isX = (block.isXInfinite() || isXInfinite()) || block.getX() == getX();
-		boolean isY = (block.isYInfinite() || isYInfinite()) || block.getY() == getY();
-		boolean isZ = (block.isZInfinite() || isZInfinite()) || block.getZ() == getZ();
+		boolean isX = (block.isXInfinite() || isXInfinite()) || block.getIntegerX() == getIntegerX();
+		boolean isY = (block.isYInfinite() || isYInfinite()) || block.getIntegerY() == getIntegerY();
+		boolean isZ = (block.isZInfinite() || isZInfinite()) || block.getIntegerZ() == getIntegerZ();
 		return isX && isY && isZ;
 	}
 

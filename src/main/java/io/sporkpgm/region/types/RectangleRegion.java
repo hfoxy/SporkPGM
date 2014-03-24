@@ -1,6 +1,6 @@
 package io.sporkpgm.region.types;
 
-import io.sporkpgm.util.Log;
+import org.bukkit.util.Vector;
 
 public class RectangleRegion extends CuboidRegion {
 
@@ -15,26 +15,14 @@ public class RectangleRegion extends CuboidRegion {
 
 	@Override
 	public boolean isInside(BlockRegion block, boolean log) {
+		Vector point = new Vector(block.getX(), block.getY(), block.getZ());
 		double xMin, xMax, zMin, zMax;
 		xMin = getPoints()[1].getX();
 		xMax = getPoints()[0].getX();
 		zMin = getPoints()[1].getZ();
 		zMax = getPoints()[0].getZ();
 
-		double x = block.getX();
-		double z = block.getZ();
-
-		boolean isX = x >= xMin && x <= xMax;
-		if(log) {
-			Log.info("X = (" + x + " >= " + xMin + " = " + (x >= xMin) + " && " + x + " >= " + xMax + " = " + (x >= xMax) + ") = " + isX);
-		}
-
-		boolean isZ = z >= zMin && z <= zMax;
-		if(log) {
-			Log.info("Z = (" + z + " >= " + zMin + " = " + (z >= zMin) + " && " + z + " >= " + zMax + " = " + (z >= zMax) + ") = " + isZ);
-		}
-
-		return isX &&  isZ;
+		return (xMin <= point.getX()) && (point.getX() <= xMax) && (zMin <= point.getZ()) && (point.getZ() <= zMax);
 	}
 
 }

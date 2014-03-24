@@ -1,6 +1,7 @@
 package io.sporkpgm.region.types;
 
 import io.sporkpgm.region.Region;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,14 +71,11 @@ public class CuboidRegion extends Region {
 		zMin = getPoints()[1].getZ();
 		zMax = getPoints()[0].getZ();
 
-		double x = block.getX();
-		double y = block.getY();
-		double z = block.getZ();
+		Vector point = new Vector(block.getX(), block.getY(), block.getZ());
+		Vector min = new Vector(xMin, yMin, zMin);
+		Vector max = new Vector(xMax, yMax, zMax);
 
-		boolean isX = x >= xMin && x <= xMax;
-		boolean isY = y >= yMin && y <= yMax;
-		boolean isZ = z >= zMin && z <= zMax;
-		return isX && isY && isZ;
+		return point.isInAABB(min, max);
 	}
 
 	public boolean isAboveOrBelow(BlockRegion region) {
