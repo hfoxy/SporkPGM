@@ -143,6 +143,7 @@ public class VictoryObjective extends ObjectiveModule {
 
 				completer = player;
 				setComplete(true);
+				event.setCancelled(false);
 			}
 		}
 	}
