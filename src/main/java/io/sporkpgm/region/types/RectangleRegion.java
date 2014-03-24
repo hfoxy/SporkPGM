@@ -1,5 +1,7 @@
 package io.sporkpgm.region.types;
 
+import io.sporkpgm.util.Log;
+
 public class RectangleRegion extends CuboidRegion {
 
 	public RectangleRegion(String name, BlockRegion min, BlockRegion max) {
@@ -8,6 +10,11 @@ public class RectangleRegion extends CuboidRegion {
 
 	@Override
 	public boolean isInside(BlockRegion block) {
+		return isInside(block, false);
+	}
+
+	@Override
+	public boolean isInside(BlockRegion block, boolean log) {
 		double xMin, xMax, zMin, zMax;
 		xMin = getPoints()[1].getX();
 		xMax = getPoints()[0].getX();
@@ -18,7 +25,15 @@ public class RectangleRegion extends CuboidRegion {
 		double z = block.getZ();
 
 		boolean isX = x >= xMin && x <= xMax;
+		if(log) {
+			Log.info("X = (" + x + " >= " + xMin + " = " + (x >= xMin) + " && " + x + " >= " + xMax + " = " + (x >= xMax) + ") = " + isX);
+		}
+
 		boolean isZ = z >= zMin && z <= zMax;
+		if(log) {
+			Log.info("Z = (" + z + " >= " + zMin + " = " + (z >= zMin) + " && " + z + " >= " + zMax + " = " + (z >= zMax) + ") = " + isZ);
+		}
+
 		return isX &&  isZ;
 	}
 

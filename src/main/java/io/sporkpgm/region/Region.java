@@ -27,6 +27,10 @@ public abstract class Region {
 
 	public abstract boolean isInside(BlockRegion block);
 
+	public boolean isInside(BlockRegion block, boolean log) {
+		return isInside(block);
+	}
+
 	public boolean isInside(double x, double y, double z) {
 		return isInside(new BlockRegion(x, y, z));
 	}

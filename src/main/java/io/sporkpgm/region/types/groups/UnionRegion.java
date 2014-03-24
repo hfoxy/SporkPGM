@@ -35,6 +35,18 @@ public class UnionRegion extends Region {
 	}
 
 	@Override
+	public boolean isInside(BlockRegion block, boolean log) {
+		for(Region region : regions) {
+			// Log.info("Checking '" + region.getName() + "' (" + region.getClass().getSimpleName() + ") for " + block);
+			if(region.isInside(block, log)) {
+				// Log.info(block + " was found inside '" + region.getName() + "'");
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
 	public boolean isInside(Material material, World world) {
 		for(BlockRegion region : getValues()) {
 			if(region.getMaterial(world) == material) {

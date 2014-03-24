@@ -22,6 +22,7 @@ import io.sporkpgm.region.Region;
 import io.sporkpgm.region.RegionBuilder;
 import io.sporkpgm.region.exception.InvalidRegionException;
 import io.sporkpgm.region.types.BlockRegion;
+import io.sporkpgm.region.types.groups.UnionRegion;
 import io.sporkpgm.rotation.RotationSlot;
 import io.sporkpgm.team.SporkTeam;
 import io.sporkpgm.team.SporkTeamBuilder;
@@ -471,15 +472,19 @@ public class SporkMap {
 		if(getName().equalsIgnoreCase("Race for Victory 2")) {
 			String[] checks = new String[]{"blue-wool-rooms", "red-wool-rooms"};
 			for(String check : checks) {
-				Region region = getRegion(check);
-				if(region == null) {
-					Log.info(check + " does not exist!");
-					continue;
-				}
+				try {
+					UnionRegion region = (UnionRegion) getRegion(check);
+					if(region == null) {
+						Log.info(check + " does not exist!");
+						continue;
+					}
 
-				Log.info("Checking '" + region.getName() + "' (" + region.getClass().getSimpleName() + ") for " + block);
-				boolean inside = region.isInside(block);
-				Log.info((inside ? "Found " : "Could not find ") + block + " inside '" + region.getName() + "'");
+					Log.info("Checking '" + region.getName() + "' (" + region.getClass().getSimpleName() + ") for " + block);
+					boolean inside = region.isInside(block, true);
+					Log.info((inside ? "Found " : "Could not find ") + block + " inside '" + region.getName() + "'");
+				} catch(ClassCastException e) {
+					Log.info("Checked Region was not a Union Region");
+				}
 			}
 		}
 
