@@ -14,6 +14,7 @@ import io.sporkpgm.player.event.PlayerChatEvent;
 import io.sporkpgm.rotation.RotationSlot;
 import io.sporkpgm.team.SporkTeam;
 import io.sporkpgm.util.StringUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -124,12 +125,15 @@ public class MatchCommands {
 			Match match = Spork.get().getRotation().getCurrentMatch();
 			List<SporkTeam> matchingTeams = match.getMap().getTeams(cmd.getString(1));
 			if(matchingTeams.size() == 0) throw new CommandException("No matching teams found");
-			matchingTeams.get(0).setReady(true);
+			SporkTeam matched = matchingTeams.get(0);
+			matched.setReady(true);
+			Bukkit.broadcastMessage(matched.getColoredName() + ChatColor.WHITE + " has been toggled ready!");
 			boolean ready = true;
 			for(SporkTeam team : match.getMap().getTeams()) {
 				if(!team.isReady()) ready = false;
 			}
 			if(ready) {
+				Bukkit.broadcastMessage(ChatColor.GREEN + "All teams are ready, starting match!");
 				match.setPhase(MatchPhase.STARTING);
 			}
 		} else {
@@ -138,11 +142,13 @@ public class MatchCommands {
 			SporkTeam player_team = player.getTeam();
 			Match match = Spork.get().getRotation().getCurrentMatch();
 			player_team.setReady(true);
+			Bukkit.broadcastMessage(player_team.getColoredName() + ChatColor.WHITE + " has been toggled ready!");
 			boolean ready = true;
 			for(SporkTeam team : match.getMap().getTeams()) {
 				if(!team.isReady()) ready = false;
 			}
 			if(ready) {
+				Bukkit.broadcastMessage(ChatColor.GREEN + "All teams are ready, starting match!");
 				match.setPhase(MatchPhase.STARTING);
 			}
 		}
