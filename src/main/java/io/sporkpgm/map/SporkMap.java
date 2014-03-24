@@ -470,7 +470,8 @@ public class SporkMap {
 	public List<Region> getContainingRegions(Location location) {
 		BlockRegion block = new BlockRegion(location.getBlockX(), location.getBlockY(), location.getBlockZ());
 		if(getName().equalsIgnoreCase("Race for Victory 2")) {
-			String[] checks = new String[]{"blue-wool-rooms", "red-wool-rooms"};
+			String[] checks = new String[]{};
+			// String[] checks = new String[]{"blue-wool-rooms", "red-wool-rooms"};
 			for(String check : checks) {
 				try {
 					UnionRegion region = (UnionRegion) getRegion(check);
