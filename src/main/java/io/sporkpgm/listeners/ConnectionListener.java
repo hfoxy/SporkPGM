@@ -2,6 +2,7 @@ package io.sporkpgm.listeners;
 
 
 import io.sporkpgm.Spork;
+import io.sporkpgm.match.MatchPhase;
 import io.sporkpgm.player.SporkPlayer;
 import io.sporkpgm.rotation.RotationSlot;
 import io.sporkpgm.util.Chars;
@@ -37,7 +38,21 @@ public class ConnectionListener implements Listener {
 
 	@EventHandler
 	public void onServerPing(ServerListPingEvent event){
-		event.setMotd(ChatColor.AQUA + "" + Chars.RAQUO + " " + RotationSlot.getRotation().getCurrent().getName() + " " + Chars.LAQUO);
+		MatchPhase phase = RotationSlot.getRotation().getCurrentMatch().getPhase();
+		ChatColor status=null;
+		if (phase == MatchPhase.WAITING){
+			status = ChatColor.GRAY;
+		}
+		else if (phase == MatchPhase.STARTING){
+			status = ChatColor.GREEN;
+		}
+		else if (phase == MatchPhase.PLAYING){
+			status = ChatColor.BLUE;
+		}
+		else if (phase == MatchPhase.CYCLING){
+			status = ChatColor.RED;
+		}
+		event.setMotd(status + "" + Chars.RAQUO + "" + ChatColor.AQUA + " " + RotationSlot.getRotation().getCurrent().getName() + " " + status + Chars.LAQUO);
 	}
 
 }
