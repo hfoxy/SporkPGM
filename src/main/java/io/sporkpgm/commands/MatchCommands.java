@@ -116,6 +116,38 @@ public class MatchCommands {
 		}
 	}
 
+	@Command(aliases = {"ready"}, desc = "Set a team's readiness state", usage = "{team}", max = 1)
+	@CommandPermissions("spork.match.ready")
+	public static void ready(CommandContext cmd, CommandSender sender) throws CommandException {
+		if(cmd.argsLength() == 1) {
+			if(!sender.hasPermission("spork.match.ready.force")) throw new CommandException("You don't have permission");
+			Match match = Spork.get().getRotation().getCurrentMatch();
+			List<SporkTeam> matchingTeams = match.getMap().getTeams(cmd.getString(1));
+			if(matchingTeams.size() == 0) throw new CommandException("No matching teams found");
+			matchingTeams.get(0).setReady(true);
+			boolean ready = true;
+			for(SporkTeam team : match.getMap().getTeams()) {
+				if(!team.isReady()) ready = false;
+			}
+			if(ready) {
+				match.setPhase(MatchPhase.STARTING);
+			}
+		} else {
+			if(!(sender instanceof Player)) throw new CommandException("Only a player may use this command");
+			SporkPlayer player = SporkPlayer.getPlayer((Player) sender);
+			SporkTeam player_team = player.getTeam();
+			Match match = Spork.get().getRotation().getCurrentMatch();
+			player_team.setReady(true);
+			boolean ready = true;
+			for(SporkTeam team : match.getMap().getTeams()) {
+				if(!team.isReady()) ready = false;
+			}
+			if(ready) {
+				match.setPhase(MatchPhase.STARTING);
+			}
+		}
+	}
+
 	@Command(aliases = {"cancel", "end"}, desc = "Cancel any timers (Starting, Match, Cycling)", max = 0)
 	@CommandPermissions("spork.match.cancel")
 	public static void cancel(CommandContext cmd, CommandSender sender) throws CommandException {

@@ -32,6 +32,7 @@ public class SporkTeam {
 	String display;
 	boolean capped;
 	boolean closed;
+	boolean ready;
 	List<SporkSpawn> spawns;
 
 	SporkTeam(SporkMap map, String name, ChatColor color) {
@@ -97,6 +98,10 @@ public class SporkTeam {
 		return observers;
 	}
 
+	public boolean isReady() {
+		return ready;
+	}
+
 	public String getDisplay() {
 		return display;
 	}
@@ -139,6 +144,10 @@ public class SporkTeam {
 
 	public void setScored(ScoredObjective objective) {
 		this.scored = objective;
+	}
+
+	public void setReady(boolean value) {
+		ready = value;
 	}
 
 	public List<SporkSpawn> getSpawns() {
