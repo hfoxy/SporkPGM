@@ -21,6 +21,17 @@ public class SearchRegion extends Region {
 		this.search = search;
 	}
 
+	@Override
+	public String getName() {
+		try {
+			get();
+			return region.getName();
+		} catch(InvalidRegionException e) {
+			Log.info(e.getMessage());
+			return "unkown-search";
+		}
+	}
+
 	public List<BlockRegion> getValues() {
 		try {
 			get();
