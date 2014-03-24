@@ -476,9 +476,10 @@ public class SporkMap {
 					Log.info(check + " does not exist!");
 					continue;
 				}
-				Log.info("Checking '" + region.getName() + "' (" + region.getClass().getSimpleName() + ") for " + block);
 
-				Region red_wool_rooms = getRegion("red-wool-rooms");
+				Log.info("Checking '" + region.getName() + "' (" + region.getClass().getSimpleName() + ") for " + block);
+				boolean inside = region.isInside(block);
+				Log.info((inside ? "Found " : "Could not find ") + block + " inside '" + region.getName() + "'");
 			}
 		}
 
