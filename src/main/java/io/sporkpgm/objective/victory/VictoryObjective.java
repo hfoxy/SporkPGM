@@ -10,7 +10,6 @@ import io.sporkpgm.objective.ObjectiveModule;
 import io.sporkpgm.player.SporkPlayer;
 import io.sporkpgm.region.types.BlockRegion;
 import io.sporkpgm.team.SporkTeam;
-import io.sporkpgm.util.FireworkUtil;
 import io.sporkpgm.util.Log;
 import io.sporkpgm.util.NMSUtil;
 import org.bukkit.Bukkit;
