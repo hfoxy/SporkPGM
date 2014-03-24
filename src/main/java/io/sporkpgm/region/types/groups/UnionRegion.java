@@ -2,6 +2,7 @@ package io.sporkpgm.region.types.groups;
 
 import io.sporkpgm.region.Region;
 import io.sporkpgm.region.types.BlockRegion;
+import io.sporkpgm.region.types.RectangleRegion;
 import io.sporkpgm.util.Log;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -32,6 +33,11 @@ public class UnionRegion extends Region {
 		for(Region region : regions) {
 			if(log) {
 				Log.info("Checking '" + region.getName() + "' (" + region.getClass().getSimpleName() + ") for " + block);
+			}
+
+			if(region instanceof RectangleRegion) {
+				RectangleRegion rectange = (RectangleRegion) region;
+				rectange.isInside(block, log);
 			}
 
 			if(region.isInside(block, log)) {
