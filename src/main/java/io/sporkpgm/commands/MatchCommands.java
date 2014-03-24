@@ -13,6 +13,7 @@ import io.sporkpgm.player.SporkPlayer;
 import io.sporkpgm.player.event.PlayerChatEvent;
 import io.sporkpgm.rotation.RotationSlot;
 import io.sporkpgm.team.SporkTeam;
+import io.sporkpgm.util.SchedulerUtil;
 import io.sporkpgm.util.StringUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -173,21 +174,36 @@ public class MatchCommands {
 
 	@Command(aliases = {"cycle"}, desc = "Cycle the map with the specified countdown", usage = "[time]", min = 1, max = 1)
 	@CommandPermissions("spork.match.cycle")
-	public static void cycle(CommandContext cmd, CommandSender sender) throws CommandException {
+	public static void cycle(final CommandContext cmd, final CommandSender sender) throws CommandException {
 		Match match = RotationSlot.getRotation().getCurrentMatch();
 		MatchPhase phase = match.getPhase();
 
+		int delay = 0;
 		if(phase == MatchPhase.PLAYING) {
 			match.getMap().setEnded(true);
+			delay = 2;
+		} else if(phase == MatchPhase.WAITING || phase == MatchPhase.STARTING) {
+			match.stop();
+			match.setPhase(MatchPhase.CYCLING);
+			delay = 2;
 		}
 
-		if(phase == MatchPhase.CYCLING) {
-			match.setDuration(cmd.getInteger(0));
-			match.start();
-			return;
-		}
+		Runnable run = new Runnable() {
+			@Override
+			public void run() {
+				Match match = RotationSlot.getRotation().getCurrentMatch();
+				MatchPhase phase = match.getPhase();
+				if(phase == MatchPhase.CYCLING) {
+					match.setDuration(cmd.getInteger(0));
+					match.start();
+					return;
+				}
 
-		sender.sendMessage(ChatColor.RED + "Server must be playing or cycling to set cycle time");
+				sender.sendMessage(ChatColor.RED + "Invalid MatchPhase? " + phase.name());
+			}
+		};
+
+		new SchedulerUtil(run, false).delay(delay);
 	}
 
 }
