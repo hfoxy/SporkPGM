@@ -34,7 +34,7 @@ public class RegionBuilder {
 		if(type.equalsIgnoreCase("block") || type.equalsIgnoreCase("point")) {
 			// Log.info("block: " + ele.asXML());
 			return parseBlock(ele);
-		} else if(type.equalsIgnoreCase("rectange")) {
+		} else if(type.equalsIgnoreCase("rectangle")) {
 			// Log.info("rectangle: " + ele.asXML());
 			return parseRectange(ele);
 		} else if(type.equalsIgnoreCase("cuboid")) {
@@ -250,7 +250,8 @@ public class RegionBuilder {
 
 	public static UnionRegion parseUnion(Element ele) throws InvalidRegionException {
 		String name = ele.attributeValue("name");
-		return new UnionRegion(name, parseSubRegions(ele));
+		List<Region> regions = parseSubRegions(ele);
+		return new UnionRegion(name, regions);
 	}
 
 	public static ComplementRegion parseComplement(Element ele) throws InvalidRegionException {
