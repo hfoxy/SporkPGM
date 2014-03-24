@@ -178,13 +178,15 @@ public class MatchCommands {
 		Match match = RotationSlot.getRotation().getCurrentMatch();
 		MatchPhase phase = match.getPhase();
 
+		final int duration = cmd.getInteger(0);
 		int delay = 0;
 		if(phase == MatchPhase.PLAYING) {
 			match.getMap().setEnded(true);
+			match.setDuration(duration);
 			delay = 2;
 		} else if(phase == MatchPhase.WAITING || phase == MatchPhase.STARTING) {
 			match.stop();
-			match.setPhase(MatchPhase.CYCLING);
+			match.setPhase(MatchPhase.CYCLING, duration);
 			delay = 2;
 		}
 
@@ -194,7 +196,7 @@ public class MatchCommands {
 				Match match = RotationSlot.getRotation().getCurrentMatch();
 				MatchPhase phase = match.getPhase();
 				if(phase == MatchPhase.CYCLING) {
-					match.setDuration(cmd.getInteger(0));
+					match.setDuration(duration);
 					match.start();
 					return;
 				}

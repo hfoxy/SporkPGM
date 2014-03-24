@@ -74,6 +74,10 @@ public class Match {
 	}
 
 	public void setPhase(MatchPhase phase) {
+		setPhase(phase, phase.getDuration());
+	}
+
+	public void setPhase(MatchPhase phase, int duration) {
 		if(phase == MatchPhase.CYCLING) {
 			MatchEndEvent end = new MatchEndEvent(this);
 			Spork.callEvent(end);
@@ -94,6 +98,7 @@ public class Match {
 			this.start = new DateTime(DateTimeZone.UTC);
 		else if(this.phase == MatchPhase.CYCLING)
 			this.end = new DateTime(DateTimeZone.UTC);
+		setDuration(duration);
 		start();
 
 		if(phase == MatchPhase.PLAYING) {
