@@ -57,9 +57,10 @@ public class ServerPlaying extends ServerPhase {
 			message = winner.getColoredName() + ChatColor.GOLD + " wins";
 		}
 
-		String left = ChatColor.DARK_PURPLE + arrows(Chars.RAQUO);
-		String right = ChatColor.DARK_PURPLE + arrows(Chars.LAQUO);
-		broadcast(left + " " + message + " " + right);
+		broadcast(ChatColor.DARK_PURPLE+"# # # # # # # # # # # # # # # # ");
+		broadcast(ChatColor.DARK_PURPLE+"# # "+ ChatColor.GOLD + "The match has ended!" + ChatColor.DARK_PURPLE + " # #");
+		broadcast(ChatColor.DARK_PURPLE+"# # "+ message + ChatColor.DARK_PURPLE+" # #");
+		broadcast(ChatColor.DARK_PURPLE+"# # # # # # # # # # # # # # # #");
 	}
 
 	public String arrows(Chars chars) {

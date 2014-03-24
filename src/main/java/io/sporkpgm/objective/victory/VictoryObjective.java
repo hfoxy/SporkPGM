@@ -10,15 +10,24 @@ import io.sporkpgm.objective.ObjectiveModule;
 import io.sporkpgm.player.SporkPlayer;
 import io.sporkpgm.region.types.BlockRegion;
 import io.sporkpgm.team.SporkTeam;
+import io.sporkpgm.util.FireworkUtil;
+import io.sporkpgm.util.Log;
+import io.sporkpgm.util.NMSUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Type;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
 import org.bukkit.event.EventHandler;
+import org.bukkit.inventory.meta.FireworkMeta;
+
+import java.lang.reflect.Method;
 
 @ModuleInfo(name = "VictoryObjective", description = "Defines a region where blocks fall")
 public class VictoryObjective extends ObjectiveModule {
@@ -63,11 +72,34 @@ public class VictoryObjective extends ObjectiveModule {
 		}
 
 		StringBuilder builder = new StringBuilder();
-		builder.append(color).append(name).append(ChatColor.GRAY).append(" was completed by ");
+		builder.append(color).append(name.toUpperCase()).append(ChatColor.GRAY).append(" was completed by ");
 		builder.append(ChatColor.AQUA).append(completer.getName());
 
 		Bukkit.broadcastMessage(builder.toString());
 		update();
+		Location location = completer.getPlayer().getLocation();
+		Firework firework = (Firework) location.getWorld().spawnEntity(location, EntityType.FIREWORK);
+		FireworkMeta meta = firework.getFireworkMeta();
+		meta.clearEffects();
+		meta.addEffect(getFirework());
+		firework.setFireworkMeta(meta);
+
+		try {
+			Method method = firework.getClass().getMethod("getHandle");
+			method.setAccessible(true);
+			method.invoke(firework);
+		} catch(Exception e) {
+			Log.warning("Server isn't running a version of Bukkit which allows the use of Firework.detonate() - resorting to manual detonation.");
+			try {
+				Object craft = NMSUtil.getClassBukkit("entity.CraftFirework").cast(firework);
+				Method method = craft.getClass().getMethod("getHandle");
+				method.setAccessible(true);
+				Object handle = method.invoke(craft);
+				handle.getClass().getField("expectedLifespan").set(handle, 0);
+			} catch(Exception e2) {
+				e2.printStackTrace();
+			}
+		}
 	}
 
 	@Override
