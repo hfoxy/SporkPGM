@@ -4,9 +4,16 @@ import io.sporkpgm.map.SporkMap;
 import io.sporkpgm.module.Module;
 import io.sporkpgm.module.builder.Builder;
 import io.sporkpgm.module.exceptions.ModuleLoadException;
+import io.sporkpgm.region.RegionBuilder;
 import io.sporkpgm.region.exception.InvalidRegionException;
+import io.sporkpgm.region.types.BlockRegion;
+import io.sporkpgm.team.SporkTeam;
+import io.sporkpgm.util.XMLUtil;
+import org.bukkit.Material;
 import org.dom4j.Document;
+import org.dom4j.Element;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MonumentBuilder extends Builder{
@@ -20,6 +27,21 @@ public class MonumentBuilder extends Builder{
 
 	@Override
 	public List<Module> build() throws ModuleLoadException, InvalidRegionException{
-		return null;
+		List<Module> modules = new ArrayList<>();
+		Element root = getRoot();
+		String name = getRoot().element("destroyables").attributeValue("name");
+		Material material = Material.getMaterial(getRoot().element("destroyables").attributeValue("materials"));
+		for (Element element : XMLUtil.getElements(root, "destroyables")){
+
+			for (Element element1 : XMLUtil.getElements(element, "destroyable")){
+				String team = element1.attributeValue("owner");
+				SporkTeam mapteam = map.getTeam(team);
+				BlockRegion block = RegionBuilder.parseBlock(element1.element("cuboid"));
+				modules.add(new MonumentObjective(name, material, block, mapteam));
+			}
+		}
+
+
+		return modules;
 	}
 }
