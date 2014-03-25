@@ -432,7 +432,7 @@ public class SporkPlayer implements Listener {
 		for(PotionEffectType type : types)
 			if(type != null)
 				try {
-					if(getPlayer().hasPotionEffect(type))
+					if(getPlayer().hasPotionEffect(type) && getPlayer() != null)
 						getPlayer().removePotionEffect(type);
 				} catch(NullPointerException e) {
 					Log.warning("NullPointerException thrown when trying to remove '" + type.getName() + "' from '" + getPlayer().getName() + "'");
