@@ -167,6 +167,14 @@ public class SporkMap {
 			if(sessionLock.exists()) {
 				FileUtil.delete(sessionLock);
 			}
+			File uid = new File(copyto.getAbsolutePath() + "/uid.dat");
+			if(uid.exists()) {
+				FileUtil.delete(uid);
+			}
+			File old = new File(copyto.getAbsolutePath() + "/level.dat_old");
+			if(old.exists()) {
+				FileUtil.delete(old);
+			}
 		} catch(IOException e) {
 			e.printStackTrace();
 			return false;
