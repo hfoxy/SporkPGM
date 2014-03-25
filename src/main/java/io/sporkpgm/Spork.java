@@ -17,15 +17,17 @@ import io.sporkpgm.map.SporkMap;
 import io.sporkpgm.match.Match;
 import io.sporkpgm.module.Module;
 import io.sporkpgm.module.builder.Builder;
-import io.sporkpgm.module.builder.BuilderAbout;
 import io.sporkpgm.module.exceptions.ModuleLoadException;
 import io.sporkpgm.objective.monument.MonumentBuilder;
 import io.sporkpgm.objective.victory.VictoryBuilder;
+import io.sporkpgm.player.SporkPlayer;
+import io.sporkpgm.player.rank.Permission;
+import io.sporkpgm.player.rank.Rank;
 import io.sporkpgm.region.exception.InvalidRegionException;
 import io.sporkpgm.rotation.Rotation;
 import io.sporkpgm.rotation.exceptions.RotationLoadException;
+import io.sporkpgm.util.Chars;
 import io.sporkpgm.util.Config;
-import io.sporkpgm.util.Config.Map;
 import io.sporkpgm.util.Log;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -37,7 +39,10 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -54,6 +59,7 @@ import static io.sporkpgm.Spork.StartupType.*;
 public class Spork extends JavaPlugin {
 
 	protected static Spork spork;
+	protected static Map<String, Rank[]> players;
 
 	protected CommandsManager<CommandSender> commands;
 	protected List<Class<? extends Builder>> builders;
@@ -74,10 +80,10 @@ public class Spork extends JavaPlugin {
 		}
 
 		builders();
-		repository = Map.DIRECTORY;
+		repository = Config.Map.DIRECTORY;
 		maps = new ArrayList<>();
 
-		StartupType type = Map.STARTUP;
+		StartupType type = Config.Map.STARTUP;
 
 		List<MapBuilder> all = MapLoader.build(repository);
 		List<MapBuilder> load = new ArrayList<>();
@@ -152,6 +158,32 @@ public class Spork extends JavaPlugin {
 			setEnabled(false);
 			return;
 		}
+
+		Permission perms_all = new Permission("*");
+
+		Rank admin = new Rank(ChatColor.GOLD, Chars.FLAIR, "Administrator", 1000, true);
+		admin.addPermission(perms_all);
+
+		Rank developer = new Rank(ChatColor.DARK_PURPLE, Chars.FLAIR, "Developer", 1000, true);
+
+		Rank referee = new Rank(ChatColor.DARK_AQUA, Chars.FLAIR, "Referee", 1000, true);
+
+		players = new HashMap<>();
+		players.put("ParaPenguin", new Rank[]{admin, developer});
+		players.put("msalihov", new Rank[]{admin, developer});
+		players.put("ShinyDialga45", new Rank[]{developer, referee});
+		players.put("lymibom", new Rank[]{developer});
+		players.put("RainoBoy97", new Rank[]{developer});
+		players.put("MasterEjzz", new Rank[]{developer});
+		players.put("TheSecret8", new Rank[]{referee});
+	}
+
+	public Rank[] getRanks(SporkPlayer player) {
+		if(players.containsKey(player.getName())) {
+			return players.get(player.getName());
+		}
+
+		return new Rank[]{};
 	}
 
 	private void registerCommands() {

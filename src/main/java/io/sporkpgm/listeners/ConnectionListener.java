@@ -4,7 +4,9 @@ package io.sporkpgm.listeners;
 import io.sporkpgm.Spork;
 import io.sporkpgm.match.MatchPhase;
 import io.sporkpgm.player.SporkPlayer;
+import io.sporkpgm.player.rank.Rank;
 import io.sporkpgm.rotation.RotationSlot;
+import io.sporkpgm.team.SporkTeam;
 import io.sporkpgm.util.Chars;
 import io.sporkpgm.util.SchedulerUtil;
 import org.bukkit.ChatColor;
@@ -19,12 +21,19 @@ public class ConnectionListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerJoin(final PlayerJoinEvent event) {
+		final SporkPlayer player = SporkPlayer.getPlayer(event.getPlayer());
+		final SporkTeam obs = Spork.get().getRotation().getCurrent().getObservers();
+		player.setTeam(obs, false, false, false);
+
+		for(Rank rank : Spork.get().getRanks(player)) {
+			player.addRank(rank);
+		}
+
 		new SchedulerUtil(new Runnable() {
 
 			@Override
 			public void run() {
-				SporkPlayer player = SporkPlayer.getPlayer(event.getPlayer());
-				player.setTeam(Spork.get().getRotation().getCurrent().getObservers());
+				player.setTeam(obs, false, true, true);
 				player.updateInventory();
 			}
 
