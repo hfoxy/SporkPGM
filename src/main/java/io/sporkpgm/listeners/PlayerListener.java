@@ -1,8 +1,10 @@
 package io.sporkpgm.listeners;
 
 import io.sporkpgm.Spork;
+import io.sporkpgm.match.MatchPhase;
 import io.sporkpgm.player.SporkPlayer;
 import io.sporkpgm.player.event.PlayingPlayerMoveEvent;
+import io.sporkpgm.rotation.RotationSlot;
 import org.bukkit.Material;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
@@ -124,13 +126,13 @@ public class PlayerListener implements Listener {
 		player.updateInventory();
 		if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && event.getClickedBlock().getType().equals(Material.CHEST)) {
 
-			if(player.isObserver()) {
+			if(player.isObserver() || RotationSlot.getRotation().getCurrentMatch().getPhase() != MatchPhase.PLAYING) {
 				event.setCancelled(true);
 				Chest chest = (Chest) event.getClickedBlock().getState();
 				player.getPlayer().openInventory(chest.getInventory());
 			}
 		} else if(event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-			if(player.isObserver() && (!event.getPlayer().getItemInHand().getType().equals(Material.AIR) || event.getPlayer().getItemInHand().equals(Material.COMPASS))) {
+			if(player.isObserver() && (!event.getPlayer().getItemInHand().getType().equals(Material.AIR) || event.getPlayer().getItemInHand().getType().equals(Material.COMPASS))) {
 				event.setCancelled(true);
 			}
 		}
@@ -152,7 +154,8 @@ public class PlayerListener implements Listener {
 		if(event.getWhoClicked() instanceof Player) {
 			SporkPlayer player = SporkPlayer.getPlayer((Player) event.getWhoClicked());
 
-			if(player.isObserver() && !event.getInventory().equals(player.getPlayer().getInventory())) {
+			if((player.isObserver() && !event.getInventory().equals(player.getPlayer().getInventory()))
+					|| RotationSlot.getRotation().getCurrentMatch().getPhase() != MatchPhase.PLAYING) {
 				event.setCancelled(true);
 			}
 
