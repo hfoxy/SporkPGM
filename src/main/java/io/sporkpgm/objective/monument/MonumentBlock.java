@@ -1,38 +1,46 @@
 package io.sporkpgm.objective.monument;
 
 import io.sporkpgm.player.SporkPlayer;
+import io.sporkpgm.region.types.BlockRegion;
 import org.bukkit.Location;
 
-/**
- * @author MasterEjay
- */
 public class MonumentBlock {
 
 	boolean broken;
-	SporkPlayer whoBroke;
-	Location loc;
+	SporkPlayer player;
+	BlockRegion block;
 
-	public void setBroken(boolean broken){
-		this.broken=broken;
+	public MonumentBlock(BlockRegion block) {
+		this.block = block;
 	}
 
-	public void setWhoBroke(SporkPlayer whoBroke){
-		this.whoBroke=whoBroke;
+	public void setComplete(SporkPlayer player, boolean broken) {
+		setPlayer(player);
+		setBroken(broken);
 	}
 
-	public boolean isBroken(){
+	public void setBroken(boolean broken) {
+		this.broken = broken;
+	}
+
+	public void setPlayer(SporkPlayer player) {
+		this.player = player;
+	}
+
+	public boolean isBroken() {
 		return broken;
 	}
 
-	public SporkPlayer getWhoBroke(){
-		return whoBroke;
+	public boolean isComplete() {
+		return broken;
 	}
 
-	public Location getLoc(){
-		return loc;
+	public SporkPlayer getPlayer() {
+		return player;
 	}
 
-	public MonumentBlock(Location loc){
-		this.loc=loc;
+	public BlockRegion getBlock() {
+		return block;
 	}
+
 }
