@@ -178,10 +178,18 @@ public class Spork extends JavaPlugin {
 		if(referees != null) {
 			for(String ref : referees) {
 				if(players.containsKey(ref)) {
-					Rank[] ranks = players.get(ref);
-					if(!Lists.newArrayList(ranks).contains(referee)) {
-						ranks[ranks.length] = referee;
+					List<Rank> ranks = Lists.newArrayList(players.get(ref));
+					ranks.add(referee);
+
+					int i = 0;
+					Rank[] array = new Rank[ranks.size()];
+					for(Rank rank : ranks) {
+						array[i] = rank;
+						i++;
 					}
+
+					players.remove(ref);
+					players.put(ref, array);
 					continue;
 				}
 
