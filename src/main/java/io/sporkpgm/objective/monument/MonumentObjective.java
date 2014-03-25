@@ -10,8 +10,10 @@ import io.sporkpgm.module.extras.InitModule;
 import io.sporkpgm.objective.ObjectiveModule;
 import io.sporkpgm.player.SporkPlayer;
 import io.sporkpgm.region.types.BlockRegion;
+import io.sporkpgm.region.types.CuboidRegion;
 import io.sporkpgm.team.SporkTeam;
 
+import io.sporkpgm.util.Log;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -32,13 +34,13 @@ public class MonumentObjective extends ObjectiveModule implements InitModule{
 	ChatColor color;
 	SporkPlayer completer;
 
-	BlockRegion place;
+	CuboidRegion place;
 	SporkTeam team;
 	OfflinePlayer player;
 	List<MonumentBlock> blocks;
 	StringBuilder spaces;
 
-	public MonumentObjective(String name,Material material,BlockRegion place,SporkTeam team){
+	public MonumentObjective(String name,Material material,CuboidRegion place,SporkTeam team){
 		this.name=name;
 		this.material=material;
 		this.place=place;
@@ -62,7 +64,7 @@ public class MonumentObjective extends ObjectiveModule implements InitModule{
 		return completer;
 	}
 
-	public BlockRegion getRegion(){
+	public CuboidRegion getRegion(){
 		return place;
 	}
 
@@ -130,9 +132,11 @@ public class MonumentObjective extends ObjectiveModule implements InitModule{
 
 	@EventHandler
 	public void onBlockChange(BlockChangeEvent event){
-
 		if (isComplete()){
 			event.setCancelled(true);
+		}
+		if (completer == null){
+			return;
 		}
 		if (completer.getTeam() == getTeam()){
 			event.setCancelled(true);
@@ -169,6 +173,8 @@ public class MonumentObjective extends ObjectiveModule implements InitModule{
 	@Override
 	public void start(){
 		for (BlockRegion region : place.getValues()){
+			Log.info(region.toString());
+			Log.info(String.valueOf(blocks.size()));
 			if (region.getLocation(team.getMap().getWorld()).getBlock().getType().toString().equals(material.toString())){
 				blocks.add(new MonumentBlock(region.getLocation(team.getMap().getWorld())));
 			}

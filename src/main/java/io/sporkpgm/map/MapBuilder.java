@@ -38,6 +38,18 @@ public class MapBuilder {
 		Element root = document.getRootElement();
 		this.info = (InfoModule) new InfoBuilder(document).build().get(0);
 
+		if(root.element("regions") != null) {
+						this.regions = RegionBuilder.parseSubRegions(root.element("regions"));
+					}
+
+						this.modules = Spork.get().getModules(document);
+				Log.info("Loaded " + modules.size() + " Modules: " + modules);
+
+			this.kits = SporkKitBuilder.build(document);
+			if(kits == null) {
+						this.kits = new ArrayList<>();
+			}
+
 		this.regions = new ArrayList<>();
 	}
 
