@@ -35,12 +35,7 @@ public abstract class Builder {
 	}
 
 	public static boolean isDocumentable(Class<? extends Builder> clazz) throws Exception {
-		Document document = null;
-		Constructor constructor = clazz.getConstructor(Document.class);
-		constructor.setAccessible(true);
-		Builder builder = (Builder) constructor.newInstance(document);
-		BuilderAbout about = builder.getInfo();
-		return about.isDocumentable();
+		return new BuilderAbout(clazz).isDocumentable();
 	}
 
 }

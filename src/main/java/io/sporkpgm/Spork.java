@@ -248,7 +248,7 @@ public class Spork extends JavaPlugin {
 	}
 
 	public boolean isDocumentable(Class<? extends Builder> clazz) {
-		return new BuilderAbout(clazz).isDocumentable();
+		return Builder.isDocumentable(clazz);
 	}
 
 	public List<Class<? extends Builder>> getBuilders() {

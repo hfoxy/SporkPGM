@@ -9,6 +9,7 @@ import io.sporkpgm.region.Region;
 import io.sporkpgm.region.RegionBuilder;
 import io.sporkpgm.region.exception.InvalidRegionException;
 import io.sporkpgm.team.SporkTeam;
+import io.sporkpgm.util.Log;
 import io.sporkpgm.util.StringUtil;
 import io.sporkpgm.util.XMLUtil;
 import org.bukkit.Material;
@@ -21,10 +22,6 @@ import java.util.List;
 @BuilderInfo(documentable = false)
 public class MonumentBuilder extends Builder {
 
-	public MonumentBuilder(Document document) {
-		super(document);
-	}
-
 	public MonumentBuilder(SporkMap map) {
 		super(map);
 	}
@@ -34,6 +31,7 @@ public class MonumentBuilder extends Builder {
 		List<Module> modules = new ArrayList<>();
 		Element root = getRoot();
 		List<Element> destroyablesList = XMLUtil.getElements(root, "destroyables");
+		Log.info("Found " + destroyablesList.size() + " different 'destroyables' elements");
 
 		for(Element destroyables : destroyablesList) {
 			String name = destroyables.attributeValue("name");
@@ -69,6 +67,7 @@ public class MonumentBuilder extends Builder {
 				owner = SporkMap.getMap().getTeam(team);
 			}
 
+			Log.info("Found " + XMLUtil.getElements(destroyables, "destroyable").size() + " different 'destroyable' elements");
 			for(Element destroyable : XMLUtil.getElements(destroyables, "destroyable")) {
 				name = (destroyable.attributeValue("name") != null ? destroyable.attributeValue("name") : name);
 
