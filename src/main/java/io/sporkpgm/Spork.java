@@ -167,7 +167,7 @@ public class Spork extends JavaPlugin {
 		players = new HashMap<>();
 		players.put("ParaPenguin", new Rank[]{developer});
 		players.put("msalihov", new Rank[]{developer});
-		players.put("ShinyDialga45", new Rank[]{developer, referee});
+		players.put("ShinyDialga45", new Rank[]{developer});
 		players.put("lymibom", new Rank[]{developer});
 		players.put("RainoBoy97", new Rank[]{developer});
 		players.put("MasterEjzz", new Rank[]{contributor});
@@ -177,7 +177,9 @@ public class Spork extends JavaPlugin {
 			for(String ref : referees) {
 				if(players.containsKey(ref)) {
 					List<Rank> ranks = Lists.newArrayList(players.get(ref));
-					ranks.add(referee);
+					if(!ranks.contains(referee)) {
+						ranks.add(referee);
+					}
 
 					int i = 0;
 					Rank[] array = new Rank[ranks.size()];
