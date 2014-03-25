@@ -37,19 +37,16 @@ public class ConnectionListener implements Listener {
 	}
 
 	@EventHandler
-	public void onServerPing(ServerListPingEvent event){
+	public void onServerPing(ServerListPingEvent event) {
 		MatchPhase phase = RotationSlot.getRotation().getCurrentMatch().getPhase();
-		ChatColor status=null;
-		if (phase == MatchPhase.WAITING){
+		ChatColor status = null;
+		if(phase == MatchPhase.WAITING) {
 			status = ChatColor.GRAY;
-		}
-		else if (phase == MatchPhase.STARTING){
+		} else if(phase == MatchPhase.STARTING) {
 			status = ChatColor.GREEN;
-		}
-		else if (phase == MatchPhase.PLAYING){
-			status = ChatColor.BLUE;
-		}
-		else if (phase == MatchPhase.CYCLING){
+		} else if(phase == MatchPhase.PLAYING) {
+			status = ChatColor.GOLD;
+		} else if(phase == MatchPhase.CYCLING) {
 			status = ChatColor.RED;
 		}
 		event.setMotd(status + "" + Chars.RAQUO + "" + ChatColor.AQUA + " " + RotationSlot.getRotation().getCurrent().getName() + " " + status + Chars.LAQUO);

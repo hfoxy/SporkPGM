@@ -1,6 +1,5 @@
 package io.sporkpgm.listeners;
 
-import static io.sporkpgm.Spork.callEvent;
 import io.sporkpgm.filter.FilterContext;
 import io.sporkpgm.filter.event.FilterTriggerEvent;
 import io.sporkpgm.map.event.BlockChangeEvent;
@@ -9,6 +8,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+
+import static io.sporkpgm.Spork.callEvent;
 
 public class FilterTriggerEventListener implements Listener {
 
