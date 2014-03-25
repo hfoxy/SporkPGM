@@ -3,7 +3,6 @@ package io.sporkpgm.map;
 import io.sporkpgm.Spork;
 import io.sporkpgm.filter.InvalidFilterException;
 import io.sporkpgm.module.Module;
-import io.sporkpgm.module.builder.Builder;
 import io.sporkpgm.module.exceptions.ModuleLoadException;
 import io.sporkpgm.module.modules.info.Contributor;
 import io.sporkpgm.module.modules.info.InfoBuilder;
@@ -39,16 +38,16 @@ public class MapBuilder {
 		this.info = (InfoModule) new InfoBuilder(document).build().get(0);
 
 		if(root.element("regions") != null) {
-						this.regions = RegionBuilder.parseSubRegions(root.element("regions"));
-					}
+			this.regions = RegionBuilder.parseSubRegions(root.element("regions"));
+		}
 
-						this.modules = Spork.get().getModules(document);
-				Log.info("Loaded " + modules.size() + " Modules: " + modules);
+		this.modules = Spork.get().getModules(document);
+		Log.info("Loaded " + modules.size() + " Modules: " + modules);
 
-			this.kits = SporkKitBuilder.build(document);
-			if(kits == null) {
-						this.kits = new ArrayList<>();
-			}
+		this.kits = SporkKitBuilder.build(document);
+		if(kits == null) {
+			this.kits = new ArrayList<>();
+		}
 
 		this.regions = new ArrayList<>();
 	}

@@ -22,7 +22,6 @@ import io.sporkpgm.region.Region;
 import io.sporkpgm.region.RegionBuilder;
 import io.sporkpgm.region.exception.InvalidRegionException;
 import io.sporkpgm.region.types.BlockRegion;
-import io.sporkpgm.region.types.groups.UnionRegion;
 import io.sporkpgm.rotation.RotationSlot;
 import io.sporkpgm.team.SporkTeam;
 import io.sporkpgm.team.SporkTeamBuilder;
