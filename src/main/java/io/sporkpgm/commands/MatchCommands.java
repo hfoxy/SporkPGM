@@ -189,7 +189,7 @@ public class MatchCommands {
 		} else if(phase == MatchPhase.WAITING || phase == MatchPhase.STARTING) {
 			match.stop();
 			match.setPhase(MatchPhase.CYCLING, duration);
-			delay = 2;
+			return;
 		}
 
 		Runnable run = new Runnable() {
