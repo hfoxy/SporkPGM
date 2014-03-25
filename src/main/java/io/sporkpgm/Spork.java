@@ -160,15 +160,13 @@ public class Spork extends JavaPlugin {
 			return;
 		}
 
-		Rank admin = new Rank(ChatColor.GOLD, Chars.FLAIR, "Administrator", 1000, true);
-
 		Rank developer = new Rank(ChatColor.DARK_PURPLE, Chars.FLAIR, "Developer", 1000, true);
 		Rank contributor = new Rank(ChatColor.DARK_AQUA, Chars.ASTERISK, "Contributor", 1000, true);
 		Rank referee = new Rank(ChatColor.RED, Chars.ASTERISK, "Referee", 1000, true);
 
 		players = new HashMap<>();
-		players.put("ParaPenguin", new Rank[]{admin, developer});
-		players.put("msalihov", new Rank[]{admin, developer});
+		players.put("ParaPenguin", new Rank[]{developer});
+		players.put("msalihov", new Rank[]{developer});
 		players.put("ShinyDialga45", new Rank[]{developer, referee});
 		players.put("lymibom", new Rank[]{developer});
 		players.put("RainoBoy97", new Rank[]{developer});
@@ -190,6 +188,10 @@ public class Spork extends JavaPlugin {
 
 					players.remove(ref);
 					players.put(ref, array);
+
+					for(Rank rank : array) {
+						Log.info(ref + ": " + (rank != null ? rank.getName() : "null"));
+					}
 					continue;
 				}
 
