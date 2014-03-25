@@ -160,7 +160,6 @@ public class Spork extends JavaPlugin {
 			return;
 		}
 
-		Permission perms_all = new Permission("*");
 		Rank admin = new Rank(ChatColor.GOLD, Chars.FLAIR, "Administrator", 1000, true);
 
 		Rank developer = new Rank(ChatColor.DARK_PURPLE, Chars.FLAIR, "Developer", 1000, true);
