@@ -19,7 +19,7 @@ import org.bukkit.event.server.ServerListPingEvent;
 
 public class ConnectionListener implements Listener {
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerJoin(final PlayerJoinEvent event) {
 		final SporkPlayer player = SporkPlayer.getPlayer(event.getPlayer());
 		final SporkTeam obs = Spork.get().getRotation().getCurrent().getObservers();
@@ -27,6 +27,11 @@ public class ConnectionListener implements Listener {
 
 		for(Rank rank : Spork.get().getRanks(player)) {
 			player.addRank(rank);
+		}
+
+		Rank admin = Rank.getRank("Administrator");
+		if(player.getPlayer().isOp() && !player.hasRank(admin)) {
+			player.addRank(admin);
 		}
 
 		new SchedulerUtil(new Runnable() {

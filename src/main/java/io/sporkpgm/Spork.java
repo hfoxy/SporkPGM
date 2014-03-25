@@ -1,5 +1,6 @@
 package io.sporkpgm;
 
+import com.google.common.collect.Lists;
 import io.sporkpgm.commands.MapCommands;
 import io.sporkpgm.commands.MatchCommands;
 import io.sporkpgm.commands.RotationCommands;
@@ -160,13 +161,12 @@ public class Spork extends JavaPlugin {
 		}
 
 		Permission perms_all = new Permission("*");
-
 		Rank admin = new Rank(ChatColor.GOLD, Chars.FLAIR, "Administrator", 1000, true);
 		admin.addPermission(perms_all);
 
 		Rank developer = new Rank(ChatColor.DARK_PURPLE, Chars.FLAIR, "Developer", 1000, true);
-
-		Rank referee = new Rank(ChatColor.DARK_AQUA, Chars.FLAIR, "Referee", 1000, true);
+		Rank contributor = new Rank(ChatColor.DARK_AQUA, Chars.ASTERISK, "Contributor", 1000, true);
+		Rank referee = new Rank(ChatColor.RED, Chars.ASTERISK, "Referee", 1000, true);
 
 		players = new HashMap<>();
 		players.put("ParaPenguin", new Rank[]{admin, developer});
@@ -174,8 +174,22 @@ public class Spork extends JavaPlugin {
 		players.put("ShinyDialga45", new Rank[]{developer, referee});
 		players.put("lymibom", new Rank[]{developer});
 		players.put("RainoBoy97", new Rank[]{developer});
-		players.put("MasterEjzz", new Rank[]{developer});
-		players.put("TheSecret8", new Rank[]{referee});
+		players.put("MasterEjzz", new Rank[]{contributor});
+
+		List<String> referees = getConfig().getStringList("settings.referees");
+		if(referees != null) {
+			for(String ref : referees) {
+				if(players.containsKey(ref)) {
+					Rank[] ranks = players.get(ref);
+					if(!Lists.newArrayList(ranks).contains(referee)) {
+						ranks[ranks.length] = referee;
+					}
+					continue;
+				}
+
+				players.put(ref, new Rank[]{referee});
+			}
+		}
 	}
 
 	public Rank[] getRanks(SporkPlayer player) {
