@@ -34,7 +34,7 @@ public abstract class Builder {
 		return new BuilderAbout(this.getClass());
 	}
 
-	public static boolean isDocumentable(Class<? extends Builder> clazz) throws Exception {
+	public static boolean isDocumentable(Class<? extends Builder> clazz) {
 		return new BuilderAbout(clazz).isDocumentable();
 	}
 
