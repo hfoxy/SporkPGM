@@ -1,6 +1,5 @@
 package io.sporkpgm.objective.monument;
 
-
 import io.sporkpgm.Spork;
 import io.sporkpgm.map.SporkMap;
 import io.sporkpgm.map.event.BlockChangeEvent;
@@ -26,7 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@ModuleInfo(name = "MonumentObjective", description = "The DTM objective module")
+@ModuleInfo(name = "MonumentObjective", description = "Objective which tracks Block breaks to be completed")
 public class MonumentObjective extends ObjectiveModule implements InitModule {
 
 	String name;

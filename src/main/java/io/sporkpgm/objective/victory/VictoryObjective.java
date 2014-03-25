@@ -28,7 +28,7 @@ import org.bukkit.inventory.meta.FireworkMeta;
 
 import java.lang.reflect.Method;
 
-@ModuleInfo(name = "VictoryObjective", description = "The CTW objective module")
+@ModuleInfo(name = "VictoryObjective", description = "Objective which tracks Block placements based on the wool material")
 public class VictoryObjective extends ObjectiveModule {
 
 	String name;
