@@ -28,7 +28,7 @@ import org.bukkit.inventory.meta.FireworkMeta;
 
 import java.lang.reflect.Method;
 
-@ModuleInfo(name = "VictoryObjective", description = "Defines a region where blocks fall")
+@ModuleInfo(name = "VictoryObjective", description = "Objective which tracks Block placements based on the wool material")
 public class VictoryObjective extends ObjectiveModule {
 
 	String name;
@@ -157,7 +157,6 @@ public class VictoryObjective extends ObjectiveModule {
 			if(event.isBreak()) {
 				event.setCancelled(true);
 				player.getPlayer().sendMessage(ChatColor.RED + "You can't break that block");
-				return;
 			} else {
 				if(player.getTeam() != team) {
 					event.setCancelled(true);
