@@ -74,8 +74,13 @@ public class BlockRegion extends Region {
 	}
 
 	public int parseInteger(String value) {
+		if(isInfinite(value)) {
+			return isNegative(value) ? INFINITE_NEGATIVE : INFINITE_POSITIVE;
+		}
+
+		int i = 0;
 		try {
-			return Integer.parseInt(value);
+			i = Integer.parseInt(value);
 		} catch(NumberFormatException e) {
 			if(isInfinite(value)) {
 				return isNegative(value) ? INFINITE_NEGATIVE : INFINITE_POSITIVE;
@@ -83,6 +88,9 @@ public class BlockRegion extends Region {
 
 			return (int) parseDouble(value);
 		}
+
+		Location location = new Location(Bukkit.getWorlds().get(0), i, 0, 0);
+		return location.getBlockX();
 	}
 
 	public boolean isInfinite(String value) {
