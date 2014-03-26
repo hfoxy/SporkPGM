@@ -20,6 +20,7 @@ import io.sporkpgm.module.Module;
 import io.sporkpgm.module.builder.Builder;
 import io.sporkpgm.module.exceptions.ModuleLoadException;
 import io.sporkpgm.module.modules.mob.MobBuilder;
+import io.sporkpgm.module.modules.mob.MobModule;
 import io.sporkpgm.objective.monument.MonumentBuilder;
 import io.sporkpgm.objective.victory.VictoryBuilder;
 import io.sporkpgm.player.SporkPlayer;
@@ -172,7 +173,7 @@ public class Spork extends JavaPlugin {
 		players.put("ShinyDialga45", new Rank[]{developer});
 		players.put("lymibom", new Rank[]{developer});
 		players.put("RainoBoy97", new Rank[]{developer});
-		players.put("MasterEjzz", new Rank[]{contributor});
+		players.put("MasterEjzz", new Rank[]{developer});
 
 		List<String> referees = getConfig().getStringList("settings.referees");
 		if(referees != null) {
@@ -278,7 +279,7 @@ public class Spork extends JavaPlugin {
 					constructor.setAccessible(true);
 					Builder builder = (Builder) constructor.newInstance(document);
 					modules.addAll(builder.build());
-					getLogger().info(clazz.getSimpleName());
+					getLogger().info(clazz.getSimpleName() + " module loaded!");
 				} catch(Exception e) {
 					getLogger().warning("Error when loading '" + clazz.getSimpleName() + "' due to " + e.getClass().getSimpleName());
 					e.printStackTrace();

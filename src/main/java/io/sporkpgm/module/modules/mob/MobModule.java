@@ -4,25 +4,26 @@ import io.sporkpgm.module.Module;
 import io.sporkpgm.module.ModuleInfo;
 import io.sporkpgm.module.builder.Builder;
 import io.sporkpgm.util.Log;
-import org.bukkit.entity.CreatureType;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @ModuleInfo(name = "MobMoudle", description = "The module that controls mob spawning", listener = true)
 public class MobModule extends Module implements Listener{
 
-	List<CreatureType> mobs = null;
+	List<EntityType> mobs = null;
 	List<CreatureSpawnEvent.SpawnReason> reasons = null;
 
-	public MobModule(List<CreatureType> mobs,List<CreatureSpawnEvent.SpawnReason> reasons){
+	public MobModule(List<EntityType> mobs,List<CreatureSpawnEvent.SpawnReason> reasons){
 		this.mobs = mobs;
 		this.reasons = reasons;
 	}
 
-	public List<CreatureType> getMobs(){
+	public List<EntityType> getMobs(){
 		return mobs;
 	}
 
@@ -32,10 +33,46 @@ public class MobModule extends Module implements Listener{
 
 	@EventHandler
 	public void onSpawn(CreatureSpawnEvent event){
-		Log.info("TEST");
+		List<String> mobNames = new ArrayList<>();
+		List<String> reasonNames = new ArrayList<>();
 		if (mobs == null && reasons == null){
 			event.setCancelled(true);
 			return;
+		}
+		for (EntityType e : mobs){
+			if (e != null){
+				mobNames.add(e.name());
+			}
+
+		}
+		for (CreatureSpawnEvent.SpawnReason r : reasons){
+			if (r != null){
+				reasonNames.add(r.name());
+			}
+		}
+		if (mobs == null){
+			if (!reasonNames.contains(event.getSpawnReason().name())){
+				event.setCancelled(true);
+				Log.info("Blocked spawn because of reason: " + event.getSpawnReason().toString());
+				return;
+			}
+		}
+		else if (reasons == null){
+			if (!mobNames.contains(event.getEntityType().name())){
+				event.setCancelled(true);
+				Log.info("Blocked spawn because of mob type: " + event.getEntityType().getName());
+				return;
+			}
+		}
+		else if (mobs != null && reasons != null) {
+			if (mobNames.contains(event.getEntityType().name()) && reasonNames.contains(event.getSpawnReason().name())){
+				event.setCancelled(false);
+			}
+			else {
+				event.setCancelled(true);
+				Log.info("Blocked spawn because of reason: " + event.getSpawnReason().toString());
+				Log.info("Blocked spawn because of mob type: " + event.getEntityType().getName());
+			}
 		}
 	}
 
