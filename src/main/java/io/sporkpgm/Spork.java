@@ -281,6 +281,7 @@ public class Spork extends JavaPlugin {
 					getLogger().info(clazz.getSimpleName());
 				} catch(Exception e) {
 					getLogger().warning("Error when loading '" + clazz.getSimpleName() + "' due to " + e.getClass().getSimpleName());
+					e.printStackTrace();
 				}
 			}
 		}
@@ -300,6 +301,7 @@ public class Spork extends JavaPlugin {
 					modules.addAll(builder.build());
 				} catch(Exception e) {
 					getLogger().warning("Error when loading '" + clazz.getSimpleName() + "' due to " + e.getClass().getSimpleName());
+					e.printStackTrace();
 				}
 			}
 		}
