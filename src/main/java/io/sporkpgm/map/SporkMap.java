@@ -253,12 +253,17 @@ public class SporkMap {
 		}
 	}
 
-	public void start() {
+	public void regListeners(){
 		for(Module module : modules) {
+			Log.info(module.getInfo().getName() + " HHIIIIII");
 			if(module.getInfo().isListener()) {
 				Spork.registerListener(module);
 			}
+		}
+	}
 
+	public void start() {
+		for(Module module : modules) {
 			if(module instanceof TaskedModule) {
 				((TaskedModule) module).setTasks(true);
 			}

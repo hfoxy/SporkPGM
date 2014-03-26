@@ -15,7 +15,7 @@ import org.dom4j.Element;
 import java.util.ArrayList;
 import java.util.List;
 
-@BuilderInfo(documentable = false)
+@BuilderInfo(documentable = true)
 public class MobBuilder extends Builder{
 	public MobBuilder(Document document){
 		super(document);

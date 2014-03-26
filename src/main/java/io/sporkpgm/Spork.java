@@ -27,6 +27,7 @@ import io.sporkpgm.player.rank.Permission;
 import io.sporkpgm.player.rank.Rank;
 import io.sporkpgm.region.exception.InvalidRegionException;
 import io.sporkpgm.rotation.Rotation;
+import io.sporkpgm.rotation.RotationSlot;
 import io.sporkpgm.rotation.exceptions.RotationLoadException;
 import io.sporkpgm.util.Chars;
 import io.sporkpgm.util.Config;
@@ -201,6 +202,7 @@ public class Spork extends JavaPlugin {
 				players.put(ref, new Rank[]{referee});
 			}
 		}
+		RotationSlot.getRotation().getCurrent().regListeners();
 	}
 
 	public Rank[] getRanks(SporkPlayer player) {
@@ -276,6 +278,7 @@ public class Spork extends JavaPlugin {
 					constructor.setAccessible(true);
 					Builder builder = (Builder) constructor.newInstance(document);
 					modules.addAll(builder.build());
+					getLogger().info(clazz.getSimpleName());
 				} catch(Exception e) {
 					getLogger().warning("Error when loading '" + clazz.getSimpleName() + "' due to " + e.getClass().getSimpleName());
 				}
