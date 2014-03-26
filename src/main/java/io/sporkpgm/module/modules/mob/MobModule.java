@@ -36,7 +36,7 @@ public class MobModule extends Module implements Listener{
 		List<String> mobNames = new ArrayList<>();
 		List<String> reasonNames = new ArrayList<>();
 		if (mobs == null && reasons == null){
-			event.setCancelled(true);
+			event.getEntity().remove();
 			return;
 		}
 		for (EntityType e : mobs){
@@ -52,15 +52,15 @@ public class MobModule extends Module implements Listener{
 		}
 		if (mobs == null){
 			if (!reasonNames.contains(event.getSpawnReason().name())){
-				event.setCancelled(true);
-				Log.info("Blocked spawn because of reason: " + event.getSpawnReason().toString());
+				event.getEntity().remove();
+				//Log.info("Blocked spawn because of reason: " + event.getSpawnReason().toString());
 				return;
 			}
 		}
 		else if (reasons == null){
 			if (!mobNames.contains(event.getEntityType().name())){
-				event.setCancelled(true);
-				Log.info("Blocked spawn because of mob type: " + event.getEntityType().getName());
+				event.getEntity().remove();
+				//Log.info("Blocked spawn because of mob type: " + event.getEntityType().getName());
 				return;
 			}
 		}
@@ -69,9 +69,9 @@ public class MobModule extends Module implements Listener{
 				event.setCancelled(false);
 			}
 			else {
-				event.setCancelled(true);
-				Log.info("Blocked spawn because of reason: " + event.getSpawnReason().toString());
-				Log.info("Blocked spawn because of mob type: " + event.getEntityType().getName());
+				event.getEntity().remove();
+				//Log.info("Blocked spawn because of reason: " + event.getSpawnReason().toString());
+				//Log.info("Blocked spawn because of mob type: " + event.getEntityType().getName());
 			}
 		}
 	}
