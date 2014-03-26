@@ -88,6 +88,7 @@ public class MonumentBuilder extends Builder {
 					if(material == null) {
 						throw new ModuleLoadException("'" + type + "' is not a valid Minecraft material");
 					}
+					materialList.add(material);
 				}
 
 				int i = 0;
