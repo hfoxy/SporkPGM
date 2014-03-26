@@ -12,7 +12,7 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-@ModuleInfo(name = "MobMoudle", description = "The module that controls mob spawning", listener = true)
+@ModuleInfo(name = "MobModule", description = "The module that controls mob spawning", listener = true)
 public class MobModule extends Module implements Listener{
 
 	List<EntityType> mobs = null;
