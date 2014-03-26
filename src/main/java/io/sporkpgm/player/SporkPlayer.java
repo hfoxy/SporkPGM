@@ -240,10 +240,23 @@ public class SporkPlayer implements Listener {
 	}
 
 	public String getPrefix() {
+		List<Rank> remove = new ArrayList<>();
+
 		StringBuilder sb = new StringBuilder();
 		for(Rank rank : ranks) {
+			if(rank == null) {
+				remove.add(rank);
+				Log.info(getName() + " has a null rank - removing it");
+				continue;
+			}
+
 			sb.append(rank.getPrefix());
 		}
+
+		for(Rank rank : remove) {
+			ranks.remove(rank);
+		}
+
 		return sb.toString();
 	}
 
