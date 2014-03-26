@@ -39,7 +39,10 @@ public class MonumentBuilder extends Builder {
 			String types = destroyables.attributeValue("materials");
 			String[] names = new String[]{};
 			if(types != null) {
-				names = (types.contains(";") ? types.split(";") : new String[]{types});
+				names = new String[]{types};
+				if(types.contains(";")) {
+					types.split(";");
+				}
 			}
 
 			List<Material> materialList = new ArrayList<>();
@@ -73,14 +76,17 @@ public class MonumentBuilder extends Builder {
 
 				types = destroyable.attributeValue("materials");
 				if(types != null) {
-					names = (types.contains(";") ? types.split(";") : new String[]{types});
+					names = new String[]{types};
+					if(types.contains(";")) {
+						types.split(";");
+					}
+				}
 
-					materialList = new ArrayList<>();
-					for(String type : names) {
-						Material material = StringUtil.convertStringToMaterial(type);
-						if(material == null) {
-							throw new ModuleLoadException("'" + type + "' is not a valid Minecraft material");
-						}
+				materialList = new ArrayList<>();
+				for(String type : names) {
+					Material material = StringUtil.convertStringToMaterial(type);
+					if(material == null) {
+						throw new ModuleLoadException("'" + type + "' is not a valid Minecraft material");
 					}
 				}
 
