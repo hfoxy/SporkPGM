@@ -214,9 +214,9 @@ public class SporkPlayer implements Listener {
 		}
 
 		getRanks().add(rank);
-		for(Permission perm : rank.getPermissions()) {
-			addPermission(perm);
-		}
+		//for(Permission perm : rank.getPermissions()) {
+		//	addPermission(perm);
+		//}
 		return true;
 	}
 

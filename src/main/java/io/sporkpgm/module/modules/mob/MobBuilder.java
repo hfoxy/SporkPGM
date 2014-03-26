@@ -29,11 +29,10 @@ public class MobBuilder extends Builder{
 	public List<Module> build() throws ModuleLoadException, InvalidRegionException{
 		List<Module> modules = new ArrayList<>();
 		Element root = getRoot();
-
+		List<CreatureSpawnEvent.SpawnReason> reasons = new ArrayList<>();
+		List<CreatureType> mobs = new ArrayList<>();
 		for (Element e : XMLUtil.getElements(root, "mobs")){
 			for (Element filter : XMLUtil.getElements(e, "filter")){
-				List<CreatureSpawnEvent.SpawnReason> reasons = new ArrayList<>();
-				List<CreatureType> mobs = new ArrayList<>();
 				for (Element reason : XMLUtil.getElements(filter, "spawn")){
 					String reasonS = reason.getText();
 					reasons.add(CreatureSpawnEvent.SpawnReason.valueOf(reasonS));
@@ -43,6 +42,7 @@ public class MobBuilder extends Builder{
 					mobs.add(CreatureType.valueOf(mobS));
 				}
 			}
+			modules.add(new MobModule(mobs, reasons));
 		}
 		return modules;
 	}

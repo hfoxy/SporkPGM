@@ -19,6 +19,7 @@ import io.sporkpgm.match.Match;
 import io.sporkpgm.module.Module;
 import io.sporkpgm.module.builder.Builder;
 import io.sporkpgm.module.exceptions.ModuleLoadException;
+import io.sporkpgm.module.modules.mob.MobBuilder;
 import io.sporkpgm.objective.monument.MonumentBuilder;
 import io.sporkpgm.objective.victory.VictoryBuilder;
 import io.sporkpgm.player.SporkPlayer;
@@ -159,9 +160,9 @@ public class Spork extends JavaPlugin {
 			setEnabled(false);
 			return;
 		}
-
+		Rank administrator = new Rank(ChatColor.GOLD, Chars.FLAIR, "Administrator", 1000, true);
 		Rank developer = new Rank(ChatColor.DARK_PURPLE, Chars.FLAIR, "Developer", 1000, true);
-		Rank contributor = new Rank(ChatColor.DARK_AQUA, Chars.ASTERISK, "Contributor", 1000, true);
+		Rank contributor = new Rank(ChatColor.DARK_AQUA, Chars.FLAIR, "Contributor", 1000, true);
 		Rank referee = new Rank(ChatColor.RED, Chars.ASTERISK, "Referee", 1000, true);
 
 		players = new HashMap<>();
@@ -315,6 +316,7 @@ public class Spork extends JavaPlugin {
 		builders = new ArrayList<>();
 		builders.add(VictoryBuilder.class);
 		builders.add(MonumentBuilder.class);
+		builders.add(MobBuilder.class);
 	}
 
 	public Rotation getRotation() {
