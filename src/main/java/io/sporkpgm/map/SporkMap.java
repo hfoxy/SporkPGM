@@ -12,6 +12,7 @@ import io.sporkpgm.module.extras.InitModule;
 import io.sporkpgm.module.extras.TaskedModule;
 import io.sporkpgm.module.modules.info.Contributor;
 import io.sporkpgm.module.modules.info.InfoModule;
+import io.sporkpgm.module.modules.mob.MobModule;
 import io.sporkpgm.module.modules.timer.TimerBuilder;
 import io.sporkpgm.module.modules.timer.TimerModule;
 import io.sporkpgm.objective.ObjectiveModule;
@@ -244,8 +245,11 @@ public class SporkMap {
 				for(ObjectiveModule objective : team.getObjectives()) {
 					// Log.info("Setting score of " + ChatColor.stripColor(objective.getPlayer().getName()) + " to " + score);
 					// Log.info(ChatColor.stripColor(objective.getPlayer().getName()) + ": " + objective);
-					this.objective.getScore(objective.getPlayer()).setScore(score);
-					score++;
+					if (objective.getPlayer() != null){
+						this.objective.getScore(objective.getPlayer()).setScore(score);
+						score++;
+					}
+
 				}
 				objective.getScore(team.getPlayer()).setScore(score);
 				score++;
@@ -255,10 +259,16 @@ public class SporkMap {
 
 	public void regListeners(){
 		for(Module module : modules) {
-			Log.info(module.getInfo().getName() + " HHIIIIII");
 			if(module.getInfo().isListener()) {
 				Spork.registerListener(module);
 			}
+
+		}
+		if (!modules.contains(MobModule.class)){
+			MobModule m = new MobModule(null, null);
+			Log.info("Loaded MobModule as default");
+			Spork.registerListeners(m);
+			modules.add(m);
 		}
 	}
 
