@@ -1,11 +1,10 @@
 package io.sporkpgm.filter.other;
 
+import io.sporkpgm.filter.AppliedRegion.AppliedValue;
 import io.sporkpgm.filter.exceptions.InvalidContextException;
 import io.sporkpgm.map.event.BlockChangeEvent;
 import io.sporkpgm.player.SporkPlayer;
 import io.sporkpgm.player.event.PlayingPlayerMoveEvent;
-
-import java.util.List;
 
 public class Context {
 
@@ -21,7 +20,7 @@ public class Context {
 		this.movement = movement;
 	}
 
-	public Context(List<Object> objects) throws InvalidContextException {
+	public Context(Object... objects) throws InvalidContextException {
 		for(Object object : objects) {
 			fill(object);
 		}
@@ -34,11 +33,14 @@ public class Context {
 			BlockChangeEvent event = (BlockChangeEvent) object;
 			if(event.hasPlayer()) {
 				this.block = event;
+				this.player = event.getPlayer();
 			} else {
 				this.transformation = event;
 			}
 		} else if(object instanceof PlayingPlayerMoveEvent) {
-			this.movement = (PlayingPlayerMoveEvent) object;
+			PlayingPlayerMoveEvent event = (PlayingPlayerMoveEvent) object;
+			this.movement = event;
+			this.player = event.getPlayer();
 		}
 
 		throw new InvalidContextException("Attempted to supply an Object which was unsupported");
@@ -68,12 +70,31 @@ public class Context {
 		return transformation != null;
 	}
 
+	public BlockChangeEvent getModification() {
+		return block != null ? block : transformation;
+	}
+
+	public boolean hasModification() {
+		return getModification() != null;
+	}
+
 	public PlayingPlayerMoveEvent getMovement() {
 		return movement;
 	}
 
 	public boolean hasMovement() {
 		return movement != null;
+	}
+
+	public void deny() {
+		if(hasModification()) {
+			getModification().setCancelled(true);
+		}
+
+		if(hasMovement()) {
+			PlayingPlayerMoveEvent move = getMovement();
+			getPlayer().getPlayer().teleport(move.getFrom());
+		}
 	}
 
 }

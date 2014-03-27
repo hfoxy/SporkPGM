@@ -8,7 +8,6 @@ import io.sporkpgm.filter.exceptions.InvalidFilterException;
 import io.sporkpgm.listeners.BlockListener;
 import io.sporkpgm.listeners.ConnectionListener;
 import io.sporkpgm.listeners.EntityListener;
-import io.sporkpgm.listeners.FilterTriggerEventListener;
 import io.sporkpgm.listeners.FilterTriggerListener;
 import io.sporkpgm.listeners.MapListener;
 import io.sporkpgm.listeners.PlayerListener;
@@ -363,7 +362,6 @@ public class Spork extends JavaPlugin {
 		registerListener(new MapListener());
 		registerListener(new PlayerListener());
 		registerListener(new FilterTriggerListener());
-		registerListener(new FilterTriggerEventListener());
 	}
 
 	public static void registerListeners(Listener... listeners) {
