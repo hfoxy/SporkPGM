@@ -72,6 +72,11 @@ public class SearchRegion extends Region {
 		}
 	}
 
+	public void get(SporkMap map) {
+		this.map = map;
+		this.region = map.getRegion(search);
+	}
+
 	private void get() throws InvalidRegionException {
 		// Log.info(toString());
 		if(region != null && map == Match.getMatch().getMap()) {
@@ -80,8 +85,7 @@ public class SearchRegion extends Region {
 		}
 
 		try {
-			this.map = Match.getMatch().getMap();
-			this.region = map.getRegion(search);
+			get(Match.getMatch().getMap());
 		} catch(NullPointerException e) {
 			throw new InvalidRegionException(null, "Unable to fetch info about the map just yet!");
 		}

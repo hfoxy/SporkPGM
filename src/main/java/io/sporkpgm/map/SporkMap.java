@@ -23,6 +23,7 @@ import io.sporkpgm.region.Region;
 import io.sporkpgm.region.RegionBuilder;
 import io.sporkpgm.region.exception.InvalidRegionException;
 import io.sporkpgm.region.types.BlockRegion;
+import io.sporkpgm.region.types.SearchRegion;
 import io.sporkpgm.rotation.RotationSlot;
 import io.sporkpgm.team.SporkTeam;
 import io.sporkpgm.team.SporkTeamBuilder;
@@ -96,6 +97,7 @@ public class SporkMap {
 		filters();
 		this.regions = builder.getRegions();
 		this.regions.addAll(filtered());
+		search();
 		regions();
 
 		this.kits = builder.getKits();
@@ -127,6 +129,15 @@ public class SporkMap {
 		return filter.getName() + ": " + filter.getClass().getSimpleName();
 	}
 
+	private void search() {
+		for(Region region : regions) {
+			if(region instanceof SearchRegion) {
+				SearchRegion search = (SearchRegion) region;
+				search.get(this);
+			}
+		}
+	}
+
 	private void regions() {
 		for(Region region : regions) {
 			String message = region(region);
@@ -152,6 +163,7 @@ public class SporkMap {
 
 		Element regions = document.getRootElement().element("regions");
 		for(Element region : XMLUtil.getElements(regions, "apply")) {
+			Log.info("Found <apply> and attempting to load it");
 			filtered.add(RegionBuilder.parseFiltered(this, region));
 		}
 
