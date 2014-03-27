@@ -1,4 +1,4 @@
-package io.sporkpgm.filter;
+package io.sporkpgm.filter.other;
 
 public enum State {
 
