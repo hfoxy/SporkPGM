@@ -44,4 +44,36 @@ public class Context {
 		throw new InvalidContextException("Attempted to supply an Object which was unsupported");
 	}
 
+	public SporkPlayer getPlayer() {
+		return player;
+	}
+
+	public boolean hasPlayer() {
+		return player != null;
+	}
+
+	public BlockChangeEvent getBlock() {
+		return block;
+	}
+
+	public boolean hasBlock() {
+		return block != null;
+	}
+
+	public BlockChangeEvent getTransformation() {
+		return transformation;
+	}
+
+	public boolean hasTransformation() {
+		return transformation != null;
+	}
+
+	public PlayingPlayerMoveEvent getMovement() {
+		return movement;
+	}
+
+	public boolean hasMovement() {
+		return movement != null;
+	}
+
 }

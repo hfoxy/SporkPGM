@@ -49,11 +49,11 @@ public class BlockChangeEvent extends Event {
 		return player;
 	}
 
-	BlockState getOldState() {
+	public BlockState getOldState() {
 		return oldState;
 	}
 
-	BlockState getNewState() {
+	public BlockState getNewState() {
 		return newState;
 	}
 
