@@ -30,13 +30,7 @@ public class ServerPlaying extends ServerPhase {
 		}
 
 		match.getMap().checkEnded();
-		if(players.size() <= 1) {
-			String left = ChatColor.DARK_RED + "" + ChatColor.BOLD + arrows(Chars.RAQUO) + " ";
-			String right = " " + ChatColor.DARK_RED + "" + ChatColor.BOLD + arrows(Chars.LAQUO);
-
-			broadcast(left + ChatColor.RED + "Server cycling due to only 1 player!" + right);
-			end();
-		} else if(match.getMap().hasEnded()) {
+		 if(match.getMap().hasEnded()) {
 			end();
 		}
 	}

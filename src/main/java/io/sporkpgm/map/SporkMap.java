@@ -619,6 +619,7 @@ public class SporkMap {
 		if(this.winner == null) {
 			this.winner = getObservers();
 		}
+
 	}
 
 	public boolean hasEnded() {
