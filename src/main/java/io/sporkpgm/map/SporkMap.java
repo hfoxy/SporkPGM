@@ -93,10 +93,10 @@ public class SporkMap {
 		this.modules = builder.getModules();
 
 		this.filters = FilterBuilder.build(this);
-		// filters();
+		filters();
 		this.regions = builder.getRegions();
 		this.regions.addAll(filtered());
-		// regions();
+		regions();
 
 		this.kits = builder.getKits();
 		this.spawns = SporkSpawnBuilder.build(this);
