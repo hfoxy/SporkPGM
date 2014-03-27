@@ -101,15 +101,8 @@ public class MatchCommands {
 	public static void start(CommandContext cmd, CommandSender sender) throws CommandException {
 		Match match = RotationSlot.getRotation().getCurrentMatch();
 		MatchPhase phase = match.getPhase();
-			if(phase == MatchPhase.WAITING) {
-				match.setPhase(MatchPhase.STARTING, true);
-			}
-			if(phase == MatchPhase.STARTING) {
-				match.setDuration(cmd.getInteger(0));
-				match.start();
-				return;
-			}
-			sender.sendMessage(ChatColor.RED + "Server must be waiting or starting to set start time");
+		if(phase == MatchPhase.WAITING) {
+			match.setPhase(MatchPhase.STARTING, cmd.getInteger(0), true);
 		}
 
 		if(phase == MatchPhase.STARTING) {

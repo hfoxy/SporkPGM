@@ -77,6 +77,11 @@ public class Match {
 		setPhase(phase, phase.getDuration());
 	}
 
+	public void setPhase(MatchPhase phase, boolean forced) {
+		this.forced = forced;
+		setPhase(phase);
+	}
+
 	public void setPhase(MatchPhase phase, int duration) {
 		if(phase == MatchPhase.CYCLING) {
 			MatchEndEvent end = new MatchEndEvent(this);
@@ -107,9 +112,9 @@ public class Match {
 		}
 	}
 
-	public void setPhase(MatchPhase phase, boolean forced) {
+	public void setPhase(MatchPhase phase, int duration, boolean forced) {
 		this.forced = forced;
-		setPhase(phase);
+		setPhase(phase, duration);
 	}
 
 	public DateTime getStart() {
