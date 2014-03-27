@@ -102,21 +102,17 @@ public class MatchCommands {
 	public static void start(CommandContext cmd, CommandSender sender) throws CommandException {
 		Match match = RotationSlot.getRotation().getCurrentMatch();
 		MatchPhase phase = match.getPhase();
-		if(match.getMap().getPlayers().size() > 1) {
 			if(phase == MatchPhase.WAITING) {
 				match.setPhase(MatchPhase.STARTING, true);
 			}
-
 			if(phase == MatchPhase.STARTING) {
 				match.setDuration(cmd.getInteger(0));
 				match.start();
 				return;
 			}
 			sender.sendMessage(ChatColor.RED + "Server must be waiting or starting to set start time");
-		} else {
-			sender.sendMessage(ChatColor.RED + "At least two players need to be in the game to start it!");
 		}
-	}
+
 
 	@Command(aliases = {"ready"}, desc = "Set a team's readiness state", usage = "{team}", max = 1)
 	@CommandPermissions("spork.match.ready")
@@ -160,6 +156,7 @@ public class MatchCommands {
 		MatchPhase phase = match.getPhase();
 
 		if(phase == MatchPhase.PLAYING) {
+
 			match.getMap().setEnded(true);
 			sender.sendMessage(ChatColor.GREEN + "Countdowns cancelled");
 			return;

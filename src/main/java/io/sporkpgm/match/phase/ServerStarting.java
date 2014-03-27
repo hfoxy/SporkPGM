@@ -23,8 +23,8 @@ public class ServerStarting extends ServerPhase {
 			return;
 		List<SporkPlayer> players = match.getMap().getPlayers();
 		if(players.size() < 2) {
-			match.setPhase(MatchPhase.WAITING);
-			return;
+			//match.setPhase(MatchPhase.WAITING);
+			//return;
 		}
 
 		if(duration <= 0) {
