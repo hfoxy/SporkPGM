@@ -298,6 +298,9 @@ public class SporkMap {
 	public void stop() {
 		for(Module module : modules) {
 			if(module.getInfo().isListener()) {
+				if (module.getInfo().getName().equals("MobModule")){
+					continue;
+				}
 				Spork.unregisterListener(module);
 			}
 
