@@ -1,7 +1,7 @@
 package io.sporkpgm.map;
 
 import io.sporkpgm.Spork;
-import io.sporkpgm.filter.InvalidFilterException;
+import io.sporkpgm.filter.exceptions.InvalidFilterException;
 import io.sporkpgm.module.Module;
 import io.sporkpgm.module.exceptions.ModuleLoadException;
 import io.sporkpgm.module.modules.info.Contributor;
