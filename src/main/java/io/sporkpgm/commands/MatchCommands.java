@@ -4,7 +4,6 @@ import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.minecraft.util.commands.CommandPermissions;
-import com.sk89q.minecraft.util.commands.CommandPermissionsException;
 import io.sporkpgm.Spork;
 import io.sporkpgm.map.SporkMap;
 import io.sporkpgm.match.Match;
@@ -113,13 +112,22 @@ public class MatchCommands {
 			sender.sendMessage(ChatColor.RED + "Server must be waiting or starting to set start time");
 		}
 
+		if(phase == MatchPhase.STARTING) {
+			match.setDuration(cmd.getInteger(0));
+			match.start();
+			return;
+		}
+		sender.sendMessage(ChatColor.RED + "Server must be waiting or starting to set start time");
+	}
+
 
 	@Command(aliases = {"ready"}, desc = "Set a team's readiness state", usage = "{team}", max = 1)
 	@CommandPermissions("spork.match.ready")
 	public static void ready(CommandContext cmd, CommandSender sender) throws CommandException {
 		Match match = Spork.get().getRotation().getCurrentMatch();
 		if(cmd.argsLength() == 1) {
-			if(!sender.hasPermission("spork.match.ready.force")) throw new CommandException("You don't have permission");
+			if(!sender.hasPermission("spork.match.ready.force"))
+				throw new CommandException("You don't have permission");
 			List<SporkTeam> matchingTeams = match.getMap().getTeams(cmd.getString(1));
 			if(matchingTeams.size() == 0) throw new CommandException("No matching teams found");
 			SporkTeam matched = matchingTeams.get(0);

@@ -16,25 +16,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 @BuilderInfo(documentable = true)
-public class DisableDamageBuilder extends Builder{
+public class DisableDamageBuilder extends Builder {
 
-	public DisableDamageBuilder(Document document){
+	public DisableDamageBuilder(Document document) {
 		super(document);
 	}
 
-	public DisableDamageBuilder(SporkMap map){
+	public DisableDamageBuilder(SporkMap map) {
 		super(map);
 	}
 
 	@Override
-	public List<Module> build() throws ModuleLoadException, InvalidRegionException{
+	public List<Module> build() throws ModuleLoadException, InvalidRegionException {
 		List<Module> modules = new ArrayList<>();
 		List<EntityDamageEvent.DamageCause> causes = new ArrayList<>();
 		Element root = getRoot();
-		for (Element e : XMLUtil.getElements(root, "disabledamage")){
-			for (Element damage : XMLUtil.getElements(e, "damage")){
-			   String damageS = damage.getText().toUpperCase();
-			   causes.add(EntityDamageEvent.DamageCause.valueOf(damageS));
+		for(Element e : XMLUtil.getElements(root, "disabledamage")) {
+			for(Element damage : XMLUtil.getElements(e, "damage")) {
+				String damageS = damage.getText().toUpperCase();
+				causes.add(EntityDamageEvent.DamageCause.valueOf(damageS));
 			}
 		}
 		modules.add(new DisableDamageModule(causes));

@@ -6,7 +6,6 @@ import io.sporkpgm.objective.ObjectiveModule;
 import io.sporkpgm.objective.scored.ScoredObjective;
 import io.sporkpgm.player.SporkPlayer;
 import io.sporkpgm.team.spawns.SporkSpawn;
-import io.sporkpgm.util.Log;
 import io.sporkpgm.util.NumberUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;

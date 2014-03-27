@@ -2,7 +2,6 @@ package io.sporkpgm.objective.monument;
 
 import io.sporkpgm.player.SporkPlayer;
 import io.sporkpgm.region.types.BlockRegion;
-import org.bukkit.Location;
 
 public class MonumentBlock {
 

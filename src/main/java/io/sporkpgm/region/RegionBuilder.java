@@ -2,9 +2,9 @@ package io.sporkpgm.region;
 
 import com.google.common.collect.Lists;
 import io.sporkpgm.filter.AppliedRegion;
+import io.sporkpgm.filter.AppliedRegion.AppliedValue;
 import io.sporkpgm.filter.Filter;
 import io.sporkpgm.map.SporkMap;
-import io.sporkpgm.filter.AppliedRegion.AppliedValue;
 import io.sporkpgm.region.exception.InvalidRegionException;
 import io.sporkpgm.region.types.BlockRegion;
 import io.sporkpgm.region.types.CircleRegion;

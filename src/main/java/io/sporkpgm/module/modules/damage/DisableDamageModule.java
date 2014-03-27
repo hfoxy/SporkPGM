@@ -11,35 +11,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ModuleInfo(name = "DisableDamageModule", description = "The module that controls damage", listener = true)
-public class DisableDamageModule extends Module{
+public class DisableDamageModule extends Module {
 
 	List<EntityDamageEvent.DamageCause> damageCauses = null;
 
-	public DisableDamageModule(List<EntityDamageEvent.DamageCause> damageCauses){
+	public DisableDamageModule(List<EntityDamageEvent.DamageCause> damageCauses) {
 		this.damageCauses = damageCauses;
 	}
 
-	public List<EntityDamageEvent.DamageCause> getDamageCauses(){
+	public List<EntityDamageEvent.DamageCause> getDamageCauses() {
 		return damageCauses;
 	}
 
 	@EventHandler
-	public void onDamage(EntityDamageEvent event){
+	public void onDamage(EntityDamageEvent event) {
 		List<String> causes = new ArrayList<>();
-		if (!(event.getEntity() instanceof Player) || damageCauses == null){
-		   return;
+		if(!(event.getEntity() instanceof Player) || damageCauses == null) {
+			return;
 		}
-		for (EntityDamageEvent.DamageCause cause : damageCauses){
+		for(EntityDamageEvent.DamageCause cause : damageCauses) {
 			causes.add(cause.name());
 		}
-		if (causes.contains(event.getCause().name())){
+		if(causes.contains(event.getCause().name())) {
 			event.setCancelled(true);
 		}
 
 	}
 
 	@Override
-	public Class<? extends Builder> builder(){
+	public Class<? extends Builder> builder() {
 		return DisableDamageBuilder.class;
 	}
 }

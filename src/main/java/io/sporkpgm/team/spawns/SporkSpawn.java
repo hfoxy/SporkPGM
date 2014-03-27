@@ -80,5 +80,5 @@ public class SporkSpawn {
 	public void setKit(SporkKit kit) {
 		this.kit = kit;
 	}
-	
+
 }

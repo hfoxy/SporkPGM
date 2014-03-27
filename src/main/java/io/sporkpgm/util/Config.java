@@ -1,12 +1,11 @@
 package io.sporkpgm.util;
 
 import io.sporkpgm.Spork;
-
-import java.io.File;
-
 import io.sporkpgm.Spork.StartupType;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+
+import java.io.File;
 
 public class Config {
 
@@ -15,7 +14,7 @@ public class Config {
 
 	public static void init() {
 		configFile = new File(Spork.get().getDataFolder(), "config.yml");
-		if (!configFile.exists())
+		if(!configFile.exists())
 			Spork.get().saveResource("config.yml", true);
 
 		config = YamlConfiguration.loadConfiguration(configFile);
@@ -35,7 +34,7 @@ public class Config {
 		config.set(path, value);
 		try {
 			config.save(configFile);
-		} catch (Exception e) {
+		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}

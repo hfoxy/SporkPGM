@@ -1,6 +1,10 @@
 package io.sporkpgm.match;
 
-import io.sporkpgm.match.phase.*;
+import io.sporkpgm.match.phase.ServerCycling;
+import io.sporkpgm.match.phase.ServerPhase;
+import io.sporkpgm.match.phase.ServerPlaying;
+import io.sporkpgm.match.phase.ServerStarting;
+import io.sporkpgm.match.phase.ServerWaiting;
 
 public enum MatchPhase {
 
