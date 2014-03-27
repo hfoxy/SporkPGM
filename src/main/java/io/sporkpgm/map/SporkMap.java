@@ -304,11 +304,25 @@ public class SporkMap {
 		Spork.get().getServer().unloadWorld(world, false);
 		FileUtil.delete(delete);
 
-		return true;
+		for(Module module : modules) {
+			if(module.getInfo().isListener()) {
+				if (module.getInfo().getName().equals("MobModule")){
+					Spork.unregisterListener(module);
+				}
+			}
+		}
+			return true;
 	}
+
 
 	public void stop() {
 		for(Module module : modules) {
+				if(module.getInfo().isListener()) {
+					if (module.getInfo().getName().equals("MobModule")){
+						continue;
+					}
+				}
+
 			if(module.getInfo().isListener()) {
 				Spork.unregisterListener(module);
 			}
