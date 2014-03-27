@@ -1,6 +1,13 @@
 package io.sporkpgm;
 
 import com.google.common.collect.Lists;
+import com.sk89q.bukkit.util.CommandsManagerRegistration;
+import com.sk89q.minecraft.util.commands.CommandException;
+import com.sk89q.minecraft.util.commands.CommandPermissionsException;
+import com.sk89q.minecraft.util.commands.CommandUsageException;
+import com.sk89q.minecraft.util.commands.CommandsManager;
+import com.sk89q.minecraft.util.commands.MissingNestedCommandException;
+import com.sk89q.minecraft.util.commands.WrappedCommandException;
 import io.sporkpgm.commands.MapCommands;
 import io.sporkpgm.commands.MatchCommands;
 import io.sporkpgm.commands.RotationCommands;
@@ -20,7 +27,6 @@ import io.sporkpgm.module.builder.Builder;
 import io.sporkpgm.module.exceptions.ModuleLoadException;
 import io.sporkpgm.module.modules.damage.DisableDamageBuilder;
 import io.sporkpgm.module.modules.mob.MobBuilder;
-import io.sporkpgm.module.modules.mob.MobModule;
 import io.sporkpgm.objective.monument.MonumentBuilder;
 import io.sporkpgm.objective.victory.VictoryBuilder;
 import io.sporkpgm.player.SporkPlayer;
@@ -32,12 +38,16 @@ import io.sporkpgm.rotation.exceptions.RotationLoadException;
 import io.sporkpgm.util.Chars;
 import io.sporkpgm.util.Config;
 import io.sporkpgm.util.Log;
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.dom4j.Document;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -46,18 +56,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import com.sk89q.bukkit.util.CommandsManagerRegistration;
-import com.sk89q.minecraft.util.commands.CommandException;
-import com.sk89q.minecraft.util.commands.CommandPermissionsException;
-import com.sk89q.minecraft.util.commands.CommandUsageException;
-import com.sk89q.minecraft.util.commands.CommandsManager;
-import com.sk89q.minecraft.util.commands.MissingNestedCommandException;
-import com.sk89q.minecraft.util.commands.WrappedCommandException;
-
-import static io.sporkpgm.Spork.StartupType.*;
+import static io.sporkpgm.Spork.StartupType.ALL;
+import static io.sporkpgm.Spork.StartupType.SPECIFIED;
 
 public class Spork extends JavaPlugin {
 
@@ -230,21 +230,21 @@ public class Spork extends JavaPlugin {
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		try {
 			this.commands.execute(cmd.getName(), args, sender, sender);
-		} catch (CommandPermissionsException e) {
+		} catch(CommandPermissionsException e) {
 			sender.sendMessage(ChatColor.RED + "You don't have permission.");
-		} catch (MissingNestedCommandException e) {
+		} catch(MissingNestedCommandException e) {
 			sender.sendMessage(ChatColor.RED + e.getUsage());
-		} catch (CommandUsageException e) {
+		} catch(CommandUsageException e) {
 			sender.sendMessage(ChatColor.RED + e.getMessage());
 			sender.sendMessage(ChatColor.RED + e.getUsage());
-		} catch (WrappedCommandException e) {
-			if (e.getCause() instanceof NumberFormatException) {
+		} catch(WrappedCommandException e) {
+			if(e.getCause() instanceof NumberFormatException) {
 				sender.sendMessage(ChatColor.RED + "Number expected, string received instead.");
 			} else {
 				sender.sendMessage(ChatColor.RED + "An error has occurred. See console.");
 				e.printStackTrace();
 			}
-		} catch (CommandException e) {
+		} catch(CommandException e) {
 			sender.sendMessage(ChatColor.RED + e.getMessage());
 		}
 		return true;

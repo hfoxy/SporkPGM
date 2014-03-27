@@ -1,6 +1,5 @@
 package io.sporkpgm.filter.other;
 
-import io.sporkpgm.filter.AppliedRegion.AppliedValue;
 import io.sporkpgm.filter.exceptions.InvalidContextException;
 import io.sporkpgm.map.event.BlockChangeEvent;
 import io.sporkpgm.player.SporkPlayer;

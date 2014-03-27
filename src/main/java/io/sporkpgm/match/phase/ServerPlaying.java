@@ -30,7 +30,7 @@ public class ServerPlaying extends ServerPhase {
 		}
 
 		match.getMap().checkEnded();
-		 if(match.getMap().hasEnded()) {
+		if(match.getMap().hasEnded()) {
 			end();
 		}
 	}
@@ -51,10 +51,10 @@ public class ServerPlaying extends ServerPhase {
 			message = winner.getColoredName() + ChatColor.GOLD + " wins";
 		}
 
-		broadcast(ChatColor.DARK_PURPLE+"# # # # # # # # # # # # # # # # ");
-		broadcast(ChatColor.DARK_PURPLE+"# # "+ ChatColor.GOLD + "The match has ended!" + ChatColor.DARK_PURPLE + " # #");
-		broadcast(ChatColor.DARK_PURPLE+"# # "+ message + ChatColor.DARK_PURPLE+" # #");
-		broadcast(ChatColor.DARK_PURPLE+"# # # # # # # # # # # # # # # #");
+		broadcast(ChatColor.DARK_PURPLE + "# # # # # # # # # # # # # # # # ");
+		broadcast(ChatColor.DARK_PURPLE + "# # " + ChatColor.GOLD + "The match has ended!" + ChatColor.DARK_PURPLE + " # #");
+		broadcast(ChatColor.DARK_PURPLE + "# # " + message + ChatColor.DARK_PURPLE + " # #");
+		broadcast(ChatColor.DARK_PURPLE + "# # # # # # # # # # # # # # # #");
 	}
 
 	public String arrows(Chars chars) {

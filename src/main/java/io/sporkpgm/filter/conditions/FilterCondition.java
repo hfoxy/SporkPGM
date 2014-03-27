@@ -5,7 +5,7 @@ import io.sporkpgm.filter.other.Context;
 import io.sporkpgm.filter.other.State;
 import io.sporkpgm.map.SporkMap;
 
-import static io.sporkpgm.filter.other.State.*;
+import static io.sporkpgm.filter.other.State.ABSTAIN;
 
 public class FilterCondition extends Filter {
 

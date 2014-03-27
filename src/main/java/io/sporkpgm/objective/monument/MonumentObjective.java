@@ -86,7 +86,7 @@ public class MonumentObjective extends ObjectiveModule implements InitModule {
 	}
 
 	public MonumentBlock getBlock(BlockRegion region) {
-		if (blocks == null) return null;
+		if(blocks == null) return null;
 		for(MonumentBlock block : blocks) {
 			if(block.getBlock().isInside(region)) {
 				return block;
@@ -219,7 +219,8 @@ public class MonumentObjective extends ObjectiveModule implements InitModule {
 	}
 
 	@Override
-	public void stop() {}
+	public void stop() {
+	}
 
 	public Map<String, List<MonumentBlock>> getOrderedPlayerBlocks() {
 		Map<String, List<MonumentBlock>> map = new HashMap<>();
@@ -243,7 +244,9 @@ public class MonumentObjective extends ObjectiveModule implements InitModule {
 			allNames[i] = (String) objectNames[i];
 		}
 
-		List<String> names = new ArrayList<String>(){{ add(allNames[0]); }};
+		List<String> names = new ArrayList<String>() {{
+			add(allNames[0]);
+		}};
 		int highest = placements.get(names.get(0)).size();
 
 		for(String name : allNames) {

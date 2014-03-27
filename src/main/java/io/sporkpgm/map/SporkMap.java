@@ -1,6 +1,7 @@
 package io.sporkpgm.map;
 
 import io.sporkpgm.Spork;
+import io.sporkpgm.filter.AppliedRegion;
 import io.sporkpgm.filter.Filter;
 import io.sporkpgm.filter.FilterBuilder;
 import io.sporkpgm.filter.exceptions.InvalidFilterException;
@@ -18,7 +19,6 @@ import io.sporkpgm.module.modules.timer.TimerModule;
 import io.sporkpgm.objective.ObjectiveModule;
 import io.sporkpgm.objective.scored.ScoredObjective;
 import io.sporkpgm.player.SporkPlayer;
-import io.sporkpgm.filter.AppliedRegion;
 import io.sporkpgm.region.Region;
 import io.sporkpgm.region.RegionBuilder;
 import io.sporkpgm.region.exception.InvalidRegionException;
@@ -245,7 +245,7 @@ public class SporkMap {
 				for(ObjectiveModule objective : team.getObjectives()) {
 					// Log.info("Setting score of " + ChatColor.stripColor(objective.getPlayer().getName()) + " to " + score);
 					// Log.info(ChatColor.stripColor(objective.getPlayer().getName()) + ": " + objective);
-					if (objective.getPlayer() != null){
+					if(objective.getPlayer() != null) {
 						this.objective.getScore(objective.getPlayer()).setScore(score);
 						score++;
 					}
@@ -257,14 +257,14 @@ public class SporkMap {
 		}
 	}
 
-	public void regListeners(){
+	public void regListeners() {
 		for(Module module : modules) {
 			if(module.getInfo().isListener()) {
 				Spork.registerListener(module);
 			}
 
 		}
-		if (!modules.contains(MobModule.class)){
+		if(!modules.contains(MobModule.class)) {
 			MobModule m = new MobModule(null, null);
 			Log.info("Loaded MobModule as default");
 			Spork.registerListeners(m);

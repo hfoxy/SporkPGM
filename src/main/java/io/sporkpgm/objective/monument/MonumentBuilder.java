@@ -13,7 +13,6 @@ import io.sporkpgm.util.Log;
 import io.sporkpgm.util.StringUtil;
 import io.sporkpgm.util.XMLUtil;
 import org.bukkit.Material;
-import org.dom4j.Document;
 import org.dom4j.Element;
 
 import java.util.ArrayList;

@@ -17,7 +17,7 @@ public class Log {
 	}
 
 	private static void log(Level lvl, String... msg) {
-		for (String s : msg)
+		for(String s : msg)
 			log.log(lvl, s);
 	}
 
@@ -46,13 +46,13 @@ public class Log {
 	}
 
 	public static void debug(String msg) {
-		if (debug)
+		if(debug)
 			log("[DEBUG] " + msg);
 	}
 
 	public static void setDebugging(boolean debug) {
 		Log.debug = debug;
-		if (debug)
+		if(debug)
 			log("Debugging on.");
 	}
 
