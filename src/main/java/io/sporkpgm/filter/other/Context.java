@@ -43,7 +43,9 @@ public class Context {
 			this.player = event.getPlayer();
 		}
 
+		/*
 		throw new InvalidContextException("Attempted to supply an Object which was unsupported");
+		*/
 	}
 
 	public SporkPlayer getPlayer() {
