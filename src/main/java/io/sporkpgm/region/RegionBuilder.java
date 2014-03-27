@@ -1,22 +1,23 @@
 package io.sporkpgm.region;
 
 import com.google.common.collect.Lists;
+import io.sporkpgm.filter.AppliedRegion;
 import io.sporkpgm.filter.Filter;
 import io.sporkpgm.map.SporkMap;
-import io.sporkpgm.region.FilteredRegion.AppliedValue;
+import io.sporkpgm.filter.AppliedRegion.AppliedValue;
 import io.sporkpgm.region.exception.InvalidRegionException;
 import io.sporkpgm.region.types.BlockRegion;
 import io.sporkpgm.region.types.CircleRegion;
 import io.sporkpgm.region.types.CuboidRegion;
 import io.sporkpgm.region.types.CylinderRegion;
 import io.sporkpgm.region.types.RectangleRegion;
+import io.sporkpgm.region.types.SearchRegion;
 import io.sporkpgm.region.types.SphereRegion;
 import io.sporkpgm.region.types.groups.ComplementRegion;
 import io.sporkpgm.region.types.groups.IntersectRegion;
 import io.sporkpgm.region.types.groups.NegativeRegion;
 import io.sporkpgm.region.types.groups.UnionRegion;
 import io.sporkpgm.team.spawns.kits.SporkKit;
-import io.sporkpgm.util.Log;
 import io.sporkpgm.util.XMLUtil;
 import org.dom4j.Attribute;
 import org.dom4j.Element;
@@ -264,7 +265,7 @@ public class RegionBuilder {
 		return new IntersectRegion(name, parseSubRegions(ele));
 	}
 
-	public static FilteredRegion parseFiltered(SporkMap map, Element element) throws InvalidRegionException {
+	public static AppliedRegion parseFiltered(SporkMap map, Element element) throws InvalidRegionException {
 		String name = element.attributeValue("name");
 		List<Region> regions = parseSubRegions(element);
 		List<Filter> filters = new ArrayList<>();
@@ -287,7 +288,7 @@ public class RegionBuilder {
 			hash.put(key, value);
 		}
 
-		return new FilteredRegion(name, hash, regions, filters);
+		return new AppliedRegion(name, hash, regions, filters);
 	}
 
 	public static boolean isUsable(String value) {

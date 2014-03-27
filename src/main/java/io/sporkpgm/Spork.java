@@ -4,11 +4,10 @@ import com.google.common.collect.Lists;
 import io.sporkpgm.commands.MapCommands;
 import io.sporkpgm.commands.MatchCommands;
 import io.sporkpgm.commands.RotationCommands;
-import io.sporkpgm.filter.InvalidFilterException;
+import io.sporkpgm.filter.exceptions.InvalidFilterException;
 import io.sporkpgm.listeners.BlockListener;
 import io.sporkpgm.listeners.ConnectionListener;
 import io.sporkpgm.listeners.EntityListener;
-import io.sporkpgm.listeners.FilterTriggerEventListener;
 import io.sporkpgm.listeners.FilterTriggerListener;
 import io.sporkpgm.listeners.MapListener;
 import io.sporkpgm.listeners.PlayerListener;
@@ -25,7 +24,6 @@ import io.sporkpgm.module.modules.mob.MobModule;
 import io.sporkpgm.objective.monument.MonumentBuilder;
 import io.sporkpgm.objective.victory.VictoryBuilder;
 import io.sporkpgm.player.SporkPlayer;
-import io.sporkpgm.player.rank.Permission;
 import io.sporkpgm.player.rank.Rank;
 import io.sporkpgm.region.exception.InvalidRegionException;
 import io.sporkpgm.rotation.Rotation;
@@ -367,7 +365,6 @@ public class Spork extends JavaPlugin {
 		registerListener(new MapListener());
 		registerListener(new PlayerListener());
 		registerListener(new FilterTriggerListener());
-		registerListener(new FilterTriggerEventListener());
 	}
 
 	public static void registerListeners(Listener... listeners) {

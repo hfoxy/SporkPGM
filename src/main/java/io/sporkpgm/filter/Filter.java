@@ -1,9 +1,38 @@
 package io.sporkpgm.filter;
 
-public interface Filter {
+import io.sporkpgm.filter.other.Context;
+import io.sporkpgm.filter.other.State;
 
-	String getName();
+import static io.sporkpgm.filter.other.State.*;
 
-	State matches(FilterContext context);
+public abstract class Filter {
+
+	protected String name;
+	protected State state;
+
+	protected Filter(String name, State state) {
+		this.name = name;
+		this.state = state;
+	}
+
+	protected abstract State filter(Context context);
+
+	public State result(Context context) {
+		if(state == ALLOW) {
+			return filter(context).reverse();
+		} else if(state == DENY) {
+			return filter(context);
+		}
+
+		return ABSTAIN;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public State getState() {
+		return state;
+	}
 
 }

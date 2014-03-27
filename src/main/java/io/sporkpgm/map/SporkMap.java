@@ -3,7 +3,7 @@ package io.sporkpgm.map;
 import io.sporkpgm.Spork;
 import io.sporkpgm.filter.Filter;
 import io.sporkpgm.filter.FilterBuilder;
-import io.sporkpgm.filter.InvalidFilterException;
+import io.sporkpgm.filter.exceptions.InvalidFilterException;
 import io.sporkpgm.map.generator.NullChunkGenerator;
 import io.sporkpgm.match.Match;
 import io.sporkpgm.module.Module;
@@ -18,7 +18,7 @@ import io.sporkpgm.module.modules.timer.TimerModule;
 import io.sporkpgm.objective.ObjectiveModule;
 import io.sporkpgm.objective.scored.ScoredObjective;
 import io.sporkpgm.player.SporkPlayer;
-import io.sporkpgm.region.FilteredRegion;
+import io.sporkpgm.filter.AppliedRegion;
 import io.sporkpgm.region.Region;
 import io.sporkpgm.region.RegionBuilder;
 import io.sporkpgm.region.exception.InvalidRegionException;
@@ -130,8 +130,8 @@ public class SporkMap {
 	private void regions() {
 		for(Region region : regions) {
 			String message = region(region);
-			if(region instanceof FilteredRegion) {
-				FilteredRegion filtered = (FilteredRegion) region;
+			if(region instanceof AppliedRegion) {
+				AppliedRegion filtered = (AppliedRegion) region;
 				try {
 					message = message + " (" + filtered.getValues().size() + ")";
 				} catch(NullPointerException e) {
@@ -147,8 +147,8 @@ public class SporkMap {
 		return region.getName() + ": " + region.getClass().getSimpleName();
 	}
 
-	private List<FilteredRegion> filtered() throws InvalidRegionException {
-		List<FilteredRegion> filtered = new ArrayList<>();
+	private List<AppliedRegion> filtered() throws InvalidRegionException {
+		List<AppliedRegion> filtered = new ArrayList<>();
 
 		Element regions = document.getRootElement().element("regions");
 		for(Element region : XMLUtil.getElements(regions, "apply")) {

@@ -1,12 +1,17 @@
 package io.sporkpgm.filter;
 
-import io.sporkpgm.filter.types.*;
+import io.sporkpgm.filter.conditions.BlockCondition;
+import io.sporkpgm.filter.conditions.FilterCondition;
+import io.sporkpgm.filter.conditions.MultiCondition;
+import io.sporkpgm.filter.conditions.TeamCondition;
+import io.sporkpgm.filter.exceptions.InvalidFilterException;
+import io.sporkpgm.filter.other.Modifier;
+import io.sporkpgm.filter.other.State;
 import io.sporkpgm.map.SporkMap;
 import io.sporkpgm.team.SporkTeam;
 import io.sporkpgm.util.StringUtil;
 import io.sporkpgm.util.XMLUtil;
 import org.bukkit.Material;
-import org.bukkit.entity.EntityType;
 import org.dom4j.Document;
 import org.dom4j.Element;
 
@@ -27,14 +32,14 @@ public class FilterBuilder {
 		}
 
 		for(Element filter : XMLUtil.getElements(filters, "filter")) {
-			filterList.add(parseCondition(filter.attributeValue("name"), filter, map));
+			filterList.add(parseFilter(filter.attributeValue("name"), filter, map));
 		}
 
 		return filterList;
 	}
 
-	public static Condition parseCondition(String name, Element element, SporkMap map) throws InvalidFilterException {
-		List<Condition> conditionList = new ArrayList<>();
+	public static Filter parseFilter(String name, Element element, SporkMap map) throws InvalidFilterException {
+		List<Filter> filterList = new ArrayList<>();
 		List<Element> conditions = XMLUtil.getElements(element);
 
 		for(Element condition : conditions) {
@@ -44,18 +49,18 @@ public class FilterBuilder {
 
 			Modifier modifier = Modifier.getModifier(condition.getName());
 			if(modifier != null) {
-				MultiCondition multi = new MultiCondition(null, State.DENY, modifier, parseCondition(name, condition, map));
-				conditionList.add(multi);
+				MultiCondition multi = new MultiCondition(null, State.DENY, modifier, parseFilter(name, condition, map));
+				filterList.add(multi);
 				continue;
 			} else if(condition.getName().equalsIgnoreCase("filter")) {
-				conditionList.add(parseFilter(condition));
+				filterList.add(parseFilter(condition));
 			} else if(condition.getName().equalsIgnoreCase("team")) {
-				conditionList.add(parseTeam(condition, map));
+				filterList.add(parseTeam(condition, map));
 			} else if(condition.getName().equalsIgnoreCase("block")) {
-				conditionList.add(parseBlock(condition));
-			} else if(condition.getName().equalsIgnoreCase("entity")) {
-				conditionList.add(parseEntity(condition));
-			}
+				filterList.add(parseBlock(condition));
+			} /* else if(condition.getName().equalsIgnoreCase("entity")) {
+				filterList.add(parseEntity(condition));
+			} */
 
 			String parents = condition.getParent().attributeValue("parents");
 			if(parents != null) {
@@ -66,25 +71,25 @@ public class FilterBuilder {
 					split = new String[]{parents};
 				}
 
-				List<Condition> parentList = new ArrayList<>();
+				List<Filter> parentList = new ArrayList<>();
 				for(String parent : split) {
-					parentList.add(new FilterCondition(null, State.ALLOW, parent));
+					parentList.add(new FilterCondition(parent, State.ALLOW));
 				}
 
-				Condition[] cons = new Condition[parentList.size()];
+				Filter[] filts = new Filter[parentList.size()];
 				for(int i = 0; i < parentList.size(); i++) {
-					cons[i] = parentList.get(i);
+					filts[i] = parentList.get(i);
 				}
 
-				conditionList.add(new MultiCondition(name, State.ALLOW, Modifier.ANY, cons));
+				filterList.add(new MultiCondition(name, State.ALLOW, Modifier.ANY, filts));
 			}
 
 			// TODO: needs spawn condition
 		}
 
-		Condition[] cons = new Condition[conditionList.size()];
-		for(int i = 0; i < conditionList.size(); i++) {
-			cons[i] = conditionList.get(i);
+		Filter[] filts = new Filter[filterList.size()];
+		for(int i = 0; i < filterList.size(); i++) {
+			filts[i] = filterList.get(i);
 		}
 
 		State state = State.ALLOW;
@@ -92,7 +97,7 @@ public class FilterBuilder {
 			state = State.DENY;
 		}
 
-		return new MultiCondition(name, state, Modifier.ANY, cons);
+		return new MultiCondition(name, state, Modifier.ANY, filts);
 	}
 
 	public static FilterCondition parseFilter(Element element) {
@@ -103,7 +108,7 @@ public class FilterBuilder {
 			state = State.DENY;
 		}
 
-		return new FilterCondition(null, state, name);
+		return new FilterCondition(name, state);
 	}
 
 	public static TeamCondition parseTeam(Element element, SporkMap map) throws InvalidFilterException {
@@ -134,6 +139,7 @@ public class FilterBuilder {
 		return new BlockCondition(null, state, material);
 	}
 
+	/*
 	public static EntityCondition parseEntity(Element element) throws InvalidFilterException {
 		EntityType type = StringUtil.convertStringToEntityType(element.getText());
 		if(type == null) {
@@ -147,16 +153,17 @@ public class FilterBuilder {
 
 		return new EntityCondition(null, state, type);
 	}
+	*/
 
 	private static List<Filter> defaults() {
 		List<Filter> defaults = new ArrayList<>();
 
-		AccessCondition allowPlayers = new AccessCondition("allow-players", State.DENY, null);
+		TeamCondition allowPlayers = new TeamCondition("allow-players", State.DENY, null);
 		defaults.add(allowPlayers);
 		MultiCondition denyPlayers = new MultiCondition("deny-players", State.DENY, Modifier.NOT, allowPlayers);
 		defaults.add(denyPlayers);
 
-		WorldCondition allowBlocks = new WorldCondition("allow-blocks", State.DENY);
+		BlockCondition allowBlocks = new BlockCondition("allow-blocks", State.DENY, null);
 		defaults.add(allowBlocks);
 		MultiCondition denyBlocks = new MultiCondition("deny-blocks", State.DENY, Modifier.NOT, allowBlocks);
 		defaults.add(denyBlocks);
@@ -166,15 +173,17 @@ public class FilterBuilder {
 		MultiCondition denyWorld = new MultiCondition("deny-world", State.DENY, Modifier.NOT, allowWorld);
 		defaults.add(denyWorld);
 
+		/*
 		EntityCondition allowEntities = new EntityCondition("allow-entities", State.DENY, null);
 		defaults.add(allowEntities);
 		MultiCondition denyEntities = new MultiCondition("deny-entities", State.DENY, Modifier.NOT, allowEntities);
 		defaults.add(denyEntities);
+		*/
 
-		Condition[] allow = new Condition[]{ allowPlayers, allowBlocks, allowWorld, allowEntities };
+		Filter[] allow = new Filter[]{ allowPlayers, allowBlocks, allowWorld };
 		MultiCondition allowAll = new MultiCondition("allow-all", State.DENY, Modifier.ANY, allow);
 		defaults.add(allowAll);
-		Condition[] deny = new Condition[]{ denyPlayers, denyBlocks, denyWorld, denyEntities };
+		Filter[] deny = new Filter[]{ denyPlayers, denyBlocks, denyWorld };
 		MultiCondition denyAll = new MultiCondition("deny-all", State.DENY, Modifier.ANY, deny);
 		defaults.add(denyAll);
 

@@ -1,35 +1,35 @@
-package io.sporkpgm.filter.types;
+package io.sporkpgm.filter.conditions;
 
 import com.google.common.collect.Lists;
-import io.sporkpgm.filter.Condition;
-import io.sporkpgm.filter.FilterContext;
-import io.sporkpgm.filter.Modifier;
-import io.sporkpgm.filter.State;
+import io.sporkpgm.filter.Filter;
+import io.sporkpgm.filter.other.Context;
+import io.sporkpgm.filter.other.Modifier;
+import io.sporkpgm.filter.other.State;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MultiCondition extends Condition {
+public class MultiCondition extends Filter {
 
 	private Modifier modifier;
-	private List<Condition> conditions;
+	private List<Filter> filters;
 
-	public MultiCondition(String name, State state, Modifier modifier, Condition... conditions) {
+	public MultiCondition(String name, State state, Modifier modifier, Filter... filters) {
 		super(name, state);
 		this.modifier = modifier;
-		this.conditions = Lists.newArrayList(conditions);
+		this.filters = Lists.newArrayList(filters);
 	}
 
-	private Map<State, Integer> usages(FilterContext context) {
+	private Map<State, Integer> usages(Context context) {
 		Map<State, Integer> usages = new HashMap<>();
 		for(State state : State.values()) {
 			usages.put(state, 0);
 		}
 
-		for(Condition condition : conditions) {
-			State state = condition.matches(context);
+		for(Filter filter : filters) {
+			State state = filter.result(context);
 			int value = usages.get(state);
 			value++;
 			usages.remove(state);
@@ -39,17 +39,17 @@ public class MultiCondition extends Condition {
 		return usages;
 	}
 
-	private List<State> states(FilterContext context) {
+	private List<State> states(Context context) {
 		List<State> states = new ArrayList<>();
 
-		for(Condition condition : conditions) {
-			states.add(condition.matches(context));
+		for(Filter filter : filters) {
+			states.add(filter.result(context));
 		}
 
 		return states;
 	}
 
-	public State match(FilterContext context) {
+	public State filter(Context context) {
 		if(modifier == Modifier.ANY) {
 			List<State> states = states(context);
 
@@ -61,7 +61,7 @@ public class MultiCondition extends Condition {
 				return State.DENY;
 			}
 		} else if(modifier == Modifier.NOT) {
-			return conditions.get(0).matches(context).reverse();
+			return filters.get(0).result(context).reverse();
 		} else if(modifier == Modifier.ONE) {
 			Map<State, Integer> usages = usages(context);
 
@@ -75,7 +75,7 @@ public class MultiCondition extends Condition {
 		} else if(modifier == Modifier.ALL) {
 			Map<State, Integer> usages = usages(context);
 
-			if(usages.get(State.ALLOW) == conditions.size()) {
+			if(usages.get(State.ALLOW) == filters.size()) {
 				return State.ALLOW;
 			} else if(usages.get(State.DENY) > 0) {
 				return State.DENY;
@@ -85,11 +85,6 @@ public class MultiCondition extends Condition {
 		}
 
 		return State.ABSTAIN;
-	}
-
-	@Override
-	public String toString() {
-		return "MultiCondition{state=" + getState() + ",modifier=" + modifier.name() + ",conditions=" + conditions + "}";
 	}
 
 }
