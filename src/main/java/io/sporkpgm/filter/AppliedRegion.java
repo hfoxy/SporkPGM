@@ -7,6 +7,7 @@ import io.sporkpgm.player.event.PlayingPlayerMoveEvent;
 import io.sporkpgm.region.Region;
 import io.sporkpgm.region.types.groups.UnionRegion;
 import io.sporkpgm.team.spawns.kits.SporkKit;
+import io.sporkpgm.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,16 +42,19 @@ public class AppliedRegion extends UnionRegion {
 		}
 
 		if(context.hasModification()) {
-			applied.add(AppliedValue.BLOCK);
-
 			BlockChangeEvent block = context.getModification();
-			if(block.hasPlayer() && block.isBreak()) {
-				applied.add(AppliedValue.BLOCK_BREAK);
-			} else if(block.hasPlayer() && block.isPlace()) {
-				applied.add(AppliedValue.BLOCK_PLACE);
+
+			if(isInside(block.getLocation())) {
+				applied.add(AppliedValue.BLOCK);
+				if(block.hasPlayer() && block.isBreak()) {
+					applied.add(AppliedValue.BLOCK_BREAK);
+				} else if(block.hasPlayer() && block.isPlace()) {
+					applied.add(AppliedValue.BLOCK_PLACE);
+				}
 			}
 		}
 
+		Log.info(getName() + ": " + applied);
 		String message = null;
 		if(hasValue(AppliedValue.MESSAGE)) {
 			message = (String) values.get(AppliedValue.MESSAGE);
