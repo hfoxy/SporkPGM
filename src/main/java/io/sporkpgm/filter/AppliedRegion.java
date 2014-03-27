@@ -54,7 +54,10 @@ public class AppliedRegion extends UnionRegion {
 			}
 		}
 
-		Log.info(getName() + ": " + applied);
+		if(applied.size() > 0) {
+			Log.info(getName() + ": " + applied);
+		}
+
 		String message = null;
 		if(hasValue(AppliedValue.MESSAGE)) {
 			message = (String) values.get(AppliedValue.MESSAGE);
