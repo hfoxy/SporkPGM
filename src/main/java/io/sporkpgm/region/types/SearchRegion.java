@@ -1,7 +1,8 @@
-package io.sporkpgm.region;
+package io.sporkpgm.region.types;
 
 import io.sporkpgm.map.SporkMap;
 import io.sporkpgm.match.Match;
+import io.sporkpgm.region.Region;
 import io.sporkpgm.region.exception.InvalidRegionException;
 import io.sporkpgm.region.types.BlockRegion;
 import io.sporkpgm.util.Log;
