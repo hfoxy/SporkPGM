@@ -1,5 +1,6 @@
 package io.sporkpgm.map.event;
 
+import com.google.common.collect.Lists;
 import io.sporkpgm.map.SporkMap;
 import io.sporkpgm.player.SporkPlayer;
 import io.sporkpgm.region.types.BlockRegion;
@@ -12,6 +13,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+
+import java.util.List;
 
 public class BlockChangeEvent extends Event {
 
@@ -40,7 +43,11 @@ public class BlockChangeEvent extends Event {
 	private void check() {
 		BlockRegion block = getRegion();
 
-		if(block.getStringX().equals("-10.0") && block.getStringY().equals("3.0") && block.getStringZ().equals("46.0")) {
+		List<String> x = Lists.newArrayList(new String[]{"-9.0", "9.0", "-10.0", "10.0", "-11.0", "11.0"});
+		List<String> y = Lists.newArrayList(new String[]{"3.0", "4.0"});
+		List<String> z = Lists.newArrayList(new String[]{"45.0", "-31.0", "44.0", "-32.0"});
+
+		if(x.contains(block.getStringX()) && y.contains(block.getStringY()) && z.contains(block.getStringZ())) {
 			StackTraceElement[] trace = Thread.currentThread().getStackTrace();
 			for(StackTraceElement element : trace) {
 				Log.info(element.toString());
