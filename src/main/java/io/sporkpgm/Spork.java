@@ -202,7 +202,6 @@ public class Spork extends JavaPlugin {
 				players.put(ref, new Rank[]{referee});
 			}
 		}
-		RotationSlot.getRotation().getCurrent().regListeners();
 	}
 
 	public Rank[] getRanks(SporkPlayer player) {
