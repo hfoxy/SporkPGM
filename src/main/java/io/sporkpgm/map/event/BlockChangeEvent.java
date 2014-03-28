@@ -33,7 +33,7 @@ public class BlockChangeEvent extends Event {
 		this.oldState = oldState;
 		this.newState = newState;
 
-		check();
+		// check();
 	}
 
 	public BlockChangeEvent(Event cause, SporkMap map, Player player, BlockState oldState, BlockState newState) {
