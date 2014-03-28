@@ -94,11 +94,11 @@ public class SporkMap {
 		this.modules = builder.getModules();
 
 		this.filters = FilterBuilder.build(this);
-		filters();
+		// filters();
 		this.regions = builder.getRegions();
 		this.regions.addAll(filtered());
 		search();
-		regions();
+		// regions();
 
 		this.kits = builder.getKits();
 		this.spawns = SporkSpawnBuilder.build(this);
@@ -116,6 +116,13 @@ public class SporkMap {
 		this.kits = SporkKitBuilder.build(document);
 		if(kits == null) {
 			this.kits = new ArrayList<>();
+		}
+
+		if(!hasModule(MobModule.class)) {
+			MobModule m = new MobModule(null, null);
+			Log.info("Loaded MobModule as default");
+			Spork.registerListeners(m);
+			modules.add(m);
 		}
 	}
 
@@ -266,21 +273,6 @@ public class SporkMap {
 				objective.getScore(team.getPlayer()).setScore(score);
 				score++;
 			}
-		}
-	}
-
-	public void regListeners() {
-		for(Module module : modules) {
-			if(module.getInfo().isListener()) {
-				Spork.registerListener(module);
-			}
-
-		}
-		if(!modules.contains(MobModule.class)) {
-			MobModule m = new MobModule(null, null);
-			Log.info("Loaded MobModule as default");
-			Spork.registerListeners(m);
-			modules.add(m);
 		}
 	}
 
