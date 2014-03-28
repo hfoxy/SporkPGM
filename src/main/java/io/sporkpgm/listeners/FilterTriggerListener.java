@@ -23,7 +23,7 @@ public class FilterTriggerListener implements Listener {
 			Log.info("Checking " + event.getPlayer().getName() + "'s Block " + (event.isBreak() ? "Break" : "Place") + " for any filter incursions (" + event.getRegion() + ")");
 		}
 
-		apply(event, true);
+		apply(event, false);
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
