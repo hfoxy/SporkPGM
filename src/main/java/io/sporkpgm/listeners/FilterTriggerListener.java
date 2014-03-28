@@ -37,16 +37,20 @@ public class FilterTriggerListener implements Listener {
 		try {
 			Context context = new Context(event);
 			for(Region region : SporkMap.getMap().getRegions()) {
+				AppliedRegion applied = null;
+				try {
+					applied = (AppliedRegion) region;
+				} catch(ClassCastException e) { /* nothing */ }
+
 				if(log) {
-					Log.info("Checking if " + region.getClass() + " is an instance of AppliedRegion (" + (region.getClass() == AppliedRegion.class) + ")");
+					Log.info("Checking if " + region.getClass().getSimpleName() + " is an instance of AppliedRegion (" + (applied != null) + ")");
 				}
-				if(region.getClass() == AppliedRegion.class) {
-					AppliedRegion applied = (AppliedRegion) region;
-					if(log) {
-						Log.info("Checking Filters for '" + region.getName() + "'");
-					}
-					applied.apply(context, log);
+
+				if(applied == null) {
+					continue;
 				}
+
+				applied.apply(context, log);
 			}
 		} catch(InvalidContextException e) {
 			e.printStackTrace();
