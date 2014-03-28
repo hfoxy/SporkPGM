@@ -651,10 +651,15 @@ public class SporkMap {
 		return ended;
 	}
 
+	public void setWinner(SporkTeam winner){
+		this.winner=winner;
+	}
+
 	public SporkTeam getWinner() {
 		if(winner != null) {
 			return winner;
 		}
+
 
 		for(SporkTeam team : getTeams()) {
 			if(team.complete()) {

@@ -151,16 +151,31 @@ public class MatchCommands {
 		}
 	}
 
-	@Command(aliases = {"cancel", "end"}, desc = "Cancel any timers (Starting, Match, Cycling)", max = 0)
+	@Command(aliases = {"cancel", "end"}, desc = "Cancel any timers (Starting, Match, Cycling)", max = 1)
 	@CommandPermissions("spork.match.cancel")
 	public static void cancel(CommandContext cmd, CommandSender sender) throws CommandException {
 		Match match = RotationSlot.getRotation().getCurrentMatch();
 		MatchPhase phase = match.getPhase();
 
 		if(phase == MatchPhase.PLAYING) {
+			if (cmd.argsLength() == 1){
+				List<SporkTeam> teams = match.getMap().getTeams(cmd.getString(0));
+				if(teams.size() > 1) {
+					List<String> names = new ArrayList<>();
+					for(SporkTeam team : teams) {
+						names.add(team.getColoredName());
+					}
+					sender.sendMessage(ChatColor.RED + "Too many teams matched that query!");
+					sender.sendMessage(ChatColor.GRAY + "Returned: " + StringUtil.listToEnglishCompound(names, "", ChatColor.GRAY.toString()));
+					return;
+				} else if(teams.size() == 0) {
+					throw new CommandException("No teams matched query");
+				}
 
+				SporkTeam team = teams.get(0);
+				match.getMap().setWinner(team);
+			}
 			match.getMap().setEnded(true);
-			sender.sendMessage(ChatColor.GREEN + "Countdowns cancelled");
 			return;
 		}
 
