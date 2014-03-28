@@ -25,6 +25,10 @@ public class AppliedRegion extends UnionRegion {
 	}
 
 	public void apply(Context context) {
+		apply(context, false);
+	}
+
+	public void apply(Context context, boolean log) {
 		List<AppliedValue> applied = new ArrayList<>();
 		if(context.hasMovement()) {
 			PlayingPlayerMoveEvent move = context.getMovement();

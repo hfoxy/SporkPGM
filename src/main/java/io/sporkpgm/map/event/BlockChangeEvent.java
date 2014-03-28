@@ -2,6 +2,7 @@ package io.sporkpgm.map.event;
 
 import io.sporkpgm.map.SporkMap;
 import io.sporkpgm.player.SporkPlayer;
+import io.sporkpgm.region.types.BlockRegion;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -49,12 +50,20 @@ public class BlockChangeEvent extends Event {
 		return player;
 	}
 
+	public BlockState getState() {
+		return getLocation().getBlock().getState();
+	}
+
 	public BlockState getOldState() {
 		return oldState;
 	}
 
 	public BlockState getNewState() {
 		return newState;
+	}
+
+	public Block getBlock() {
+		return getLocation().getBlock();
 	}
 
 	public Block getOldBlock() {
@@ -74,8 +83,15 @@ public class BlockChangeEvent extends Event {
 	}
 
 	public boolean isCancelled() {
-		if(!isCancellable())
-			return false;
+		if(!isCancellable()) {
+			BlockState state = getNewState();
+			BlockState current = getBlock().getState();
+
+			boolean type = state.getData().getItemType() != current.getData().getItemType();
+			boolean data = state.getData().getData() != current.getData().getData();
+
+			return type || data;
+		}
 
 		Cancellable cancel = (Cancellable) cause;
 		return cancel.isCancelled();
@@ -105,6 +121,10 @@ public class BlockChangeEvent extends Event {
 
 	public boolean isPlace() {
 		return getOldState().getType() == Material.AIR;
+	}
+
+	public BlockRegion getRegion() {
+		return new BlockRegion(getLocation());
 	}
 
 	public HandlerList getHandlers() {
