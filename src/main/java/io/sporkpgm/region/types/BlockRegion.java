@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +28,24 @@ public class BlockRegion extends Region {
 	double zD;
 	int zI;
 
+	public BlockRegion(Vector vector) {
+		this(null, vector);
+	}
+
+	public BlockRegion(String name, Vector vector) {
+		this(name, vector.getX(), vector.getY(), vector.getZ());
+	}
+
+	public BlockRegion(Location location) {
+		this(null, location);
+	}
+
+	public BlockRegion(String name, Location location) {
+		this(name, location.getX(), location.getY(), location.getZ());
+	}
+
 	public BlockRegion(int x, int y, int z) {
-		this(null, x + "", y + "", z + "");
+		this(null, x, y, z);
 	}
 
 	public BlockRegion(String name, int x, int y, int z) {
@@ -36,7 +53,7 @@ public class BlockRegion extends Region {
 	}
 
 	public BlockRegion(double x, double y, double z) {
-		this(null, x + "", y + "", z + "");
+		this(null, x, y, z);
 	}
 
 	public BlockRegion(String name, double x, double y, double z) {
