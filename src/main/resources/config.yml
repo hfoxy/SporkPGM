@@ -13,5 +13,5 @@ settings:
   match:
     prefix: match-
   referees:
-    - ParaPenguin
-    - ShinyDialga45
+  - ParaPenguin
+  - ShinyDialga45
