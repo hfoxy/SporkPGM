@@ -19,9 +19,11 @@ public class FilterTriggerListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onBlockChange(BlockChangeEvent event) {
+		/*
 		if(event.hasPlayer()) {
 			Log.info("Checking " + event.getPlayer().getName() + "'s Block " + (event.isBreak() ? "Break" : "Place") + " for any filter incursions (" + event.getRegion() + ")");
 		}
+		*/
 
 		apply(event, false);
 	}
