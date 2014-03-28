@@ -81,10 +81,10 @@ public class SporkMap {
 	protected boolean ended;
 
 	public SporkMap(MapBuilder builder) throws ModuleLoadException, InvalidRegionException, InvalidFilterException {
-		Element root = document.getRootElement();
 		this.builder = builder;
 		this.document = builder.getDocument();
 		this.folder = builder.getFolder();
+		Element root = document.getRootElement();
 
 		this.scoreboard = Spork.get().getServer().getScoreboardManager().getNewScoreboard();
 		this.objective = scoreboard.registerNewObjective("Objectives", "dummy");
