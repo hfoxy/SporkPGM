@@ -30,6 +30,10 @@ public class AppliedRegion extends UnionRegion {
 	}
 
 	public void apply(Context context, boolean log) {
+		if(context.isDenied()) {
+			return;
+		}
+
 		List<AppliedValue> applied = new ArrayList<>();
 		if(context.hasMovement()) {
 			PlayingPlayerMoveEvent move = context.getMovement();
