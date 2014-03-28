@@ -38,9 +38,9 @@ public class FilterTriggerListener implements Listener {
 			Context context = new Context(event);
 			for(Region region : SporkMap.getMap().getRegions()) {
 				if(log) {
-					Log.info("Checking if " + region.getClass() + " is an instance of AppliedRegion (" + (region instanceof AppliedRegion) + ")");
+					Log.info("Checking if " + region.getClass() + " is an instance of AppliedRegion (" + (region.getClass() == AppliedRegion.class) + ")");
 				}
-				if(region instanceof AppliedRegion) {
+				if(region.getClass() == AppliedRegion.class) {
 					AppliedRegion applied = (AppliedRegion) region;
 					if(log) {
 						Log.info("Checking Filters for '" + region.getName() + "'");
