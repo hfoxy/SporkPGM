@@ -46,11 +46,9 @@ public class FilterTriggerListener implements Listener {
 					Log.info("Checking if " + region.getClass().getSimpleName() + " is an instance of AppliedRegion (" + (applied != null) + ")");
 				}
 
-				if(applied == null) {
-					continue;
+				if(applied != null) {
+					applied.apply(context, log);
 				}
-
-				applied.apply(context, log);
 			}
 		} catch(InvalidContextException e) {
 			e.printStackTrace();
