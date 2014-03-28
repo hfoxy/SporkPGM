@@ -90,7 +90,7 @@ public class AppliedRegion extends UnionRegion {
 
 		if(applied.contains(AppliedValue.BLOCK)) {
 			if(hasValue(AppliedValue.BLOCK)) {
-				Filter filter = (Filter) getValue(AppliedValue.ENTER);
+				Filter filter = (Filter) getValue(AppliedValue.BLOCK);
 				if(filter.result(context) == State.DENY) {
 					context.deny();
 				}
