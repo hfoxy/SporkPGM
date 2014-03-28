@@ -29,6 +29,8 @@ public class SearchRegion extends Region {
 		} catch(InvalidRegionException e) {
 			Log.info(e.getMessage());
 			return "unkown-search";
+		} catch(NullPointerException e) {
+			return "unkown-search";
 		}
 	}
 
@@ -38,6 +40,8 @@ public class SearchRegion extends Region {
 			return region.getValues();
 		} catch(InvalidRegionException e) {
 			Log.info(e.getMessage());
+			return new ArrayList<>();
+		} catch(NullPointerException e) {
 			return new ArrayList<>();
 		}
 	}
@@ -49,6 +53,8 @@ public class SearchRegion extends Region {
 		} catch(InvalidRegionException e) {
 			Log.info(e.getMessage());
 			return false;
+		} catch(NullPointerException e) {
+			return false;
 		}
 	}
 
@@ -59,6 +65,8 @@ public class SearchRegion extends Region {
 		} catch(InvalidRegionException e) {
 			Log.info(e.getMessage());
 			return false;
+		} catch(NullPointerException e) {
+			return false;
 		}
 	}
 
@@ -68,6 +76,8 @@ public class SearchRegion extends Region {
 			return region.isBelow(block);
 		} catch(InvalidRegionException e) {
 			Log.info(e.getMessage());
+			return false;
+		} catch(NullPointerException e) {
 			return false;
 		}
 	}
