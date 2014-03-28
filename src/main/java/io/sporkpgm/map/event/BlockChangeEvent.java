@@ -3,6 +3,7 @@ package io.sporkpgm.map.event;
 import io.sporkpgm.map.SporkMap;
 import io.sporkpgm.player.SporkPlayer;
 import io.sporkpgm.region.types.BlockRegion;
+import io.sporkpgm.util.Log;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -28,10 +29,23 @@ public class BlockChangeEvent extends Event {
 		this.player = player;
 		this.oldState = oldState;
 		this.newState = newState;
+
+		check();
 	}
 
 	public BlockChangeEvent(Event cause, SporkMap map, Player player, BlockState oldState, BlockState newState) {
 		this(cause, map, SporkPlayer.getPlayer(player), oldState, newState);
+	}
+
+	private void check() {
+		BlockRegion block = getRegion();
+
+		if(block.getStringX().equals("-10.0") && block.getStringY().equals("3.0") && block.getStringZ().equals("46.0")) {
+			StackTraceElement[] trace = Thread.currentThread().getStackTrace();
+			for(StackTraceElement element : trace) {
+				Log.info(element.toString());
+			}
+		}
 	}
 
 	public Event getEvent() {
