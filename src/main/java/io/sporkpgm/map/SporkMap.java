@@ -100,6 +100,14 @@ public class SporkMap {
 		search();
 		// regions();
 
+		int count = 0;
+		for(Region region : regions) {
+			if(region instanceof AppliedRegion) {
+				count++;
+			}
+		}
+		Log.info("Found " + count + " AppliedRegions");
+
 		this.kits = builder.getKits();
 		this.spawns = SporkSpawnBuilder.build(this);
 
