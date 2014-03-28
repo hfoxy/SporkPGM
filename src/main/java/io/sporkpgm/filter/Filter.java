@@ -18,9 +18,9 @@ public abstract class Filter {
 	protected abstract State filter(Context context);
 
 	public State result(Context context) {
-		if(state == ALLOW) {
+		if(state == DENY) {
 			return filter(context).reverse();
-		} else if(state == DENY) {
+		} else if(state == ALLOW) {
 			return filter(context);
 		}
 
