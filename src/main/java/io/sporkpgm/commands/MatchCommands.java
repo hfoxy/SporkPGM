@@ -103,6 +103,7 @@ public class MatchCommands {
 		MatchPhase phase = match.getPhase();
 		if(phase == MatchPhase.WAITING) {
 			match.setPhase(MatchPhase.STARTING, cmd.getInteger(0), true);
+			return;
 		}
 
 		if(phase == MatchPhase.STARTING) {
