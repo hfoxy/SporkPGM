@@ -48,7 +48,7 @@ public class BlockListener implements Listener {
 			map = (match != null ? match.getMap() : null);
 		} catch(NullPointerException ignored) {
 		}
-		BlockChangeEvent change = new BlockChangeEvent(event, map, player, event.getBlockReplacedState(), event.getBlockPlaced().getState());
+		BlockChangeEvent change = new BlockChangeEvent(event, map, SporkPlayer.getPlayer(player), event.getBlockReplacedState(), event.getBlockPlaced().getState());
 		Spork.callEvent(change);
 	}
 
@@ -66,7 +66,7 @@ public class BlockListener implements Listener {
 		BlockState newState = event.getBlock().getState();
 		newState.setData(new MaterialData(Material.AIR, (byte) 0));
 
-		BlockChangeEvent change = new BlockChangeEvent(event, map, player, event.getBlock().getState(), newState);
+		BlockChangeEvent change = new BlockChangeEvent(event, map, SporkPlayer.getPlayer(player), event.getBlock().getState(), newState);
 		Spork.callEvent(change);
 	}
 
@@ -90,7 +90,7 @@ public class BlockListener implements Listener {
 		newState.setData(new MaterialData(update, (byte) 0));
 
 		BlockState oldState = block.getState();
-		BlockChangeEvent change = new BlockChangeEvent(event, map, player, oldState, newState);
+		BlockChangeEvent change = new BlockChangeEvent(event, map, SporkPlayer.getPlayer(player), oldState, newState);
 		Spork.callEvent(change);
 	}
 
@@ -103,7 +103,7 @@ public class BlockListener implements Listener {
 		} catch(NullPointerException ignored) {
 		}
 
-		BlockChangeEvent change = new BlockChangeEvent(event, map, SporkPlayer.getPlayer("*.*"), event.getBlock().getState(), event.getNewState());
+		BlockChangeEvent change = new BlockChangeEvent(event, map, event.getBlock().getState(), event.getNewState());
 		Spork.callEvent(change);
 	}
 
@@ -115,7 +115,7 @@ public class BlockListener implements Listener {
 			map = (match != null ? match.getMap() : null);
 		} catch(NullPointerException ignored) {
 		}
-		BlockChangeEvent change = new BlockChangeEvent(event, map, SporkPlayer.getPlayer("*.*"), event.getBlock().getState(), event.getNewState());
+		BlockChangeEvent change = new BlockChangeEvent(event, map, event.getBlock().getState(), event.getNewState());
 		Spork.callEvent(change);
 	}
 
@@ -128,7 +128,7 @@ public class BlockListener implements Listener {
 		} catch(NullPointerException ignored) {
 		}
 		if(event.getToBlock().getType() != event.getBlock().getType()) {
-			BlockChangeEvent change = new BlockChangeEvent(event, map, SporkPlayer.getPlayer("*.*"), event.getBlock().getState(), event.getToBlock().getState());
+			BlockChangeEvent change = new BlockChangeEvent(event, map, event.getBlock().getState(), event.getToBlock().getState());
 			Spork.callEvent(change);
 		}
 	}
@@ -171,7 +171,7 @@ public class BlockListener implements Listener {
 		BlockState newState = event.getBlock().getState();
 		newState.setData(new MaterialData(Material.AIR, (byte) 0));
 
-		BlockChangeEvent change = new BlockChangeEvent(event, map, SporkPlayer.getPlayer("*.*"), event.getBlock().getState(), newState);
+		BlockChangeEvent change = new BlockChangeEvent(event, map, event.getBlock().getState(), newState);
 		Spork.callEvent(change);
 	}
 
@@ -187,7 +187,7 @@ public class BlockListener implements Listener {
 		BlockState newState = event.getBlock().getState();
 		newState.setData(new MaterialData(Material.AIR, (byte) 0));
 
-		BlockChangeEvent change = new BlockChangeEvent(event, map, SporkPlayer.getPlayer("*.*"), event.getBlock().getState(), newState);
+		BlockChangeEvent change = new BlockChangeEvent(event, map, event.getBlock().getState(), newState);
 		Spork.callEvent(change);
 	}
 
@@ -203,7 +203,7 @@ public class BlockListener implements Listener {
 		for(Block block : event.getBlocks()) {
 			BlockState newState = block.getRelative(event.getDirection()).getState();
 			newState.setData(new MaterialData(block.getType(), block.getData()));
-			BlockChangeEvent change = new BlockChangeEvent(event, map, SporkPlayer.getPlayer("*.*"), block.getRelative(event.getDirection()).getState(), newState);
+			BlockChangeEvent change = new BlockChangeEvent(event, map, block.getRelative(event.getDirection()).getState(), newState);
 			Spork.callEvent(change);
 		}
 	}
@@ -221,7 +221,7 @@ public class BlockListener implements Listener {
 			BlockState state = event.getBlock().getWorld().getBlockAt(event.getRetractLocation()).getState();
 			BlockState newState = state;
 			newState.setData(new MaterialData(Material.AIR, (byte) 0));
-			BlockChangeEvent change = new BlockChangeEvent(event, map, SporkPlayer.getPlayer("*.*"), state, newState);
+			BlockChangeEvent change = new BlockChangeEvent(event, map, state, newState);
 			Spork.callEvent(change);
 		}
 	}
