@@ -99,7 +99,7 @@ public class RegionUtil {
 	public static BlockRegion getRandom(List<BlockRegion> list) {
 		int min = 0;
 		int max = list.size() - 1;
-		int random = new Random().nextInt((max - min) + 1) + min;
+		int random = NumberUtil.getRandom(min, max);
 		return list.get(random);
 	}
 
