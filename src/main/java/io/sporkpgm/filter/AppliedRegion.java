@@ -8,6 +8,7 @@ import io.sporkpgm.region.Region;
 import io.sporkpgm.region.types.groups.UnionRegion;
 import io.sporkpgm.team.spawns.kits.SporkKit;
 import io.sporkpgm.util.Log;
+import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +66,7 @@ public class AppliedRegion extends UnionRegion {
 		String message = null;
 		if(hasValue(AppliedValue.MESSAGE)) {
 			message = (String) values.get(AppliedValue.MESSAGE);
-			message = message.replace("`", "§").replace("&", "§");
+			message = ChatColor.RED + message.replace("`", "§").replace("&", "§");
 		}
 
 		if(applied.contains(AppliedValue.ENTER) || applied.contains(AppliedValue.LEAVE)) {
