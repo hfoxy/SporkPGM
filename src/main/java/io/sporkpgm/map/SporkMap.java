@@ -81,6 +81,7 @@ public class SporkMap {
 	protected boolean ended;
 
 	public SporkMap(MapBuilder builder) throws ModuleLoadException, InvalidRegionException, InvalidFilterException {
+		Element root = document.getRootElement();
 		this.builder = builder;
 		this.document = builder.getDocument();
 		this.folder = builder.getFolder();
@@ -95,7 +96,9 @@ public class SporkMap {
 
 		this.filters = FilterBuilder.build(this);
 		// filters();
-		this.regions = builder.getRegions();
+		if(root.element("regions") != null) {
+			this.regions = RegionBuilder.parseSubRegions(root.element("regions"));
+		}
 		this.regions.addAll(filtered());
 		search();
 		// regions();
@@ -113,7 +116,6 @@ public class SporkMap {
 
 		this.timer = (TimerModule) new TimerBuilder(this).build().get(0);
 
-		Element root = document.getRootElement();
 		if(root.element("regions") != null) {
 			this.regions = RegionBuilder.parseSubRegions(root.element("regions"));
 		}
