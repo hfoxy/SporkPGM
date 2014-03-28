@@ -19,11 +19,11 @@ public class CuboidRegion extends Region {
 		super(name);
 		double xMin, xMax, yMin, yMax, zMin, zMax = 0;
 		xMin = Math.min(one.getX(), two.getX());
-		xMax = Math.max(one.getX(), two.getX());
+		xMax = Math.max(one.getX(), two.getX()) - 1;
 		yMin = Math.min(one.getY(), two.getY());
-		yMax = Math.max(one.getY(), two.getY());
+		yMax = Math.max(one.getY(), two.getY()) - 1;
 		zMin = Math.min(one.getZ(), two.getZ());
-		zMax = Math.max(one.getZ(), two.getZ());
+		zMax = Math.max(one.getZ(), two.getZ()) - 1;
 
 		this.one = new BlockRegion(xMax, yMax, zMax);
 		this.two = new BlockRegion(xMin, yMin, zMin);
