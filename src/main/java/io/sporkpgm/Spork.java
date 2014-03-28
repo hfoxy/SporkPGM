@@ -33,7 +33,6 @@ import io.sporkpgm.player.SporkPlayer;
 import io.sporkpgm.player.rank.Rank;
 import io.sporkpgm.region.exception.InvalidRegionException;
 import io.sporkpgm.rotation.Rotation;
-import io.sporkpgm.rotation.RotationSlot;
 import io.sporkpgm.rotation.exceptions.RotationLoadException;
 import io.sporkpgm.util.Chars;
 import io.sporkpgm.util.Config;

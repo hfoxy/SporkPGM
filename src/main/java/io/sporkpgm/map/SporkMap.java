@@ -298,22 +298,22 @@ public class SporkMap {
 
 		for(Module module : modules) {
 			if(module.getInfo().isListener()) {
-				if (module.getInfo().getName().equals("MobModule")){
+				if(module.getInfo().getName().equals("MobModule")) {
 					Spork.unregisterListener(module);
 				}
 			}
 		}
-			return true;
+		return true;
 	}
 
 
 	public void stop() {
 		for(Module module : modules) {
-				if(module.getInfo().isListener()) {
-					if (module.getInfo().getName().equals("MobModule")){
-						continue;
-					}
+			if(module.getInfo().isListener()) {
+				if(module.getInfo().getName().equals("MobModule")) {
+					continue;
 				}
+			}
 
 			if(module.getInfo().isListener()) {
 				Spork.unregisterListener(module);
