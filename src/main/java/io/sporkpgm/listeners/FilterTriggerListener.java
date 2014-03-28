@@ -13,6 +13,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
+import java.util.List;
+
 public class FilterTriggerListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -34,9 +36,14 @@ public class FilterTriggerListener implements Listener {
 	}
 
 	private void apply(Event event, boolean log) {
+		List<Region> regions = SporkMap.getMap().getRegions();
+		if(log) {
+			Log.info("Found " + regions.size() + " regions to check");
+		}
+
 		try {
 			Context context = new Context(event);
-			for(Region region : SporkMap.getMap().getRegions()) {
+			for(Region region : regions) {
 				AppliedRegion applied = null;
 				try {
 					applied = (AppliedRegion) region;
