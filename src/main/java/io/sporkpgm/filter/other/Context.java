@@ -7,6 +7,8 @@ import io.sporkpgm.player.event.PlayingPlayerMoveEvent;
 
 public class Context {
 
+	boolean denied;
+
 	SporkPlayer player;
 	BlockChangeEvent block;
 	BlockChangeEvent transformation;
@@ -45,6 +47,10 @@ public class Context {
 		/*
 		throw new InvalidContextException("Attempted to supply an Object which was unsupported");
 		*/
+	}
+
+	public boolean isDenied() {
+		return denied;
 	}
 
 	public SporkPlayer getPlayer() {
@@ -88,6 +94,7 @@ public class Context {
 	}
 
 	public void deny() {
+		this.denied = true;
 		if(hasModification()) {
 			getModification().setCancelled(true);
 		}
