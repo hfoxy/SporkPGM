@@ -116,10 +116,6 @@ public class SporkMap {
 
 		this.timer = (TimerModule) new TimerBuilder(this).build().get(0);
 
-		if(root.element("regions") != null) {
-			this.regions = RegionBuilder.parseSubRegions(root.element("regions"));
-		}
-
 		this.modules = Spork.get().getModules(document);
 		Log.info("Loaded " + modules.size() + " Modules: " + modules);
 
