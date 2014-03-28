@@ -36,7 +36,12 @@ public class FilterTriggerListener implements Listener {
 	}
 
 	private void apply(Event event, boolean log) {
-		List<Region> regions = SporkMap.getMap().getRegions();
+		SporkMap map = SporkMap.getMap();
+		if(log) {
+			Log.info("Checking Regions from '" + map.getName() + "'");
+		}
+
+		List<Region> regions = map.getRegions();
 		if(log) {
 			Log.info("Found " + regions.size() + " regions to check");
 		}
