@@ -8,6 +8,7 @@ import com.sk89q.minecraft.util.commands.NestedCommand;
 import io.sporkpgm.map.SporkMap;
 import io.sporkpgm.player.SporkPlayer;
 import io.sporkpgm.team.SporkTeam;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -47,7 +48,7 @@ public class TeamCommands {
 			ChatColor color = team.getColor();
 			team.setDisplay(newName);
 
-			sender.sendMessage(color + old + ChatColor.GRAY + " has been renamed to " + color + newName);
+			Bukkit.broadcastMessage(color + old + ChatColor.GRAY + " has been renamed to " + color + newName);
 		}
 
 		@Command(aliases = {"shuffle"}, desc = "Shuffle the teams", min = 0, max = 0)
