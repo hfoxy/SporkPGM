@@ -13,8 +13,8 @@ import java.util.List;
 
 public class BlockRegion extends Region {
 
-	public static int INFINITE_POSITIVE = Integer.MAX_VALUE;
-	public static int INFINITE_NEGATIVE = Integer.MIN_VALUE;
+	public static double INFINITE_POSITIVE = (1.0D / 0.0D);
+	public static double INFINITE_NEGATIVE = (-1.0D / 0.0D);
 
 	String x;
 	double xD;
@@ -92,7 +92,7 @@ public class BlockRegion extends Region {
 
 	public int parseInteger(String value) {
 		if(isInfinite(value)) {
-			return isNegative(value) ? INFINITE_NEGATIVE : INFINITE_POSITIVE;
+			return (int) (isNegative(value) ? INFINITE_NEGATIVE : INFINITE_POSITIVE);
 		}
 
 		int i = 0;
@@ -100,7 +100,7 @@ public class BlockRegion extends Region {
 			i = Integer.parseInt(value);
 		} catch(NumberFormatException e) {
 			if(isInfinite(value)) {
-				return isNegative(value) ? INFINITE_NEGATIVE : INFINITE_POSITIVE;
+				return (int) (isNegative(value) ? INFINITE_NEGATIVE : INFINITE_POSITIVE);
 			}
 
 			return (int) parseDouble(value);
