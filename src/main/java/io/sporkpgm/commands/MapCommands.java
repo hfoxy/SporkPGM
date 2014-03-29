@@ -26,8 +26,7 @@ public class MapCommands {
 				loader.getAuthorNames(), ChatColor.RED.toString(), ChatColor.DARK_PURPLE.toString()));
 	}
 
-	@Command(aliases = {"map"}, desc = "View information on the current map or map supplied", usage = "[map name]",
-			max = 1)
+	@Command(aliases = {"map", "mapinfo"}, desc = "View information on the current map or map supplied", usage = "[map name]", max = 1)
 	public static void map(CommandContext cmd, CommandSender sender) throws CommandException {
 		if(cmd.argsLength() == 0) {
 			MapBuilder currentmap = RotationSlot.getRotation().getCurrent().getBuilder();
@@ -40,7 +39,7 @@ public class MapCommands {
 		}
 	}
 
-	@Command(aliases = {"maps"}, desc = "View all the currently loaded maps", usage = "[page]", max = 1)
+	@Command(aliases = {"maps", "maplist"}, desc = "View all the currently loaded maps", usage = "[page]", max = 1)
 	public static void maps(CommandContext cmd, CommandSender sender) throws CommandException {
 		String bar = ChatColor.RED + "" + ChatColor.STRIKETHROUGH + " ----------- ";
 		String loaded = ChatColor.DARK_AQUA + "Loaded Maps (" + ChatColor.AQUA + "[page]" + ChatColor.DARK_AQUA + " " +
