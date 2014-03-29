@@ -7,7 +7,6 @@ import io.sporkpgm.player.event.PlayingPlayerMoveEvent;
 import io.sporkpgm.region.Region;
 import io.sporkpgm.region.types.groups.UnionRegion;
 import io.sporkpgm.team.spawns.kits.SporkKit;
-import io.sporkpgm.util.Log;
 import org.bukkit.ChatColor;
 
 import java.util.ArrayList;

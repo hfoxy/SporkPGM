@@ -53,7 +53,7 @@ public class ServerPlaying extends ServerPhase {
 
 		broadcast(ChatColor.DARK_PURPLE + "# # # # # # # # # # # # # # # # ");
 		broadcast(ChatColor.DARK_PURPLE + "# # " + ChatColor.GOLD + "The match has ended!" + ChatColor.DARK_PURPLE + " # #");
-		if (message != null){
+		if(message != null) {
 			broadcast(ChatColor.DARK_PURPLE + "# # " + message + ChatColor.DARK_PURPLE + " # #");
 		}
 		broadcast(ChatColor.DARK_PURPLE + "# # # # # # # # # # # # # # # #");

@@ -158,7 +158,7 @@ public class MatchCommands {
 		MatchPhase phase = match.getPhase();
 
 		if(phase == MatchPhase.PLAYING) {
-			if (cmd.argsLength() == 1){
+			if(cmd.argsLength() == 1) {
 				List<SporkTeam> teams = match.getMap().getTeams(cmd.getString(0));
 				if(teams.size() > 1) {
 					List<String> names = new ArrayList<>();
