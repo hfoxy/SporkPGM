@@ -17,7 +17,7 @@ import java.util.List;
 
 public class FilterTriggerListener implements Listener {
 
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	@EventHandler(ignoreCancelled = true)
 	public void onBlockChange(BlockChangeEvent event) {
 		/*
 		if(event.hasPlayer()) {
@@ -28,7 +28,7 @@ public class FilterTriggerListener implements Listener {
 		apply(event, false);
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	@EventHandler(ignoreCancelled = true)
 	public void onPlayerMove(PlayingPlayerMoveEvent event) {
 		apply(event);
 	}
