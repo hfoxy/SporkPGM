@@ -270,6 +270,10 @@ public class SporkTeam {
 		scoreboard.setPrefix(prefix);
 		scoreboard.setDisplayName(title);
 		scoreboard.setSuffix(suffix);
+
+		if(!scoreboard.hasPlayer(player)) {
+			scoreboard.addPlayer(player);
+		}
 	}
 
 	@Override
