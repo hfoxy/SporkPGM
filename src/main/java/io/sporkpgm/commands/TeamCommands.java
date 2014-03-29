@@ -46,7 +46,7 @@ public class TeamCommands {
 
 			String old = team.getName();
 			ChatColor color = team.getColor();
-			team.setDisplay(newName);
+			team.setName(newName);
 
 			Bukkit.broadcastMessage(color + old + ChatColor.GRAY + " has been renamed to " + color + newName);
 		}
