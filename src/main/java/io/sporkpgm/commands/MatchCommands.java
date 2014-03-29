@@ -151,14 +151,14 @@ public class MatchCommands {
 		}
 	}
 
-	@Command(aliases = {"cancel", "end"}, desc = "Cancel any timers (Starting, Match, Cycling)", max = 1)
-	@CommandPermissions("spork.match.cancel")
-	public static void cancel(CommandContext cmd, CommandSender sender) throws CommandException {
+	@Command(aliases = {"end"}, desc = "Ends the match", max = 1)
+	@CommandPermissions("spork.match.end")
+	public static void end(CommandContext cmd, CommandSender sender) throws CommandException {
 		Match match = RotationSlot.getRotation().getCurrentMatch();
 		MatchPhase phase = match.getPhase();
 
 		if(phase == MatchPhase.PLAYING) {
-			if (cmd.argsLength() == 1){
+			if(cmd.argsLength() == 1) {
 				List<SporkTeam> teams = match.getMap().getTeams(cmd.getString(0));
 				if(teams.size() > 1) {
 					List<String> names = new ArrayList<>();
@@ -179,13 +179,22 @@ public class MatchCommands {
 			return;
 		}
 
-		if(phase == MatchPhase.STARTING || phase == MatchPhase.CYCLING) {
+		sender.sendMessage(ChatColor.RED + "There is no match currently playing");
+	}
+
+	@Command(aliases = {"cancel"}, desc = "Cancels all active Spork countdowns", max = 0)
+	@CommandPermissions("spork.match.cancel")
+	public static void cancel(CommandContext cmd, CommandSender sender) throws CommandException {
+		Match match = RotationSlot.getRotation().getCurrentMatch();
+		MatchPhase phase = match.getPhase();
+
+		if(phase != MatchPhase.WAITING && phase != MatchPhase.PLAYING) {
 			match.stop();
 			sender.sendMessage(ChatColor.GREEN + "Countdowns cancelled");
 			return;
 		}
 
-		sender.sendMessage(ChatColor.RED + "Server must be starting, playing or cycling to cancel the countdown");
+		sender.sendMessage(ChatColor.RED + "There are no countdowns while a match is waiting or playing");
 	}
 
 	@Command(aliases = {"cycle"}, desc = "Cycle the map with the specified countdown", usage = "[time]", min = 1, max = 1)

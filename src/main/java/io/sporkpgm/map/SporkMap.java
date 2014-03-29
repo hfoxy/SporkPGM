@@ -651,8 +651,8 @@ public class SporkMap {
 		return ended;
 	}
 
-	public void setWinner(SporkTeam winner){
-		this.winner=winner;
+	public void setWinner(SporkTeam winner) {
+		this.winner = winner;
 	}
 
 	public SporkTeam getWinner() {

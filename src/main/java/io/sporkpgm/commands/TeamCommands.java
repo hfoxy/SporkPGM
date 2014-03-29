@@ -8,10 +8,23 @@ import com.sk89q.minecraft.util.commands.NestedCommand;
 import io.sporkpgm.map.SporkMap;
 import io.sporkpgm.player.SporkPlayer;
 import io.sporkpgm.team.SporkTeam;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class TeamCommands {
+
+	@Command(aliases = {"myteam", "mt"}, desc = "Shows what team you are on", max = 0)
+	public static void myteam(CommandContext cmd, CommandSender sender) throws CommandException {
+		if(!(sender instanceof Player)) {
+			throw new CommandException("This command is for Players only");
+		}
+
+		SporkPlayer player = SporkPlayer.getPlayer((Player) sender);
+		SporkTeam team = player.getTeam();
+		sender.sendMessage(ChatColor.GRAY + "You are on " + team.getColoredName());
+	}
 
 	@Command(aliases = {"team"}, desc = "Commands for working with teams", usage = "[time]", min = 1)
 	@NestedCommand(TeamSubCommands.class)
@@ -33,9 +46,9 @@ public class TeamCommands {
 
 			String old = team.getName();
 			ChatColor color = team.getColor();
-			team.setDisplay(newName);
+			team.setName(newName);
 
-			sender.sendMessage(color + old + ChatColor.GRAY + " has been renamed to " + color + newName);
+			Bukkit.broadcastMessage(color + old + ChatColor.GRAY + " has been renamed to " + color + newName);
 		}
 
 		@Command(aliases = {"shuffle"}, desc = "Shuffle the teams", min = 0, max = 0)

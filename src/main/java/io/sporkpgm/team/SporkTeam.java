@@ -2,6 +2,7 @@ package io.sporkpgm.team;
 
 import io.sporkpgm.Spork;
 import io.sporkpgm.map.SporkMap;
+import io.sporkpgm.map.SporkMap.ScoreAPI;
 import io.sporkpgm.objective.ObjectiveModule;
 import io.sporkpgm.objective.scored.ScoredObjective;
 import io.sporkpgm.player.SporkPlayer;
@@ -10,6 +11,9 @@ import io.sporkpgm.util.NumberUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Team;
 
 import java.util.ArrayList;
@@ -77,6 +81,11 @@ public class SporkTeam {
 		return name;
 	}
 
+	public void setName(String name) {
+		this.name = name;
+		update();
+	}
+
 	public ChatColor getColor() {
 		return color;
 	}
@@ -99,14 +108,6 @@ public class SporkTeam {
 
 	public boolean isReady() {
 		return ready;
-	}
-
-	public String getDisplay() {
-		return display;
-	}
-
-	public void setDisplay(String display) {
-		this.display = display;
 	}
 
 	public boolean isCapped() {
@@ -227,6 +228,22 @@ public class SporkTeam {
 			}
 
 		return yes;
+	}
+
+	public void update() {
+		Objective objective = team.getScoreboard().getObjective(DisplaySlot.SIDEBAR);
+		Score score = objective.getScore(player);
+		int value = score.getScore();
+
+		String title = getColoredName();
+		if(title.length() > 16)
+			title = title.substring(0, 16);
+		// Log.info("'" + title + "' is " + title.length() + " characters long");
+		this.player = Spork.get().getServer().getOfflinePlayer(title);
+
+		Score newScore = objective.getScore(player);
+		ScoreAPI.reset(score);
+		newScore.setScore(value);
 	}
 
 	@Override
