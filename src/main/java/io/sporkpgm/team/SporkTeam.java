@@ -257,7 +257,7 @@ public class SporkTeam {
 			prefix = original.substring(0, 16);
 			title = original.substring(16, 32);
 			Log.info(original + ": " + original.length());
-			suffix = original.substring(32, original.length());
+			suffix = original.substring(32, (original.length() > 48 ? 48 : original.length()));
 		} else if(title.length() > 16) {
 			prefix = original.substring(0, 16);
 			title = original.substring(16, original.length());
