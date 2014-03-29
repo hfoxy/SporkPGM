@@ -10,8 +10,20 @@ import io.sporkpgm.player.SporkPlayer;
 import io.sporkpgm.team.SporkTeam;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class TeamCommands {
+
+	@Command(aliases = {"myteam", "mt"}, desc = "Shows what team you are on", max = 0)
+	public static void myteam(CommandContext cmd, CommandSender sender) throws CommandException {
+		if(!(sender instanceof Player)) {
+			throw new CommandException("This command is for Players only");
+		}
+
+		SporkPlayer player = SporkPlayer.getPlayer((Player) sender);
+		SporkTeam team = player.getTeam();
+		sender.sendMessage(ChatColor.GRAY + "You are on " + team.getColoredName());
+	}
 
 	@Command(aliases = {"team"}, desc = "Commands for working with teams", usage = "[time]", min = 1)
 	@NestedCommand(TeamSubCommands.class)
