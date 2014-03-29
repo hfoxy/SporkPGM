@@ -255,10 +255,10 @@ public class SporkTeam {
 		if(title.length() > 32) {
 			prefix = title.substring(0, 16);
 			title = title.substring(16, 32);
-			suffix = title.substring(32, original.length());
+			suffix = title.substring(32, original.length() - 1);
 		} if(title.length() > 16) {
 			prefix = title.substring(0, 16);
-			title = title.substring(16, original.length());
+			title = title.substring(16, original.length() - 1);
 		}
 
 		player = Spork.get().getServer().getOfflinePlayer(title);
