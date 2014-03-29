@@ -194,7 +194,7 @@ public class MatchCommands {
 			return;
 		}
 
-		sender.sendMessage(ChatColor.RED + "Server cannot be waiting or playing to cancel the countdowns");
+		sender.sendMessage(ChatColor.RED + "There are no countdowns while a match is waiting or playing");
 	}
 
 	@Command(aliases = {"cycle"}, desc = "Cycle the map with the specified countdown", usage = "[time]", min = 1, max = 1)
