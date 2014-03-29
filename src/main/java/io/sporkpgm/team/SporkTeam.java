@@ -242,10 +242,15 @@ public class SporkTeam {
 
 	public void name() {
 		String original = getColoredName();
+		String sb = getName();
 
 		String prefix = "";
 		String title = getColoredName();
 		String suffix = "";
+
+		if(sb.length() > 4) {
+			sb = sb.substring(0, 4);
+		}
 
 		if(title.length() > 32) {
 			prefix = title.substring(0, 16);
@@ -259,7 +264,7 @@ public class SporkTeam {
 		player = Spork.get().getServer().getOfflinePlayer(title);
 
 		if(scoreboard == null) {
-			scoreboard = map.getScoreboard().registerNewTeam(name.replace(" ", "") + "-scoreboard");
+			scoreboard = map.getScoreboard().registerNewTeam(sb + "-obj");
 		}
 
 		scoreboard.setPrefix(prefix);
