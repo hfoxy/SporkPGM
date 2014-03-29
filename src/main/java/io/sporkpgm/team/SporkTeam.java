@@ -7,6 +7,7 @@ import io.sporkpgm.objective.ObjectiveModule;
 import io.sporkpgm.objective.scored.ScoredObjective;
 import io.sporkpgm.player.SporkPlayer;
 import io.sporkpgm.team.spawns.SporkSpawn;
+import io.sporkpgm.util.Log;
 import io.sporkpgm.util.NumberUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -253,12 +254,13 @@ public class SporkTeam {
 		}
 
 		if(title.length() > 32) {
-			prefix = title.substring(0, 16);
-			title = title.substring(16, 32);
-			suffix = title.substring(32, original.length() - 1);
-		} if(title.length() > 16) {
-			prefix = title.substring(0, 16);
-			title = title.substring(16, original.length() - 1);
+			prefix = original.substring(0, 16);
+			title = original.substring(16, 32);
+			Log.info(original + ": " + original.length());
+			suffix = original.substring(32, original.length());
+		} else if(title.length() > 16) {
+			prefix = original.substring(0, 16);
+			title = original.substring(16, original.length());
 		}
 
 		player = Spork.get().getServer().getOfflinePlayer(title);
