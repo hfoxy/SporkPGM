@@ -72,7 +72,7 @@ public class MatchCommands {
 		player.setTeam(lowest);
 	}
 
-	@Command(aliases = {"match"}, desc = "View match information")
+	@Command(aliases = {"match", "matchinfo"}, desc = "View match information")
 	public static void match(CommandContext cmd, CommandSender sender) throws CommandException {
 		if(!(sender instanceof Player)) {
 			throw new CommandException("Only Players can use this command");
