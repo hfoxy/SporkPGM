@@ -32,7 +32,7 @@ public class TeamCommands {
 
 	public static class TeamSubCommands {
 
-		@Command(aliases = {"alias"}, desc = "Change the alias of a team", usage = "<old name> <new name>", min = 1, max = 2)
+		@Command(aliases = {"alias"}, desc = "Change the alias of a team", usage = "<old name> <new name>", min = 1)
 		@CommandPermissions("spork.team.alias")
 		public static void alias(CommandContext cmd, CommandSender sender) {
 			String oldName = cmd.getString(0);
