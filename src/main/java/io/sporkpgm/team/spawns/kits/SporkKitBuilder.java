@@ -127,7 +127,7 @@ public class SporkKitBuilder {
 		if(rawDuration == null) {
 			throw new ModuleLoadException(element, "Potion duration or amplifier cannot be blank for '" + name + "'");
 		}
-		int duration = Integer.parseInt(rawDuration);
+		int duration = (rawDuration.equals("oo") ? Integer.MAX_VALUE : Integer.parseInt(rawDuration));
 		int amplifier = (rawAmplifier != null ? Integer.parseInt(rawAmplifier) : 0);
 		boolean ambient = XMLUtil.parseBoolean(element.attributeValue("ambient"), false);
 		return new PotionEffect(type, duration, amplifier, ambient);
