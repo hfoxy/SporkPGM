@@ -11,6 +11,7 @@ import io.sporkpgm.match.Match;
 import io.sporkpgm.module.Module;
 import io.sporkpgm.module.ModuleAbout;
 import io.sporkpgm.module.ModuleStage;
+import io.sporkpgm.module.builder.BuilderAbout;
 import io.sporkpgm.module.exceptions.ModuleLoadException;
 import io.sporkpgm.module.extras.InitModule;
 import io.sporkpgm.module.extras.TaskedModule;
@@ -301,27 +302,22 @@ public class SporkMap {
 		String name = "match-" + match.getID();
 		File delete = new File(name);
 
+		unloadModules(ModuleStage.LOAD);
 		World world = Spork.get().getServer().getWorld(name);
 		Spork.get().getServer().unloadWorld(world, false);
 		FileUtil.delete(delete);
 
-		for(Module module : modules) {
-			if(module.getInfo().isListener()) {
-				if(module.getInfo().getName().equals("MobModule")) {
-					Spork.unregisterListener(module);
-				}
-			}
-		}
 		return true;
 	}
 
-
 	public void stop() {
+		unloadModules(ModuleStage.START);
+	}
+
+	public void unloadModules(ModuleStage stage) {
 		for(Module module : modules) {
-			if(module.getInfo().isListener()) {
-				if(module.getInfo().getName().equals("MobModule")) {
-					continue;
-				}
+			if(new BuilderAbout(module.builder()).getStage() != stage) {
+				continue;
 			}
 
 			if(module.getInfo().isListener()) {
