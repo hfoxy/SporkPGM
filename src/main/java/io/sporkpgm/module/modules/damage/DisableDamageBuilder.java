@@ -1,6 +1,5 @@
 package io.sporkpgm.module.modules.damage;
 
-
 import io.sporkpgm.map.SporkMap;
 import io.sporkpgm.module.Module;
 import io.sporkpgm.module.builder.Builder;
