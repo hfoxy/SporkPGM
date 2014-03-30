@@ -14,7 +14,7 @@ public class MapLoader {
 	public static List<MapBuilder> build(File folder) {
 		List<MapBuilder> builders = new ArrayList<>();
 
-		File[] maps = Map.DIRECTORY.listFiles();
+		File[] maps = Map.getDirectory().listFiles();
 		Log.info("Found " + maps.length + " possible entries in the Maps respository");
 
 		for(File map : maps) {
