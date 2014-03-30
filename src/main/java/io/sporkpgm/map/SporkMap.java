@@ -291,6 +291,12 @@ public class SporkMap {
 
 	public void startModules(ModuleStage stage) {
 		for(Module module : modules) {
+			try {
+				if(new BuilderAbout(module.builder()).getStage() != stage) {
+					continue;
+				}
+			} catch(Exception e) { continue; }
+
 			if(module.getInfo().isListener()) {
 				Spork.registerListener(module);
 			}
@@ -327,7 +333,7 @@ public class SporkMap {
 				if(new BuilderAbout(module.builder()).getStage() != stage) {
 					continue;
 				}
-			} catch(Exception e) { /* nothing */ }
+			} catch(Exception e) { continue; }
 
 			if(module.getInfo().isListener()) {
 				Spork.unregisterListener(module);
