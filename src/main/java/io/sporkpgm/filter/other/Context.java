@@ -4,6 +4,7 @@ import io.sporkpgm.filter.exceptions.InvalidContextException;
 import io.sporkpgm.map.event.BlockChangeEvent;
 import io.sporkpgm.player.SporkPlayer;
 import io.sporkpgm.player.event.PlayingPlayerMoveEvent;
+import org.bukkit.Location;
 
 public class Context {
 
@@ -101,7 +102,13 @@ public class Context {
 
 		if(hasMovement()) {
 			PlayingPlayerMoveEvent move = getMovement();
-			getPlayer().getPlayer().teleport(move.getFrom());
+			double x = Math.floor(move.getFrom().getX()) + 0.5D;
+			double y = move.getFrom().getY();
+			double z = Math.floor(move.getFrom().getZ()) + 0.5D;
+
+			float yaw = move.getTo().getYaw();
+			float pitch = move.getTo().getPitch();
+			getPlayer().getPlayer().teleport(new Location(move.getFrom().getWorld(), x, y, z, yaw, pitch));
 		}
 	}
 
