@@ -28,6 +28,10 @@ public class VisibleRegion {
 
 	public void set(World world) {
 		for(BlockRegion value : region.getValues()) {
+			if(value.getIntegerY() < 0 || value.getIntegerY() > 256) {
+				continue;
+			}
+
 			FastBlock.setBlockFast(value.getLocation(world), material, (byte) damage);
 			/*
 			Block block = value.getBlock(world);
