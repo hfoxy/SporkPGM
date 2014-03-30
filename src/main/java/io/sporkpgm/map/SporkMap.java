@@ -124,8 +124,6 @@ public class SporkMap {
 		if(kits == null) {
 			this.kits = new ArrayList<>();
 		}
-
-		loadModules(ModuleStage.START);
 	}
 
 	private void filters() {
@@ -206,7 +204,7 @@ public class SporkMap {
 		creator.generator(new NullChunkGenerator());
 		this.world = creator.createWorld();
 
-		loadModules(ModuleStage.LOAD);
+		startModules(ModuleStage.LOAD);
 		this.timer.setMatch(match);
 
 		scoreboard();
@@ -287,7 +285,15 @@ public class SporkMap {
 	}
 
 	public void start() {
+		startModules(ModuleStage.START);
+	}
+
+	public void startModules(ModuleStage stage) {
 		for(Module module : modules) {
+			if(module.getInfo().isListener()) {
+				Spork.registerListener(module);
+			}
+
 			if(module instanceof TaskedModule) {
 				((TaskedModule) module).setTasks(true);
 			}
@@ -302,7 +308,7 @@ public class SporkMap {
 		String name = "match-" + match.getID();
 		File delete = new File(name);
 
-		unloadModules(ModuleStage.LOAD);
+		stopModules(ModuleStage.LOAD);
 		World world = Spork.get().getServer().getWorld(name);
 		Spork.get().getServer().unloadWorld(world, false);
 		FileUtil.delete(delete);
@@ -311,10 +317,10 @@ public class SporkMap {
 	}
 
 	public void stop() {
-		unloadModules(ModuleStage.START);
+		stopModules(ModuleStage.START);
 	}
 
-	public void unloadModules(ModuleStage stage) {
+	public void stopModules(ModuleStage stage) {
 		for(Module module : modules) {
 			if(new BuilderAbout(module.builder()).getStage() != stage) {
 				continue;
@@ -334,8 +340,8 @@ public class SporkMap {
 		}
 	}
 
-	public void loadModules(ModuleStage load) {
-		modules.addAll(Spork.get().getModules(this, load));
+	public void loadModules() {
+		modules.addAll(Spork.get().getModules(this));
 
 		List<Module> remove = new ArrayList<>();
 		for(Module module : modules) {
