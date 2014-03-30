@@ -29,10 +29,6 @@ public class AppliedRegion extends UnionRegion {
 	}
 
 	public void apply(Context context, boolean log) {
-		if(context.isDenied()) {
-			return;
-		}
-
 		List<AppliedValue> applied = new ArrayList<>();
 		if(context.hasMovement()) {
 			PlayingPlayerMoveEvent move = context.getMovement();
@@ -79,7 +75,8 @@ public class AppliedRegion extends UnionRegion {
 				Filter filter = (Filter) getValue(AppliedValue.ENTER);
 				if(filter.result(context) == State.DENY) {
 					context.deny();
-					if(message != null) {
+					if(message != null && !context.isMessaged()) {
+						context.setMessaged(true);
 						context.getPlayer().getPlayer().sendMessage(message);
 					}
 				}
@@ -87,7 +84,8 @@ public class AppliedRegion extends UnionRegion {
 				Filter filter = (Filter) getValue(AppliedValue.LEAVE);
 				if(filter.result(context) == State.DENY) {
 					context.deny();
-					if(message != null) {
+					if(message != null && !context.isMessaged()) {
+						context.setMessaged(true);
 						context.getPlayer().getPlayer().sendMessage(message);
 					}
 				}
@@ -106,7 +104,8 @@ public class AppliedRegion extends UnionRegion {
 				Filter filter = (Filter) getValue(AppliedValue.BLOCK_BREAK);
 				if(filter.result(context) == State.DENY) {
 					context.deny();
-					if(message != null) {
+					if(message != null && !context.isMessaged()) {
+						context.setMessaged(true);
 						context.getPlayer().getPlayer().sendMessage(message);
 					}
 				}
@@ -114,7 +113,8 @@ public class AppliedRegion extends UnionRegion {
 				Filter filter = (Filter) getValue(AppliedValue.BLOCK_PLACE);
 				if(filter.result(context) == State.DENY) {
 					context.deny();
-					if(message != null) {
+					if(message != null && !context.isMessaged()) {
+						context.setMessaged(true);
 						context.getPlayer().getPlayer().sendMessage(message);
 					}
 				}

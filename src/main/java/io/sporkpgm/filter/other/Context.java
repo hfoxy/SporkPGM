@@ -9,6 +9,7 @@ import org.bukkit.Location;
 public class Context {
 
 	boolean denied;
+	boolean messaged;
 
 	SporkPlayer player;
 	BlockChangeEvent block;
@@ -54,6 +55,14 @@ public class Context {
 		return denied;
 	}
 
+	public boolean isMessaged() {
+		return messaged;
+	}
+
+	public void setMessaged(boolean messaged) {
+		this.messaged = messaged;
+	}
+
 	public SporkPlayer getPlayer() {
 		return player;
 	}
@@ -96,6 +105,7 @@ public class Context {
 
 	public void deny() {
 		this.denied = true;
+
 		if(hasModification()) {
 			getModification().setCancelled(true);
 		}
