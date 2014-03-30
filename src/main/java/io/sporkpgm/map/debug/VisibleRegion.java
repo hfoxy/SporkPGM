@@ -11,6 +11,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 public class VisibleRegion {
 
@@ -28,10 +29,12 @@ public class VisibleRegion {
 	}
 
 	public void set(World world) {
+		List<BlockRegion> blocks = region.getValues();
+
 		int i = 0;
-		int total = region.getValues().size();
+		int total = blocks.size();
 		Log.info("Found a total of " + total + " values for " + region);
-		for(BlockRegion value : region.getValues()) {
+		for(BlockRegion value : blocks) {
 			i++;
 			if(value.getIntegerY() < 0 || value.getIntegerY() > 256) {
 				continue;
