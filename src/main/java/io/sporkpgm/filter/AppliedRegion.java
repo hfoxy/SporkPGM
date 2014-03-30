@@ -147,6 +147,11 @@ public class AppliedRegion extends UnionRegion {
 		return values.get(value);
 	}
 
+	@Override
+	public String toString() {
+		return "AppliedRegion{name=" + getName() + ",values=" + values + "}";
+	}
+
 	public enum AppliedValue {
 
 		ENTER("enter", Filter.class),
