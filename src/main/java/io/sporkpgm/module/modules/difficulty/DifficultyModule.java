@@ -12,8 +12,7 @@ public class DifficultyModule extends Module implements InitModule {
 
     int difficulty;
 
-    @Override
-    public Class<? extends Builder> builder() { return DifficultyBuilder.class; }
+    public DifficultyModule(int difficulty) { this.difficulty = difficulty; }
 
     @Override
     public void start () {
@@ -23,6 +22,7 @@ public class DifficultyModule extends Module implements InitModule {
     @Override
     public void stop () {}
 
-    public DifficultyModule(int difficulty) { this.difficulty = difficulty; }
+    @Override
+    public Class<? extends Builder> builder() { return DifficultyBuilder.class; }
 
 }
