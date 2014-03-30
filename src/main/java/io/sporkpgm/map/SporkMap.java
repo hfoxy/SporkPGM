@@ -108,7 +108,7 @@ public class SporkMap {
 		}
 		// regions();
 
-		this.visible = visible(true);
+		this.visible = visible(false);
 
 		this.kits = builder.getKits();
 		this.spawns = SporkSpawnBuilder.build(this);

@@ -47,7 +47,7 @@ public class VisibleRegion {
 			Block block = value.getBlock(world);
 			block.setType(material);
 			block.setData((byte) damage);
-			
+
 			/*
 			FastBlock.setBlockFast(value.getLocation(world), material, (byte) damage);
 			*/
