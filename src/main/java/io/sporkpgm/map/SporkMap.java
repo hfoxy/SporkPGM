@@ -9,12 +9,13 @@ import io.sporkpgm.map.debug.VisibleRegion;
 import io.sporkpgm.map.generator.NullChunkGenerator;
 import io.sporkpgm.match.Match;
 import io.sporkpgm.module.Module;
+import io.sporkpgm.module.ModuleAbout;
+import io.sporkpgm.module.ModuleStage;
 import io.sporkpgm.module.exceptions.ModuleLoadException;
 import io.sporkpgm.module.extras.InitModule;
 import io.sporkpgm.module.extras.TaskedModule;
 import io.sporkpgm.module.modules.info.Contributor;
 import io.sporkpgm.module.modules.info.InfoModule;
-import io.sporkpgm.module.modules.mob.MobModule;
 import io.sporkpgm.module.modules.timer.TimerBuilder;
 import io.sporkpgm.module.modules.timer.TimerModule;
 import io.sporkpgm.objective.ObjectiveModule;
@@ -123,12 +124,7 @@ public class SporkMap {
 			this.kits = new ArrayList<>();
 		}
 
-		if(!hasModule(MobModule.class)) {
-			MobModule m = new MobModule(null, null);
-			Log.info("Loaded MobModule as default");
-			Spork.registerListeners(m);
-			modules.add(m);
-		}
+		loadModules(ModuleStage.START);
 	}
 
 	private void filters() {
@@ -209,7 +205,7 @@ public class SporkMap {
 		creator.generator(new NullChunkGenerator());
 		this.world = creator.createWorld();
 
-		loadModules();
+		loadModules(ModuleStage.LOAD);
 		this.timer.setMatch(match);
 
 		scoreboard();
@@ -342,14 +338,15 @@ public class SporkMap {
 		}
 	}
 
-	public void loadModules() {
-		modules.addAll(Spork.get().getModules(this));
+	public void loadModules(ModuleStage load) {
+		modules.addAll(Spork.get().getModules(this, load));
 
 		List<Module> remove = new ArrayList<>();
 		for(Module module : modules) {
-			if(module.getInfo().getRequires().size() > 0) {
+			ModuleAbout info = module.getInfo();
+			if(info.getRequires().size() > 0) {
 				boolean ignore = false;
-				for(Class<? extends Module> type : module.getInfo().getRequires()) {
+				for(Class<? extends Module> type : info.getRequires()) {
 					if(!remove.contains(module) && !ignore && !hasModule(type)) {
 						remove.add(module);
 						Log.warning("Removing " + module.getInfo().getName() + " because " + type.getName() + " was missing!");

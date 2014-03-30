@@ -11,4 +11,8 @@ public abstract class Module implements Listener {
 
 	public abstract Class<? extends Builder> builder();
 
+	public static ModuleAbout getInfo(Class<? extends Module> clazz) {
+		return new ModuleAbout(clazz);
+	}
+
 }

@@ -1,6 +1,7 @@
 package io.sporkpgm.module.builder;
 
 import com.google.common.base.Preconditions;
+import io.sporkpgm.module.ModuleStage;
 
 public class BuilderAbout {
 
@@ -17,6 +18,10 @@ public class BuilderAbout {
 
 	public boolean isDocumentable() {
 		return info.documentable();
+	}
+
+	public ModuleStage getStage() {
+		return info.stage();
 	}
 
 }

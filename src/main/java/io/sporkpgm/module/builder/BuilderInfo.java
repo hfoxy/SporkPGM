@@ -1,5 +1,7 @@
 package io.sporkpgm.module.builder;
 
+import io.sporkpgm.module.ModuleStage;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -10,5 +12,7 @@ import java.lang.annotation.Target;
 public @interface BuilderInfo {
 
 	public abstract boolean documentable() default true;
+
+	public ModuleStage stage() default ModuleStage.START;
 
 }

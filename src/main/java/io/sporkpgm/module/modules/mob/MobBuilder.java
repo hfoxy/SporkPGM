@@ -2,6 +2,7 @@ package io.sporkpgm.module.modules.mob;
 
 import io.sporkpgm.map.SporkMap;
 import io.sporkpgm.module.Module;
+import io.sporkpgm.module.ModuleStage;
 import io.sporkpgm.module.builder.Builder;
 import io.sporkpgm.module.builder.BuilderInfo;
 import io.sporkpgm.module.exceptions.ModuleLoadException;
@@ -16,8 +17,9 @@ import org.dom4j.Element;
 import java.util.ArrayList;
 import java.util.List;
 
-@BuilderInfo(documentable = true)
+@BuilderInfo(documentable = true, stage = ModuleStage.LOAD)
 public class MobBuilder extends Builder {
+
 	public MobBuilder(Document document) {
 		super(document);
 	}
@@ -46,6 +48,12 @@ public class MobBuilder extends Builder {
 			}
 			modules.add(new MobModule(mobs, reasons));
 		}
+
+		if(modules.size() == 0) {
+			modules.add(new MobModule(null, null));
+		}
+
 		return modules;
 	}
+
 }

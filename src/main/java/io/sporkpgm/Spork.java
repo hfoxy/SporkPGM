@@ -25,7 +25,9 @@ import io.sporkpgm.map.MapLoader;
 import io.sporkpgm.map.SporkMap;
 import io.sporkpgm.match.Match;
 import io.sporkpgm.module.Module;
+import io.sporkpgm.module.ModuleStage;
 import io.sporkpgm.module.builder.Builder;
+import io.sporkpgm.module.builder.BuilderAbout;
 import io.sporkpgm.module.exceptions.ModuleLoadException;
 import io.sporkpgm.module.modules.damage.DisableDamageBuilder;
 import io.sporkpgm.module.modules.mob.MobBuilder;
@@ -265,8 +267,8 @@ public class Spork extends JavaPlugin {
 		return getModules(document, builders);
 	}
 
-	public List<Module> getModules(SporkMap map) {
-		return getModules(map, builders);
+	public List<Module> getModules(SporkMap map, ModuleStage stage) {
+		return getModules(map, builders, stage);
 	}
 
 	public List<Module> getModules(Document document, List<Class<? extends Builder>> builders) {
@@ -290,19 +292,22 @@ public class Spork extends JavaPlugin {
 		return modules;
 	}
 
-	public List<Module> getModules(SporkMap map, List<Class<? extends Builder>> builders) {
+	public List<Module> getModules(SporkMap map, List<Class<? extends Builder>> builders, ModuleStage stage) {
 		List<Module> modules = new ArrayList<>();
 
 		for(Class<? extends Builder> clazz : builders) {
 			if(!isDocumentable(clazz)) {
-				try {
-					Constructor constructor = clazz.getConstructor(SporkMap.class);
-					constructor.setAccessible(true);
-					Builder builder = (Builder) constructor.newInstance(map);
-					modules.addAll(builder.build());
-				} catch(Exception e) {
-					getLogger().warning("Error when loading '" + clazz.getSimpleName() + "' due to " + e.getClass().getSimpleName());
-					e.printStackTrace();
+				BuilderAbout about = new BuilderAbout(clazz);
+				if(about.getStage() == stage) {
+					try {
+						Constructor constructor = clazz.getConstructor(SporkMap.class);
+						constructor.setAccessible(true);
+						Builder builder = (Builder) constructor.newInstance(map);
+						modules.addAll(builder.build());
+					} catch(Exception e) {
+						getLogger().warning("Error when loading '" + clazz.getSimpleName() + "' due to " + e.getClass().getSimpleName());
+						e.printStackTrace();
+					}
 				}
 			}
 		}

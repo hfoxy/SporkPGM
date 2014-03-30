@@ -30,7 +30,7 @@ public abstract class Builder {
 	public abstract List<Module> build() throws ModuleLoadException, InvalidRegionException;
 
 	public BuilderAbout getInfo() {
-		return new BuilderAbout(this.getClass());
+		return new BuilderAbout(getClass());
 	}
 
 	public static boolean isDocumentable(Class<? extends Builder> clazz) {
