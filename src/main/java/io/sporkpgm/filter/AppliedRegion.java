@@ -70,55 +70,8 @@ public class AppliedRegion extends UnionRegion {
 			message = ChatColor.RED + message.replace("`", "§").replace("&", "§");
 		}
 
-		if(applied.contains(AppliedValue.ENTER) || applied.contains(AppliedValue.LEAVE)) {
-			if(hasValue(AppliedValue.ENTER)) {
-				Filter filter = (Filter) getValue(AppliedValue.ENTER);
-				if(filter.result(context) == State.DENY) {
-					context.deny();
-					if(message != null && !context.isMessaged()) {
-						context.setMessaged(true);
-						context.getPlayer().getPlayer().sendMessage(message);
-					}
-				}
-			} else if(hasValue(AppliedValue.LEAVE)) {
-				Filter filter = (Filter) getValue(AppliedValue.LEAVE);
-				if(filter.result(context) == State.DENY) {
-					context.deny();
-					if(message != null && !context.isMessaged()) {
-						context.setMessaged(true);
-						context.getPlayer().getPlayer().sendMessage(message);
-					}
-				}
-			}
-		}
-
-		if(applied.contains(AppliedValue.BLOCK)) {
-			if(hasValue(AppliedValue.BLOCK)) {
-				Filter filter = (Filter) getValue(AppliedValue.BLOCK);
-				if(filter.result(context) == State.DENY) {
-					context.deny();
-				}
-			}
-
-			if(hasValue(AppliedValue.BLOCK_BREAK)) {
-				Filter filter = (Filter) getValue(AppliedValue.BLOCK_BREAK);
-				if(filter.result(context) == State.DENY) {
-					context.deny();
-					if(message != null && !context.isMessaged()) {
-						context.setMessaged(true);
-						context.getPlayer().getPlayer().sendMessage(message);
-					}
-				}
-			} else if(hasValue(AppliedValue.BLOCK_PLACE)) {
-				Filter filter = (Filter) getValue(AppliedValue.BLOCK_PLACE);
-				if(filter.result(context) == State.DENY) {
-					context.deny();
-					if(message != null && !context.isMessaged()) {
-						context.setMessaged(true);
-						context.getPlayer().getPlayer().sendMessage(message);
-					}
-				}
-			}
+		for(AppliedValue value : AppliedValue.getValues(Filter.class)) {
+			handle(message, context, applied, value);
 		}
 
 		if(applied.contains(AppliedValue.KIT)) {
@@ -129,6 +82,19 @@ public class AppliedRegion extends UnionRegion {
 		}
 
 		// TODO: add support for velocities
+	}
+
+	public void handle(String message, Context context, List<AppliedValue> applied, AppliedValue value) {
+		if(applied.contains(value) && hasValue(value)) {
+			Filter filter = (Filter) getValue(value);
+			if(filter.result(context) == State.DENY) {
+				context.deny();
+				if(message != null && !context.isMessaged()) {
+					context.setMessaged(true);
+					context.getPlayer().getPlayer().sendMessage(message);
+				}
+			}
+		}
 	}
 
 	public Map<AppliedValue, Object> getHashMap() {
@@ -187,6 +153,16 @@ public class AppliedRegion extends UnionRegion {
 				attributes[i] = values()[i].name();
 			}
 			return attributes;
+		}
+
+		public static List<AppliedValue> getValues(Class<?> returns) {
+			List<AppliedValue> values = new ArrayList<>();
+			for(AppliedValue value : values()) {
+				if(value.getReturns() == returns) {
+					values.add(value);
+				}
+			}
+			return values;
 		}
 
 	}
