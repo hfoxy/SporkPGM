@@ -30,6 +30,7 @@ public class VisibleRegion {
 	public void set(World world) {
 		int i = 0;
 		int total = region.getValues().size();
+		Log.info("Found a total of " + total + " values for " + region.getName());
 		for(BlockRegion value : region.getValues()) {
 			i++;
 			if(value.getIntegerY() < 0 || value.getIntegerY() > 256) {
