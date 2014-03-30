@@ -66,4 +66,9 @@ public class SphereRegion extends Region {
 		return center.getY() > region.getY();
 	}
 
+	@Override
+	public String toString() {
+		return "SphereRegion{name=" + getName() + ",center=[" + center + "],radius=" + radius + ",hollow=" + hollow + "}";
+	}
+
 }

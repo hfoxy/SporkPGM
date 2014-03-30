@@ -14,4 +14,9 @@ public class CircleRegion extends CylinderRegion {
 		return Math.pow(point.getX() - origin.getX(), 2.0D) + Math.pow(point.getZ() - origin.getZ(), 2.0D) < (radius * radius);
 	}
 
+	@Override
+	public String toString() {
+		return "CircleRegion{name=" + getName() + ",center=[" + center + "],radius=" + radius + ",hollow=" + hollow + "}";
+	}
+
 }

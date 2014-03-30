@@ -8,8 +8,8 @@ import java.util.List;
 
 public class CuboidRegion extends Region {
 
-	BlockRegion one;
-	BlockRegion two;
+	protected BlockRegion one;
+	protected BlockRegion two;
 
 	public CuboidRegion(BlockRegion one, BlockRegion two) {
 		this(null, one, two);
@@ -113,6 +113,11 @@ public class CuboidRegion extends Region {
 		}
 
 		return false;
+	}
+
+	@Override
+	public String toString() {
+		return "CuboidRegion{name=" + getName() + ",min=[" + one + "],max=[" + two + "]}";
 	}
 
 }

@@ -1,7 +1,10 @@
 package io.sporkpgm.region.types;
 
 import io.sporkpgm.util.Log;
+import io.sporkpgm.util.RegionUtil;
 import org.bukkit.util.Vector;
+
+import java.util.List;
 
 public class RectangleRegion extends CuboidRegion {
 
@@ -35,6 +38,15 @@ public class RectangleRegion extends CuboidRegion {
 			Log.info("Z: " + zI + " = " + z);
 		}
 		return x && z;
+	}
+
+	public List<BlockRegion> getValues() {
+		return RegionUtil.cuboid(new BlockRegion(one.x, "0", one.z), new BlockRegion(two.x, "256", two.z));
+	}
+
+	@Override
+	public String toString() {
+		return "RectangleRegion{name=" + getName() + ",min=[" + one + "],max=[" + two + "]}";
 	}
 
 }
