@@ -27,11 +27,7 @@ public class FriendlyFireBuilder extends Builder {
         boolean enabled = true;
         for(Element e : XMLUtil.getElements(root)) {
             if(e.getName().equals("friendlyfire")) {
-                if(e.getText().equals("on")) {
-                    StringUtil.convertStringToBoolean(e.getText(), true);
-                } else if(e.getText().equals("off")) {
-                    enabled = false;
-                }
+                enabled = StringUtil.convertStringToBoolean(e.getText(), true);
             }
         }
         modules.add(new FriendlyFireModule(enabled));
