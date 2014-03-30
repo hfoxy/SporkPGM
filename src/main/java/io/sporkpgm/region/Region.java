@@ -31,15 +31,27 @@ public abstract class Region {
 	}
 
 	public boolean isInside(double x, double y, double z) {
-		return isInside(new BlockRegion(x, y, z));
+		return isInside(x, y, z, false);
+	}
+
+	public boolean isInside(double x, double y, double z, boolean log) {
+		return isInside(new BlockRegion(x, y, z), log);
 	}
 
 	public boolean isInside(Location location) {
-		return isInside(location.getX(), location.getY(), location.getZ());
+		return isInside(location, false);
+	}
+
+	public boolean isInside(Location location, boolean log) {
+		return isInside(location.getX(), location.getY(), location.getZ(), log);
 	}
 
 	public boolean isInside(Vector vector) {
-		return isInside(vector.getX(), vector.getY(), vector.getZ());
+		return isInside(vector, false);
+	}
+
+	public boolean isInside(Vector vector, boolean log) {
+		return isInside(vector.getX(), vector.getY(), vector.getZ(), log);
 	}
 
 	public boolean isInside(Material material, World world) {

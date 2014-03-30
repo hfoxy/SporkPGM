@@ -36,15 +36,15 @@ public class AppliedRegion extends UnionRegion {
 		List<AppliedValue> applied = new ArrayList<>();
 		if(context.hasMovement()) {
 			PlayingPlayerMoveEvent move = context.getMovement();
-			if(isInside(move.getFrom()) && isInside(move.getTo())) {
+			if(isInside(move.getFrom(), log) && isInside(move.getTo(), log)) {
 				return;
-			} else if(!isInside(move.getFrom()) && !isInside(move.getTo())) {
+			} else if(!isInside(move.getFrom(), log) && !isInside(move.getTo(), log)) {
 				return;
-			} else if(!isInside(move.getFrom()) && isInside(move.getTo())) {
+			} else if(!isInside(move.getFrom(), log) && isInside(move.getTo(), log)) {
 				applied.add(AppliedValue.ENTER);
 				applied.add(AppliedValue.KIT);
 				applied.add(AppliedValue.VELOCITY);
-			} else if(isInside(move.getFrom()) && !isInside(move.getTo())) {
+			} else if(isInside(move.getFrom(), log) && !isInside(move.getTo(), log)) {
 				applied.add(AppliedValue.LEAVE);
 			}
 		}
@@ -52,7 +52,7 @@ public class AppliedRegion extends UnionRegion {
 		if(context.hasModification()) {
 			BlockChangeEvent block = context.getModification();
 
-			if(isInside(block.getLocation())) {
+			if(isInside(block.getLocation(), log)) {
 				applied.add(AppliedValue.BLOCK);
 				if(block.hasPlayer() && block.isBreak()) {
 					applied.add(AppliedValue.BLOCK_BREAK);

@@ -7,6 +7,7 @@ import io.sporkpgm.objective.ObjectiveModule;
 import io.sporkpgm.objective.scored.ScoredObjective;
 import io.sporkpgm.player.SporkPlayer;
 import io.sporkpgm.team.spawns.SporkSpawn;
+import io.sporkpgm.util.Log;
 import io.sporkpgm.util.NumberUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -23,8 +24,10 @@ public class SporkTeam {
 
 	SporkMap map;
 	Team team;
-	OfflinePlayer player;
 	ScoredObjective scored;
+
+	Team scoreboard;
+	OfflinePlayer player;
 
 	String name;
 	ChatColor color;
@@ -66,11 +69,7 @@ public class SporkTeam {
 		this.team.setDisplayName(getColoredName());
 		this.team.setCanSeeFriendlyInvisibles(true);
 
-		String title = getColoredName();
-		if(title.length() > 16)
-			title = title.substring(0, 16);
-		// Log.info("'" + title + "' is " + title.length() + " characters long");
-		this.player = Spork.get().getServer().getOfflinePlayer(title);
+		name();
 	}
 
 	public SporkMap getMap() {
@@ -235,15 +234,48 @@ public class SporkTeam {
 		Score score = objective.getScore(player);
 		int value = score.getScore();
 
-		String title = getColoredName();
-		if(title.length() > 16)
-			title = title.substring(0, 16);
-		// Log.info("'" + title + "' is " + title.length() + " characters long");
-		this.player = Spork.get().getServer().getOfflinePlayer(title);
+		name();
 
 		Score newScore = objective.getScore(player);
 		ScoreAPI.reset(score);
 		newScore.setScore(value);
+	}
+
+	public void name() {
+		String original = getColoredName();
+		String sb = getName();
+
+		String prefix = "";
+		String title = getColoredName();
+		String suffix = "";
+
+		if(sb.length() > 4) {
+			sb = sb.substring(0, 4);
+		}
+
+		if(title.length() > 32) {
+			prefix = original.substring(0, 16);
+			title = original.substring(16, 32);
+			Log.info(original + ": " + original.length());
+			suffix = original.substring(32, (original.length() > 48 ? 48 : original.length()));
+		} else if(title.length() > 16) {
+			prefix = original.substring(0, 16);
+			title = original.substring(16, original.length());
+		}
+
+		player = Spork.get().getServer().getOfflinePlayer(title);
+
+		if(scoreboard == null) {
+			scoreboard = map.getScoreboard().registerNewTeam(sb + "-obj");
+		}
+
+		scoreboard.setPrefix(prefix);
+		scoreboard.setDisplayName(title);
+		scoreboard.setSuffix(suffix);
+
+		if(!scoreboard.hasPlayer(player)) {
+			scoreboard.addPlayer(player);
+		}
 	}
 
 	@Override

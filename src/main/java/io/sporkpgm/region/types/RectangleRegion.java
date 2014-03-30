@@ -1,5 +1,6 @@
 package io.sporkpgm.region.types;
 
+import io.sporkpgm.util.Log;
 import org.bukkit.util.Vector;
 
 public class RectangleRegion extends CuboidRegion {
@@ -22,7 +23,18 @@ public class RectangleRegion extends CuboidRegion {
 		zMin = getPoints()[1].getZ();
 		zMax = getPoints()[0].getZ();
 
-		return (xMin <= point.getX()) && (point.getX() <= xMax) && (zMin <= point.getZ()) && (point.getZ() <= zMax);
+		boolean x = (xMin <= point.getX()) && (point.getX() <= xMax);
+		String xI = "(" + xMin + " <= " + point.getX() + " && " + point.getX() + " <= " + xMax + ")";
+
+		boolean z = (zMin <= point.getZ()) && (point.getZ() <= zMax);
+		String zI = "(" + zMin + " <= " + point.getZ() + " && " + point.getZ() + " <= " + zMax + ")";
+
+		if(log) {
+			Log.info("Checking " + this + " to match " + point);
+			Log.info("X: " + xI + " = " + x);
+			Log.info("Z: " + zI + " = " + z);
+		}
+		return x && z;
 	}
 
 }
