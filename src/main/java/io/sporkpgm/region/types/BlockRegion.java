@@ -14,7 +14,7 @@ import java.util.List;
 public class BlockRegion extends Region {
 
 	public static double INFINITE_POSITIVE = Double.POSITIVE_INFINITY;
-	public static double INFINITE_NEGATIVE = Double.NEGATIVE_INFINITY;
+	public static double INFINITE_NEGATIVE = -Double.POSITIVE_INFINITY;
 
 	String x;
 	double xD;
