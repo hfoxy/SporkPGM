@@ -44,7 +44,7 @@ public class MonumentBuilder extends Builder {
 				}
 			}
 
-			List<Material> materialList = new ArrayList<>();
+			List<Material> materialList;
 			for(String type : names) {
 				Material material = StringUtil.convertStringToMaterial(type);
 				if(material == null) {

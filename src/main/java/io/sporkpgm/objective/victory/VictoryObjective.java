@@ -24,6 +24,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.meta.FireworkMeta;
 
 import java.lang.reflect.Method;
@@ -142,7 +143,7 @@ public class VictoryObjective extends ObjectiveModule {
 		return player;
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onBlockChange(BlockChangeEvent event) {
 		if(!event.hasPlayer()) {
 			if(place.isInside(event.getLocation())) {
@@ -174,6 +175,7 @@ public class VictoryObjective extends ObjectiveModule {
 				completer = player;
 				setComplete(true);
 				event.setCancelled(false);
+				event.setLocked(true);
 			}
 		}
 	}

@@ -88,10 +88,20 @@ public class AppliedRegion extends UnionRegion {
 		if(applied.contains(value) && hasValue(value)) {
 			Filter filter = (Filter) getValue(value);
 			if(filter.result(context) == State.DENY) {
-				context.deny();
-				if(message != null && !context.isMessaged()) {
-					context.setMessaged(true);
-					context.getPlayer().getPlayer().sendMessage(message);
+				boolean ignore = false;
+				if(context.hasModification()) {
+					BlockChangeEvent change = context.getModification();
+					if(change.isLocked()) {
+						ignore = true;
+					}
+				}
+
+				if(!ignore) {
+					context.deny();
+					if(message != null && !context.isMessaged()) {
+						context.setMessaged(true);
+						context.getPlayer().getPlayer().sendMessage(message);
+					}
 				}
 			}
 		}
