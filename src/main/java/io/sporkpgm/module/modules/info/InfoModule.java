@@ -3,6 +3,8 @@ package io.sporkpgm.module.modules.info;
 import io.sporkpgm.module.Module;
 import io.sporkpgm.module.ModuleInfo;
 import io.sporkpgm.module.builder.Builder;
+import io.sporkpgm.util.StringUtil;
+import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +53,11 @@ public class InfoModule extends Module {
 
 	public List<Contributor> getContributors() {
 		return contributors;
+	}
+
+	public String getShortDescription() {
+		String authorsString = StringUtil.listToEnglishCompound(authors, ChatColor.RED + "", ChatColor.DARK_PURPLE + "");
+		return ChatColor.GOLD + name + ChatColor.DARK_PURPLE + " by " + authorsString;
 	}
 
 	public boolean friendlyFire() {
