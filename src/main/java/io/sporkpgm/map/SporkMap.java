@@ -96,11 +96,13 @@ public class SporkMap {
 
 		this.filters = FilterBuilder.build(this);
 		// filters();
+
+		this.regions = new ArrayList<>();
 		if(root.element("regions") != null) {
 			this.regions = RegionBuilder.parseSubRegions(root.element("regions"));
+			this.regions.addAll(filtered());
+			search();
 		}
-		this.regions.addAll(filtered());
-		search();
 		// regions();
 
 		int count = 0;
