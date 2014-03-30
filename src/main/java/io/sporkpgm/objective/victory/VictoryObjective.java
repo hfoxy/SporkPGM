@@ -72,8 +72,11 @@ public class VictoryObjective extends ObjectiveModule {
 		}
 
 		StringBuilder builder = new StringBuilder();
-		builder.append(color).append(name.toUpperCase()).append(ChatColor.GRAY).append(" was completed by ");
-		builder.append(ChatColor.AQUA).append(completer.getName());
+		builder.append(completer.getTeamColour()).append(completer.getName());
+		builder.append(ChatColor.GRAY).append(" placed ");
+		builder.append(color).append(name.toUpperCase());
+		builder.append(ChatColor.GRAY).append(" for the ");
+		builder.append(completer.getTeam().getColoredName());
 
 		Bukkit.broadcastMessage(builder.toString());
 		update();
