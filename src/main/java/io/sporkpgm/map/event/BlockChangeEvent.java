@@ -19,6 +19,7 @@ public class BlockChangeEvent extends Event {
 
 	private static final HandlerList handlers = new HandlerList();
 
+	private boolean locked;
 	private Event cause;
 	private SporkMap map;
 	private SporkPlayer player;
@@ -102,6 +103,14 @@ public class BlockChangeEvent extends Event {
 		return getNewState().getLocation();
 	}
 
+	public void setLocked(boolean locked) {
+		this.locked = locked;
+	}
+
+	public boolean isLocked() {
+		return locked;
+	}
+
 	public boolean isCancellable() {
 		return cause instanceof Cancellable;
 	}
@@ -122,6 +131,10 @@ public class BlockChangeEvent extends Event {
 	}
 
 	public boolean setCancelled(boolean cancelled) {
+		if(locked) {
+			return false;
+		}
+
 		if(!isCancellable()) {
 			BlockState state = getOldState();
 			if(!cancelled) {
