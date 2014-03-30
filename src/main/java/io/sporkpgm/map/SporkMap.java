@@ -323,9 +323,11 @@ public class SporkMap {
 
 	public void stopModules(ModuleStage stage) {
 		for(Module module : modules) {
-			if(new BuilderAbout(module.builder()).getStage() != stage) {
-				continue;
-			}
+			try {
+				if(new BuilderAbout(module.builder()).getStage() != stage) {
+					continue;
+				}
+			} catch(Exception e) { /* nothing */ }
 
 			if(module.getInfo().isListener()) {
 				Spork.unregisterListener(module);

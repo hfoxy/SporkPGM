@@ -11,7 +11,7 @@ import org.dom4j.Element;
 
 import java.util.List;
 
-@BuilderInfo
+@BuilderInfo(documentable = false)
 public class MaxHeightBuilder extends Builder {
 
 	public MaxHeightBuilder(Document document) {
