@@ -115,7 +115,7 @@ public class BlockRegion extends Region {
 	}
 
 	public boolean isNegative(String value) {
-		return isInfinite(value) ? x.equals("-oo") : getDoubleX() < 0;
+		return isInfinite(value) ? value.equals("-oo") : getDoubleX() < 0;
 	}
 
 	public double getX() {
