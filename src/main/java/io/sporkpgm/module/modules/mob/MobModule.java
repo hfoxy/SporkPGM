@@ -7,6 +7,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +15,10 @@ import java.util.List;
 @ModuleInfo(name = "MobModule", description = "The module that controls mob spawning", listener = true)
 public class MobModule extends Module implements Listener {
 
-	List<EntityType> mobs = null;
-	List<CreatureSpawnEvent.SpawnReason> reasons = null;
+	List<EntityType> mobs;
+	List<SpawnReason> reasons;
 
-	public MobModule(List<EntityType> mobs, List<CreatureSpawnEvent.SpawnReason> reasons) {
+	public MobModule(List<EntityType> mobs, List<SpawnReason> reasons) {
 		this.mobs = mobs;
 		this.reasons = reasons;
 	}
@@ -26,7 +27,7 @@ public class MobModule extends Module implements Listener {
 		return mobs;
 	}
 
-	public List<CreatureSpawnEvent.SpawnReason> getReasons() {
+	public List<SpawnReason> getReasons() {
 		return reasons;
 	}
 

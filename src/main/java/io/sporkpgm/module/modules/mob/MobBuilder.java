@@ -17,7 +17,7 @@ import org.dom4j.Element;
 import java.util.ArrayList;
 import java.util.List;
 
-@BuilderInfo(documentable = true, stage = ModuleStage.LOAD)
+@BuilderInfo(documentable = false, stage = ModuleStage.LOAD)
 public class MobBuilder extends Builder {
 
 	public MobBuilder(Document document) {
