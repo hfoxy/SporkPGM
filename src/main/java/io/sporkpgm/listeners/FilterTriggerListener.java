@@ -24,7 +24,7 @@ public class FilterTriggerListener implements Listener {
 		}
 		*/
 
-		apply(event, false);
+		apply(event, event.hasPlayer());
 	}
 
 	@EventHandler(ignoreCancelled = true)

@@ -29,9 +29,11 @@ public class RectangleRegion extends CuboidRegion {
 		boolean z = (zMin <= point.getZ()) && (point.getZ() <= zMax);
 		String zI = "(" + zMin + " <= " + point.getZ() + " && " + point.getZ() + " <= " + zMax + ")";
 
-		Log.info("Checking " + this + " to match " + point);
-		Log.info("X: " + xI + " = " + x);
-		Log.info("Z: " + zI + " = " + z);
+		if(log) {
+			Log.info("Checking " + this + " to match " + point);
+			Log.info("X: " + xI + " = " + x);
+			Log.info("Z: " + zI + " = " + z);
+		}
 		return x && z;
 	}
 
