@@ -2,6 +2,7 @@ package io.sporkpgm.map.debug;
 
 import io.sporkpgm.region.Region;
 import io.sporkpgm.region.types.BlockRegion;
+import io.sporkpgm.util.Log;
 import io.sporkpgm.util.NMSUtil;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
@@ -27,11 +28,15 @@ public class VisibleRegion {
 	}
 
 	public void set(World world) {
+		int i = 0;
+		int total = region.getValues().size();
 		for(BlockRegion value : region.getValues()) {
+			i++;
 			if(value.getIntegerY() < 0 || value.getIntegerY() > 256) {
 				continue;
 			}
 
+			Log.info("Setting " + material.name() + ":" + dye.name() + " at " + value + " (" + i + "/" + total + ")");
 			FastBlock.setBlockFast(value.getLocation(world), material, (byte) damage);
 			/*
 			Block block = value.getBlock(world);
