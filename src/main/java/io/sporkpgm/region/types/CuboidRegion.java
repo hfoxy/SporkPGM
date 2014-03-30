@@ -8,8 +8,8 @@ import java.util.List;
 
 public class CuboidRegion extends Region {
 
-	BlockRegion one;
-	BlockRegion two;
+	protected BlockRegion one;
+	protected BlockRegion two;
 
 	public CuboidRegion(BlockRegion one, BlockRegion two) {
 		this(null, one, two);
