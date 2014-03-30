@@ -214,8 +214,11 @@ public class SporkMap {
 
 		scoreboard();
 		for(VisibleRegion region : visible) {
-			Log.info("Using " + region.getMaterial().name() + ":" + region.getDye().name() + " for " + region.getRegion());
 			region.set(world);
+		}
+
+		for(VisibleRegion region : visible) {
+			Log.info("Using " + region.getMaterial().name() + ":" + region.getDye().name() + " for " + region.getRegion());
 		}
 
 		return true;
