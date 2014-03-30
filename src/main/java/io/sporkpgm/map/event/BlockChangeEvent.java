@@ -63,7 +63,7 @@ public class BlockChangeEvent extends Event {
 	}
 
 	public boolean hasPlayer() {
-		return player != null || player.getPlayer() != null;
+		return player != null && player.getPlayer() != null;
 	}
 
 	public SporkPlayer getPlayer() {
