@@ -118,6 +118,7 @@ public class SporkMap {
 		this.timer = (TimerModule) new TimerBuilder(this).build().get(0);
 
 		this.modules = Spork.get().getModules(document);
+		loadModules();
 		Log.info("Loaded " + modules.size() + " Modules: " + modules);
 
 		this.kits = SporkKitBuilder.build(document);
