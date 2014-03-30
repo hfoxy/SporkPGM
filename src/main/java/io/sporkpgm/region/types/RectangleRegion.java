@@ -44,4 +44,9 @@ public class RectangleRegion extends CuboidRegion {
 		return RegionUtil.cuboid(new BlockRegion(one.x, "0", one.z), new BlockRegion(two.x, "256", two.z));
 	}
 
+	@Override
+	public String toString() {
+		return "RectangleRegion{name=" + getName() + ",min=[" + one + "],max=[" + two + "]}";
+	}
+
 }

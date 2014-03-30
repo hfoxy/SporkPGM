@@ -115,4 +115,9 @@ public class CuboidRegion extends Region {
 		return false;
 	}
 
+	@Override
+	public String toString() {
+		return "CuboidRegion{name=" + getName() + ",min=[" + one + "],max=[" + two + "]}";
+	}
+
 }

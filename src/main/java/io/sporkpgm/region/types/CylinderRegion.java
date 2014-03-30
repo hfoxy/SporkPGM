@@ -9,11 +9,11 @@ import java.util.List;
 
 public class CylinderRegion extends Region {
 
-	Vector origin;
-	BlockRegion center;
-	double radius;
-	double height;
-	boolean hollow;
+	protected Vector origin;
+	protected BlockRegion center;
+	protected double radius;
+	protected double height;
+	protected boolean hollow;
 
 	List<BlockRegion> values;
 	boolean infinite;
@@ -93,6 +93,11 @@ public class CylinderRegion extends Region {
 
 		CuboidRegion cube = new CuboidRegion(region, new BlockRegion(region.getX(), region.getY() + height, region.getZ()));
 		return cube.isBelow(region);
+	}
+
+	@Override
+	public String toString() {
+		return "CylinderRegion{name=" + getName() + ",center=[" + center + "],radius=" + radius + ",height=" + height + ",hollow=" + hollow + "}";
 	}
 
 }
