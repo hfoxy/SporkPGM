@@ -33,6 +33,9 @@ public class BlockChangeEvent extends Event {
 		this.newState = newState;
 
 		// check();
+		if(player != null && player.getPlayer() == null) {
+			this.player = null;
+		}
 	}
 
 	public BlockChangeEvent(Event cause, SporkMap map, BlockState oldState, BlockState newState) {
@@ -63,7 +66,7 @@ public class BlockChangeEvent extends Event {
 	}
 
 	public boolean hasPlayer() {
-		return player != null && player.getPlayer() != null;
+		return player != null;
 	}
 
 	public SporkPlayer getPlayer() {
