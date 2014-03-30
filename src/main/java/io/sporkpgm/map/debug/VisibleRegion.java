@@ -104,11 +104,11 @@ public class VisibleRegion {
 			e.setAccessible(true);
 			Object block = e.invoke(null, blockId);
 
-			Object nmsChunk = getChunk.invoke(nmsWorld, x >> 4, z >> 4);
+			Object nmsChunk = getChunk.invoke(nmsWorld, x, z);
 			Method a = NMS_CHUNK.getDeclaredMethod("a", int.class, int.class, int.class, NMS_BLOCK, int.class);
 			a.setAccessible(true);
 
-			Object set = a.invoke(nmsChunk, x & 0x0f, y, z & 0x0f, block, data);
+			Object set = a.invoke(nmsChunk, x, y, z, block, data);
 			return (boolean) set;
 		}
 
