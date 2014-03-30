@@ -119,8 +119,10 @@ public class StringUtil {
 	}
 
 	public static Integer convertStringToInteger(String string) throws NumberFormatException {
-		if(string == null)
-			return null;
+		if(string == null) {
+			throw new NumberFormatException(string);
+		}
+
 		return Integer.parseInt(string);
 	}
 
