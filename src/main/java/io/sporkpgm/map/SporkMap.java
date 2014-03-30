@@ -180,7 +180,7 @@ public class SporkMap {
 		for(Element region : XMLUtil.getElements(regions, "apply")) {
 			AppliedRegion applied = RegionBuilder.parseFiltered(this, region);
 			filtered.add(applied);
-			Log.info("Found an AppliedRegion (" + (applied instanceof AppliedRegion) + ") current total = " + filtered.size());
+			// Log.info("Found an AppliedRegion (" + (applied instanceof AppliedRegion) + ") current total = " + filtered.size());
 		}
 
 		return filtered;
