@@ -28,6 +28,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.meta.FireworkMeta;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 @ModuleInfo(name = "VictoryObjective", description = "Objective which tracks Block placements based on the wool material")
 public class VictoryObjective extends ObjectiveModule {
@@ -44,12 +46,15 @@ public class VictoryObjective extends ObjectiveModule {
 	OfflinePlayer player;
 	StringBuilder spaces;
 
+	List<String> touches;
+
 	public VictoryObjective(String name, SporkTeam team, DyeColor dye, ChatColor color, BlockRegion place) {
 		this.name = name;
 		this.team = team;
 		this.dye = dye;
 		this.color = color;
 		this.place = place;
+		this.touches = new ArrayList<>();
 
 		update();
 	}
