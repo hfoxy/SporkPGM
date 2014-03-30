@@ -5,6 +5,7 @@ import io.sporkpgm.filter.AppliedRegion;
 import io.sporkpgm.filter.Filter;
 import io.sporkpgm.filter.FilterBuilder;
 import io.sporkpgm.filter.exceptions.InvalidFilterException;
+import io.sporkpgm.map.debug.VisibleRegion;
 import io.sporkpgm.map.generator.NullChunkGenerator;
 import io.sporkpgm.match.Match;
 import io.sporkpgm.module.Module;
@@ -39,6 +40,7 @@ import io.sporkpgm.util.XMLUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
@@ -75,6 +77,7 @@ public class SporkMap {
 	protected List<Filter> filters;
 
 	protected World world;
+	protected List<VisibleRegion> visible;
 	protected Scoreboard scoreboard;
 	protected Objective objective;
 	protected SporkTeam winner;
@@ -105,13 +108,7 @@ public class SporkMap {
 		}
 		// regions();
 
-		int count = 0;
-		for(Region region : regions) {
-			if(region instanceof AppliedRegion) {
-				count++;
-			}
-		}
-		Log.info("Found " + count + " AppliedRegions");
+		this.visible = visible(true);
 
 		this.kits = builder.getKits();
 		this.spawns = SporkSpawnBuilder.build(this);
@@ -216,6 +213,9 @@ public class SporkMap {
 		this.timer.setMatch(match);
 
 		scoreboard();
+		for(VisibleRegion region : visible) {
+			region.set(world);
+		}
 
 		return true;
 	}
@@ -830,6 +830,32 @@ public class SporkMap {
 			*/
 		}
 
+	}
+
+	public List<VisibleRegion> visible(boolean provide) {
+		List<VisibleRegion> visible = new ArrayList<>();
+
+		if(provide) {
+			int material = 0;
+			Material[] materials = new Material[]{Material.STAINED_GLASS, Material.STAINED_GLASS_PANE, Material.WOOL};
+
+			short damage = 0;
+			for(Region region : regions) {
+				if(damage > 15) {
+					material++;
+					if(material >= materials.length) {
+						material = 0;
+					}
+				}
+
+				Material type = materials[material];
+				visible.add(new VisibleRegion(region, type, damage));
+
+				damage++;
+			}
+		}
+
+		return visible;
 	}
 
 	@Override
