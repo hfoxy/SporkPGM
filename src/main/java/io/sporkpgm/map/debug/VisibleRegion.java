@@ -37,7 +37,7 @@ public class VisibleRegion {
 				continue;
 			}
 
-			if(i == 1 || i % 1000 == 0) {
+			if(i== 0 && (i == 1 || i % 1000 == 0)) {
 				Log.info("Setting " + material.name() + ":" + dye.name() + " at " + value + " (" + i + "/" + total + ")");
 			}
 			FastBlock.setBlockFast(value.getLocation(world), material, (byte) damage);
