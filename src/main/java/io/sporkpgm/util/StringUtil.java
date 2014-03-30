@@ -134,6 +134,14 @@ public class StringUtil {
 		}
 	}
 
+    public static boolean convertStringToBoolean(String string, boolean def) {
+        if(string == null) {
+            return def;
+        }
+
+        return string.equalsIgnoreCase("yes") || string.equalsIgnoreCase("on") || string.equalsIgnoreCase("true");
+    }
+
 	public static EntityType convertStringToEntityType(String string) {
 		if(string == null)
 			return null;
