@@ -53,7 +53,6 @@ public class SporkSpawnBuilder {
 
 		teamS = (element.attributeValue("team") != null ? element.attributeValue("team") : teamS);
 		if(element.getName().equalsIgnoreCase("default")) {
-			Log.info("Found a default element for '" + map.getName() + "'");
 			teamS = map.getObservers().getName();
 		}
 
@@ -90,6 +89,7 @@ public class SporkSpawnBuilder {
 				throw new ModuleLoadException("Kit `" + kitS + "` not found while parsing `" + teamS + "` spawn!");
 		}
 
+		Log.info("Loaded spawn for " + team.getName());
 		SporkSpawn spawn = new SporkSpawn(name, regions, match, yaw, pitch);
 		team.getSpawns().add(spawn);
 		return spawn;
