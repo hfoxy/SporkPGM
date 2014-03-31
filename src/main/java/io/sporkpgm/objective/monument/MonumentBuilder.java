@@ -36,6 +36,12 @@ public class MonumentBuilder extends Builder {
 			for(Element destroyable : XMLUtil.getElements(destroyables, "destroyable")) {
 				modules.add(parseMonument(map, destroyable));
 			}
+
+			for(Element destroyables2 : XMLUtil.getElements(destroyables, "destroyables")) {
+				for(Element destroyable : XMLUtil.getElements(destroyables2, "destroyable")) {
+					modules.add(parseMonument(map, destroyable));
+				}
+			}
 		}
 
 		return modules;
