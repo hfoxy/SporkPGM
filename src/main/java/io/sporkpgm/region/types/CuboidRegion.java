@@ -1,6 +1,7 @@
 package io.sporkpgm.region.types;
 
 import io.sporkpgm.region.Region;
+import io.sporkpgm.util.RegionUtil;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -34,31 +35,7 @@ public class CuboidRegion extends Region {
 	}
 
 	public List<BlockRegion> getValues() {
-		List<BlockRegion> blocks = new ArrayList<>();
-
-		double xMin, xMax, yMin, yMax, zMin, zMax = 0;
-		xMin = getPoints()[1].getX();
-		xMax = getPoints()[0].getX();
-		yMin = getPoints()[1].getY();
-		yMax = getPoints()[0].getY();
-		zMin = getPoints()[1].getZ();
-		zMax = getPoints()[0].getZ();
-
-		double px = xMin;
-		while(px <= xMax) {
-			double py = yMin;
-			while(py <= yMax) {
-				double pz = zMin;
-				while(pz <= zMax) {
-					blocks.add(new BlockRegion(px, py, pz));
-					pz++;
-				}
-				py++;
-			}
-			px++;
-		}
-
-		return blocks;
+		return RegionUtil.cuboid(one, two);
 	}
 
 	@Override

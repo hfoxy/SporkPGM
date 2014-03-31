@@ -89,7 +89,6 @@ public class SporkSpawnBuilder {
 				throw new ModuleLoadException("Kit `" + kitS + "` not found while parsing `" + teamS + "` spawn!");
 		}
 
-		Log.info("Loaded spawn for " + team.getName());
 		SporkSpawn spawn = new SporkSpawn(name, regions, match, yaw, pitch);
 		team.getSpawns().add(spawn);
 		return spawn;

@@ -12,7 +12,7 @@ import java.util.List;
 
 public class UnionRegion extends Region {
 
-	List<Region> regions;
+	protected List<Region> regions;
 
 	public UnionRegion(List<Region> regions) {
 		this(null, regions);
