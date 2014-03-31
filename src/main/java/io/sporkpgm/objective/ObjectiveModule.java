@@ -15,6 +15,11 @@ public abstract class ObjectiveModule extends Module {
 	protected SporkTeam team;
 	protected OfflinePlayer player;
 
+	public ObjectiveModule(String name, SporkTeam team) {
+		this.name = name;
+		this.team = team;
+	}
+
 	public String getName() {
 		return name;
 	}

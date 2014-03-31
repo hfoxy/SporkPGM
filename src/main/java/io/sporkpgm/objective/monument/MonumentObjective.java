@@ -1,7 +1,5 @@
 package io.sporkpgm.objective.monument;
 
-import io.sporkpgm.Spork;
-import io.sporkpgm.map.SporkMap;
 import io.sporkpgm.map.event.BlockChangeEvent;
 import io.sporkpgm.module.ModuleInfo;
 import io.sporkpgm.module.builder.Builder;
@@ -37,10 +35,9 @@ public class MonumentObjective extends ObjectiveModule implements InitModule {
 	boolean completed;
 
 	public MonumentObjective(String name, Material[] materials, Region region, SporkTeam team, int completion) {
-		this.name = name;
+		super(name, team);
 		this.materials = materials;
 		this.region = region;
-		this.team = team;
 		this.completion = completion;
 	}
 
