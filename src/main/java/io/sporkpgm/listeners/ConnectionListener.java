@@ -24,13 +24,13 @@ public class ConnectionListener implements Listener {
 		final SporkPlayer player = SporkPlayer.getPlayer(event.getPlayer());
 		final SporkTeam obs = Spork.get().getRotation().getCurrent().getObservers();
 
-		for(Rank rank : Spork.get().getRanks(player)) {
-			player.addRank(rank);
-		}
-
 		Rank admin = Rank.getRank("Administrator");
 		if(player.getPlayer().isOp() && !player.hasRank(admin)) {
 			player.addRank(admin);
+		}
+
+		for(Rank rank : Spork.get().getRanks(player)) {
+			player.addRank(rank);
 		}
 		player.setTeam(obs, false, false, false);
 
