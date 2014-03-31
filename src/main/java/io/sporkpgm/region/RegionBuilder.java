@@ -18,6 +18,7 @@ import io.sporkpgm.region.types.groups.IntersectRegion;
 import io.sporkpgm.region.types.groups.NegativeRegion;
 import io.sporkpgm.region.types.groups.UnionRegion;
 import io.sporkpgm.team.spawns.kits.SporkKit;
+import io.sporkpgm.util.Log;
 import io.sporkpgm.util.XMLUtil;
 import org.dom4j.Attribute;
 import org.dom4j.Element;
@@ -93,9 +94,11 @@ public class RegionBuilder {
 			throw new InvalidRegionException(ele, "BlockRegions must have an X, a Y and a Z in the Element text or location attribute");
 		}
 
+		Log.info(text + " contains ',' (" + text.contains(",") + ")");
+
 		String[] split = text.split(",");
 		if(split.length != 3) {
-			throw new InvalidRegionException(ele, "BlockRegions must have an X, a Y and a Z (found: " + split + " - " + split.length + ")");
+			throw new InvalidRegionException(ele, "BlockRegions must have an X, a Y and a Z (found: " + Lists.newArrayList(split) + " - " + split.length + ")");
 		}
 
 		String x = split[0];
