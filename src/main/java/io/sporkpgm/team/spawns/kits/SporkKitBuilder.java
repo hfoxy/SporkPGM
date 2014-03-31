@@ -233,15 +233,23 @@ public class SporkKitBuilder {
 
 		String enchants = element.attributeValue("enchantment");
 		Map<Enchantment, Integer> res = new HashMap<>();
-		for(String s : enchants.split(";")) {
-			if(s.split(":").length < 2) {
-				throw new ModuleLoadException(element, "Cannot parse enchantment: '" + s + "' for '" + name + "'");
+		for(String string : enchants.split(";")) {
+			Enchantment enchantment;
+			int level;
+
+			if(string.split(":").length < 2) {
+				enchantment = StringUtil.convertStringToEnchantment(string);
+				level = 1;
+			} else {
+				enchantment = StringUtil.convertStringToEnchantment(string.split(":")[0]);
+				level = XMLUtil.parseInteger(string.split(":")[1]);
 			}
-			Enchantment e = StringUtil.convertStringToEnchantment(s.split(":")[0]);
-			if(e == null) {
-				throw new ModuleLoadException(element, "Invalid enchantment: '" + s + "' for '" + name + "'");
+
+			if(enchantment == null) {
+				throw new ModuleLoadException(element, "Invalid enchantment: '" + string + "' for '" + name + "'");
 			}
-			res.put(e, XMLUtil.parseInteger(s.split(":")[1]));
+
+			res.put(enchantment, level);
 		}
 		return res;
 	}
