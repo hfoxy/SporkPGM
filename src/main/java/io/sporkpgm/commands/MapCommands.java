@@ -21,9 +21,9 @@ public class MapCommands {
 		sender.sendMessage(bar + ChatColor.GOLD + loader.getName() + bar);
 		sender.sendMessage(ChatColor.DARK_AQUA + "Version: " + loader.getVersion());
 		sender.sendMessage(ChatColor.DARK_AQUA + "Authors: " + StringUtil.listToEnglishCompound(
-				loader.getAuthorNames(), ChatColor.RED.toString(), ChatColor.DARK_PURPLE.toString()));
+				loader.getAuthors(), ChatColor.RED.toString(), ChatColor.DARK_PURPLE.toString()));
 		sender.sendMessage(ChatColor.DARK_AQUA + "Contributors: " + StringUtil.listToEnglishCompound(
-				loader.getAuthorNames(), ChatColor.RED.toString(), ChatColor.DARK_PURPLE.toString()));
+				loader.getContributors(), ChatColor.RED.toString(), ChatColor.DARK_PURPLE.toString()));
 	}
 
 	@Command(aliases = {"map", "mapinfo"}, desc = "View information on the current map or map supplied", usage = "[map name]", max = 1)

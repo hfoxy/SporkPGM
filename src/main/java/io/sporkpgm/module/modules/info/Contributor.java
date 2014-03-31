@@ -22,4 +22,9 @@ public class Contributor {
 		return contribution;
 	}
 
+	@Override
+	public String toString() {
+		return getUsername();
+	}
+
 }
