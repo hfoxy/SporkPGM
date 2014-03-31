@@ -7,6 +7,7 @@ import io.sporkpgm.region.RegionBuilder;
 import io.sporkpgm.region.exception.InvalidRegionException;
 import io.sporkpgm.team.SporkTeam;
 import io.sporkpgm.team.spawns.kits.SporkKit;
+import io.sporkpgm.util.Log;
 import io.sporkpgm.util.XMLUtil;
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -52,6 +53,7 @@ public class SporkSpawnBuilder {
 
 		teamS = (element.attributeValue("team") != null ? element.attributeValue("team") : teamS);
 		if(element.getName().equalsIgnoreCase("default")) {
+			Log.info("Found a default element for '" + map.getName() + "'");
 			teamS = map.getObservers().getName();
 		}
 
