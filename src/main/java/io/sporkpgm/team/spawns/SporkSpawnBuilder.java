@@ -22,39 +22,42 @@ public class SporkSpawnBuilder {
 		Element root = document.getRootElement();
 
 		for(Element spawns : XMLUtil.getElements(root, "spawns")) {
-			String teamS = spawns.attributeValue("team");
-
-			sporks.addAll(parseSpawns(map, XMLUtil.getElements(spawns, "spawn", "default"), teamS));
+			sporks.addAll(parseSpawns(map, XMLUtil.getElements(spawns, "spawn", "default")));
 			if(spawns.element("spawns") != null) {
-				sporks.addAll(parseSpawns(map, XMLUtil.getElements(spawns.element("spawns"), "spawn", "default"), teamS));
+				sporks.addAll(parseSpawns(map, XMLUtil.getElements(spawns.element("spawns"), "spawn", "default")));
 			}
 		}
 
 		return sporks;
 	}
 
-	public static List<SporkSpawn> parseSpawns(SporkMap map, List<Element> spawns, String teamS) throws ModuleLoadException, InvalidRegionException {
+	public static List<SporkSpawn> parseSpawns(SporkMap map, List<Element> spawns) throws ModuleLoadException, InvalidRegionException {
 		List<SporkSpawn> sporks = new ArrayList<>();
 
 		for(Element element : spawns) {
-			SporkSpawn spawn = parseSpawn(map, element, teamS);
+			SporkSpawn spawn = parseSpawn(map, element);
 			sporks.add(spawn);
 		}
 
 		return sporks;
 	}
 
-	public static SporkSpawn parseSpawn(SporkMap map, Element element, String teamS) throws ModuleLoadException, InvalidRegionException {
+	public static SporkSpawn parseSpawn(SporkMap map, Element element) throws ModuleLoadException, InvalidRegionException {
 		String nameS = null;
+
+		String teamS = element.getParent().attributeValue("team");
+		String yawS = element.getParent().attributeValue("yaw");
+		String pitchS = element.getParent().attributeValue("pitch");
+		String kitS = element.getParent().attributeValue("kit");
 
 		teamS = (element.attributeValue("team") != null ? element.attributeValue("team") : teamS);
 		if(element.getName().equalsIgnoreCase("default")) {
 			teamS = map.getObservers().getName();
 		}
 
-		String yawS = element.attributeValue("yaw");
-		String pitchS = element.attributeValue("pitch");
-		String kitS = element.attributeValue("kit");
+		yawS = (element.attributeValue("yaw") != null ? element.attributeValue("yaw") : yawS);
+		pitchS = (element.attributeValue("pitch") != null ? element.attributeValue("pitch") : pitchS);
+		kitS = (element.attributeValue("kit") != null ? element.attributeValue("kit") : kitS);
 
 		String name = (nameS == null ? "noname" : nameS);
 		SporkTeam team = map.getTeam(teamS);
