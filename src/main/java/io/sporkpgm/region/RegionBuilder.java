@@ -95,7 +95,7 @@ public class RegionBuilder {
 
 		String[] split = text.split(",");
 		if(split.length != 3) {
-			throw new InvalidRegionException(ele, "BlockRegions must have an X, a Y and a Z");
+			throw new InvalidRegionException(ele, "BlockRegions must have an X, a Y and a Z (found: " + split + " - " + split.length + ")");
 		}
 
 		String x = split[0];
