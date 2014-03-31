@@ -28,16 +28,12 @@ import java.util.Map;
 @ModuleInfo(name = "MonumentObjective", description = "Objective which tracks Block breaks to be completed")
 public class MonumentObjective extends ObjectiveModule implements InitModule {
 
-	String name;
 	Material[] materials;
 	ChatColor color;
 	Region region;
 	int completion;
 
-	SporkTeam team;
-	OfflinePlayer player;
 	List<MonumentBlock> blocks;
-	StringBuilder spaces;
 	boolean completed;
 
 	public MonumentObjective(String name, Material[] materials, Region region, SporkTeam team, int completion) {
@@ -46,15 +42,6 @@ public class MonumentObjective extends ObjectiveModule implements InitModule {
 		this.region = region;
 		this.team = team;
 		this.completion = completion;
-	}
-
-	@Override
-	public SporkTeam getTeam() {
-		return team;
-	}
-
-	public String getName() {
-		return name;
 	}
 
 	public Material[] getMaterials() {
@@ -166,37 +153,6 @@ public class MonumentObjective extends ObjectiveModule implements InitModule {
 	@Override
 	public OfflinePlayer getPlayer() {
 		return player;
-	}
-
-	@Override
-	public void update() {
-		int score = 0;
-		if(this.player != null) {
-			score = team.getMap().getObjective().getScore(player).getScore();
-			SporkMap.ScoreAPI.reset(team.getMap().getObjective().getScore(player));
-		}
-
-		this.spaces = new StringBuilder();
-
-		String title = getStatusColour() + name + spaces.toString();
-		if(title.length() > 16) {
-			title = title.substring(0, 16);
-		}
-		this.player = Spork.get().getServer().getOfflinePlayer(title);
-
-		while(SporkMap.ScoreAPI.isSet(team.getMap().getObjective().getScore(player))) {
-			spaces.append(" ");
-
-			title = getStatusColour() + name + spaces.toString();
-			if(title.length() > 16) {
-				String coloured = (getStatusColour() + name).substring(0, 15 - spaces.length());
-				title = coloured + spaces.toString();
-			}
-
-			player = Spork.get().getServer().getOfflinePlayer(title);
-		}
-
-		team.getMap().getObjective().getScore(player).setScore(score);
 	}
 
 	@Override
