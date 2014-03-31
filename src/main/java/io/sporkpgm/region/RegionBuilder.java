@@ -89,7 +89,11 @@ public class RegionBuilder {
 	public static BlockRegion parseBlock(Element ele) throws InvalidRegionException {
 		String name = ele.attributeValue("name");
 
-		String text = (ele.getText() != null ? ele.getText() : ele.attributeValue("location"));
+		String text = ele.getText();
+		if(text == null || text.isEmpty()) {
+			text = ele.attributeValue("location");
+		}
+
 		if(text == null) {
 			throw new InvalidRegionException(ele, "BlockRegions must have an X, a Y and a Z in the Element text or location attribute");
 		}
