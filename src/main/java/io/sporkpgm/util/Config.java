@@ -50,10 +50,11 @@ public class Config {
 		public static final File DIRECTORY = new File((String) get("settings.maps.repository", "maps/"));
 		public static final StartupType STARTUP = StartupType.getType((String) get("settings.maps.startup", "all"));
 		
-		public static void getDirectory() {
+		public static File getDirectory() {
 			if(!DIRECTORY.exists()) {
 				DIRECTORY.mkdirs();
 			}
+
 			return DIRECTORY;
 		}
 
