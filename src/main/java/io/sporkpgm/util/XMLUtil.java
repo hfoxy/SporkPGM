@@ -123,6 +123,10 @@ public class XMLUtil {
 		}
 	}
 
+	public static String getElementOrParentValue(Element element, String attribute) {
+		return (element.attributeValue(attribute) != null ? element.attributeValue(attribute) : element.getParent().attributeValue(attribute));
+	}
+
 	public static String getValue(Element element, String name) {
 		return getValue(ElementValueType.BOTH, element, name);
 	}
