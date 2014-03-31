@@ -98,11 +98,9 @@ public class RegionBuilder {
 			throw new InvalidRegionException(ele, "BlockRegions must have an X, a Y and a Z in the Element text or location attribute");
 		}
 
-		Log.info(text + " contains ',' (" + text.contains(",") + ")");
-
 		String[] split = text.split(",");
 		if(split.length != 3) {
-			throw new InvalidRegionException(ele, "BlockRegions must have an X, a Y and a Z (found: " + Lists.newArrayList(split) + " - " + split.length + ")");
+			throw new InvalidRegionException(ele, "BlockRegions must have an X, a Y and a Z");
 		}
 
 		String x = split[0];
