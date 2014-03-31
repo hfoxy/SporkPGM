@@ -234,7 +234,7 @@ public class SporkMap {
 
 		for(Module module : modules) {
 			if(module instanceof ObjectiveModule) {
-				Log.info("Found '" + ((ObjectiveModule) module).getName() + "' and registering it as an Objective");
+				// Log.info("Found '" + ((ObjectiveModule) module).getName() + "' and registering it as an Objective");
 				objectives.add((ObjectiveModule) module);
 			}
 		}
