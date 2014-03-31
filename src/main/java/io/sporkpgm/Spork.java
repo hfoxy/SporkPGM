@@ -166,10 +166,15 @@ public class Spork extends JavaPlugin {
 			setEnabled(false);
 			return;
 		}
+
 		Rank administrator = new Rank(ChatColor.GOLD, Chars.FLAIR, "Administrator", 1000, true);
+		administrator.add();
 		Rank developer = new Rank(ChatColor.DARK_PURPLE, Chars.FLAIR, "Developer", 1000, true);
+		developer.add();
 		Rank contributor = new Rank(ChatColor.DARK_AQUA, Chars.FLAIR, "Contributor", 1000, true);
+		contributor.add();
 		Rank referee = new Rank(ChatColor.RED, Chars.ASTERISK, "Referee", 1000, true);
+		referee.add();
 
 		players = new HashMap<>();
 		players.put("ParaPenguin", new Rank[]{developer});
