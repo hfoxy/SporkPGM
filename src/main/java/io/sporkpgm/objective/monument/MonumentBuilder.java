@@ -117,7 +117,7 @@ public class MonumentBuilder extends Builder {
 
 		Region region = RegionBuilder.parseCuboid(((Element) element.elements().get(0)));
 
-		SporkTeam owner;
+		SporkTeam owner = null;
 		for(SporkTeam spork : map.getTeams()) {
 			if(!spork.equals(other) && spork.isObservers()) {
 				owner = spork;
@@ -132,7 +132,7 @@ public class MonumentBuilder extends Builder {
 			throw new ModuleLoadException("An invalid list of Materials was found");
 		} else if(completion <= 0) {
 			throw new ModuleLoadException("Completion % must be greater than 0");
-		} else if(other == null) {
+		} else if(owner == null) {
 			throw new ModuleLoadException("The owner of a Monument can't be null");
 		} else if(region == null) {
 			throw new ModuleLoadException("The region of a Monument can't be null");
