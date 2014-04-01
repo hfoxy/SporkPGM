@@ -249,6 +249,7 @@ public class SporkMap {
 		int score = 1;
 		for(SporkTeam team : getTeams()) {
 			if(hasModule(ScoredObjective.class)) {
+				this.objective.setDisplayName(ChatColor.GOLD + "Score");
 				for(ObjectiveModule objective : team.getObjectives()) {
 					if(objective.getClass() == ScoredObjective.class) {
 						ScoredObjective scored = (ScoredObjective) objective;
