@@ -125,6 +125,23 @@ public class SporkMap {
 		if(kits == null) {
 			this.kits = new ArrayList<>();
 		}
+
+		for(SporkTeam team : teams) {
+			List<ObjectiveModule> fetched = team.getObjectives();
+			Log.info(team.getName() + ": " + fetched + " (" + fetched.size() + ")");
+
+			List<ObjectiveModule> objectives = new ArrayList<>();
+			for(Module module : modules) {
+				if(module instanceof ObjectiveModule) {
+					ObjectiveModule objective = (ObjectiveModule) module;
+					if(objective.getTeam().equals(team)) {
+						Log.info("Found '" + objective.getName() + "' for " + objective.getTeam().getName().toUpperCase());
+						objectives.add(objective);
+					}
+				}
+			}
+			Log.info(team.getName() + ": " + objectives + " (" + objectives.size() + ")");
+		}
 	}
 
 	private void filters() {
