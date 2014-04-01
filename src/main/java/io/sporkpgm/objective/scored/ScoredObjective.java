@@ -29,6 +29,7 @@ public class ScoredObjective extends ObjectiveModule {
 	}
 
 	public ScoredObjective(SporkTeam team, int limit) throws ModuleLoadException {
+		super(null, team);
 		this.team = team;
 		this.limit = limit;
 
