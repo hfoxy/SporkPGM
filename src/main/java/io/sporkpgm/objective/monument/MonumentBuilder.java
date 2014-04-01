@@ -112,7 +112,7 @@ public class MonumentBuilder extends Builder {
 		SporkTeam other = null;
 		String team = XMLUtil.getElementOrParentValue(element, "owner");
 		if(team != null) {
-			other = SporkMap.getMap().getTeam(team);
+			other = map.getTeam(team);
 		}
 
 		Region region = RegionBuilder.parseCuboid(((Element) element.elements().get(0)));
