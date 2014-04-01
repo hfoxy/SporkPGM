@@ -132,7 +132,7 @@ public class SporkMap {
 
 			List<ObjectiveModule> objectives = new ArrayList<>();
 			for(Module module : modules) {
-				Log.info("Checking " + module.getClass() + " to see if it is an instance of ObjectiveModule");
+				Log.info("Checking " + module.getClass().getSimpleName() + " to see if it is an instance of ObjectiveModule");
 				if(module instanceof ObjectiveModule) {
 					ObjectiveModule objective = (ObjectiveModule) module;
 					Log.info("'" + objective.getName() + "' has been found (" + objective.getTeam().getName().toUpperCase() + ")");
