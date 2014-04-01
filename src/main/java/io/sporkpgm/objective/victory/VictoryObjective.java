@@ -34,17 +34,12 @@ import java.util.List;
 @ModuleInfo(name = "VictoryObjective", description = "Objective which tracks Block placements based on the wool material")
 public class VictoryObjective extends ObjectiveModule {
 
-	String name;
 	DyeColor dye;
 	ChatColor color;
 	BlockRegion place;
 
 	SporkPlayer completer;
 	boolean complete;
-
-	SporkTeam team;
-	OfflinePlayer player;
-	StringBuilder spaces;
 
 	List<String> touches;
 
