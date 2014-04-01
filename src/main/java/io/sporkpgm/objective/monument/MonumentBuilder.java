@@ -121,6 +121,7 @@ public class MonumentBuilder extends Builder {
 		for(SporkTeam spork : map.getTeams()) {
 			if(!spork.equals(other) && !spork.isObservers()) {
 				owner = spork;
+				break;
 			}
 		}
 
