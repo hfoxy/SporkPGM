@@ -109,13 +109,20 @@ public class MonumentBuilder extends Builder {
 			completion = Integer.parseInt(complete);
 		}
 
-		SporkTeam owner = null;
+		SporkTeam other = null;
 		String team = XMLUtil.getElementOrParentValue(element, "owner");
 		if(team != null) {
-			owner = SporkMap.getMap().getTeam(team);
+			other = SporkMap.getMap().getTeam(team);
 		}
 
 		Region region = RegionBuilder.parseCuboid(((Element) element.elements().get(0)));
+
+		SporkTeam owner;
+		for(SporkTeam spork : map.getTeams()) {
+			if(!spork.equals(other) && spork.isObservers()) {
+				owner = spork;
+			}
+		}
 
 		if(name == null) {
 			throw new ModuleLoadException("A Monument name could not be found");
@@ -125,13 +132,13 @@ public class MonumentBuilder extends Builder {
 			throw new ModuleLoadException("An invalid list of Materials was found");
 		} else if(completion <= 0) {
 			throw new ModuleLoadException("Completion % must be greater than 0");
-		} else if(owner == null) {
+		} else if(other == null) {
 			throw new ModuleLoadException("The owner of a Monument can't be null");
 		} else if(region == null) {
 			throw new ModuleLoadException("The region of a Monument can't be null");
 		}
 
-		return new MonumentObjective(name, materials, region, owner, completion);
+		return new MonumentObjective(name, materials, region, other, completion);
 	}
 
 }
