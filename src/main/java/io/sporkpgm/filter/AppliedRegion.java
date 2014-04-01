@@ -98,7 +98,7 @@ public class AppliedRegion extends UnionRegion {
 
 				if(!ignore) {
 					context.deny();
-					if(message != null && !context.isMessaged()) {
+					if(message != null && !context.isMessaged() && context.getPlayer() != null) {
 						context.setMessaged(true);
 						context.getPlayer().getPlayer().sendMessage(message);
 					}
