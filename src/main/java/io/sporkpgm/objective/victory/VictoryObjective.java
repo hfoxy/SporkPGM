@@ -49,8 +49,7 @@ public class VictoryObjective extends ObjectiveModule {
 	List<String> touches;
 
 	public VictoryObjective(String name, SporkTeam team, DyeColor dye, ChatColor color, BlockRegion place) {
-		this.name = name;
-		this.team = team;
+		super(name, team);
 		this.dye = dye;
 		this.color = color;
 		this.place = place;
