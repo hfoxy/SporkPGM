@@ -106,7 +106,7 @@ public class PlayerListener implements Listener {
 			SporkPlayer damager = SporkPlayer.getPlayer((Player) event.getDamager());
 			SporkPlayer victim = SporkPlayer.getPlayer((Player) event.getEntity());
 
-			if(victim.getTeam().equals(damager.getTeam())) {
+			if(!damager.isParticipating()) {
 				event.setCancelled(true);
 			} else {
 				victim.updateInventory();
