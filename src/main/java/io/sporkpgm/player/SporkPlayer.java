@@ -94,6 +94,10 @@ public class SporkPlayer implements Listener {
 			if(about.getPlayer().getName().startsWith(username))
 				return about;
 
+		for(SporkPlayer about : players)
+			if(about.getPlayer().getName().contains(username))
+				return about;
+
 		return null;
 	}
 

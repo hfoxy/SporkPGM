@@ -22,7 +22,7 @@ public class Context {
 		this.transformation = transformation;
 		this.movement = movement;
 	}
-
+	
 	public Context(Object... objects) throws InvalidContextException {
 		for(Object object : objects) {
 			fill(object);
