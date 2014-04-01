@@ -50,7 +50,7 @@ public class ServerStarting extends ServerPhase {
 				show = true;
 			else if(getSeconds() < 15 && getSeconds() % 5 == 0)
 				show = true;
-			else if(getSeconds() < 5 && getSeconds() == 0)
+			else if(getSeconds() < 5 || getSeconds() == 0)
 				show = true;
 		}
 
