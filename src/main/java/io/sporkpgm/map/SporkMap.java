@@ -271,7 +271,9 @@ public class SporkMap {
 				}
 
 				// Log.info(team.getName() + ": " + team.getObjectives().size() + " Objectives");
-				for(ObjectiveModule objective : team.getObjectives()) {
+				List<ObjectiveModule> objectives = team.getObjectives();
+				Log.info(team.getName() + ": " + objectives);
+				for(ObjectiveModule objective : objectives) {
 					// Log.info("Setting score of " + ChatColor.stripColor(objective.getPlayer().getName()) + " to " + score);
 					// Log.info(ChatColor.stripColor(objective.getPlayer().getName()) + ": " + objective);
 					if(objective.getPlayer() != null) {
