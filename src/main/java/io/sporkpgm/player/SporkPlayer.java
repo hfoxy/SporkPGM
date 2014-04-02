@@ -593,6 +593,7 @@ public class SporkPlayer implements Listener {
 	public void open(Inventory inventory) {
 		Inventory fake = Bukkit.createInventory(getPlayer(), inventory.getSize(), inventory.getTitle());
 		fake.setContents(inventory.getContents());
+		getPlayer().openInventory(fake);
 		inventories.put(inventory, fake);
 	}
 
