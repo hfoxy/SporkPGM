@@ -9,6 +9,7 @@ import io.sporkpgm.util.Log;
 import org.bukkit.Material;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -129,7 +130,7 @@ public class PlayerListener implements Listener {
 				event.setCancelled(true);
 				Chest chest = (Chest) event.getClickedBlock().getState();
 				player.getPlayer().openInventory(chest.getInventory());
-				event.setCancelled(true);
+				event.setUseInteractedBlock(Result.DENY);
 			}
 		} else if(event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 			if(player.isObserver() && (!event.getPlayer().getItemInHand().getType().equals(Material.AIR) || event.getPlayer().getItemInHand().getType().equals(Material.COMPASS))) {
