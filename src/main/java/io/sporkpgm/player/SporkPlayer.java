@@ -164,7 +164,7 @@ public class SporkPlayer implements Listener {
 		ItemStack healthBar = new ItemStack(Material.POTION, health, (short) 16389);
 		PotionMeta potionMeta = (PotionMeta) healthBar.getItemMeta();
 		potionMeta.setDisplayName(ChatColor.RED + "Health");
-		potionMeta.setLore(Lists.newArrayList(new String[]{getPlayer().getFoodLevel() + " Food."}));
+		potionMeta.setLore(Lists.newArrayList(new String[]{getPlayer().getFoodLevel() + " Health."}));
 		healthBar.setItemMeta(potionMeta);
 
 		int food = getPlayer().getFoodLevel() <= 0 ? 1 : getPlayer().getFoodLevel();
