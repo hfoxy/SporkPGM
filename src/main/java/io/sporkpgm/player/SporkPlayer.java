@@ -157,7 +157,7 @@ public class SporkPlayer implements Listener {
 
 	public void updateInventory() {
 		if(inventory == null) {
-			inventory = getPlayer().getServer().createInventory(null, 45, getPlayer().getDisplayName());
+			inventory = getPlayer().getServer().createInventory(null, 45, getFullName());
 		}
 
 		int health = getPlayer().getHealth() <= 0 ? 1 : (int) getPlayer().getHealth();
