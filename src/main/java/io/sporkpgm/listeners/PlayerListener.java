@@ -140,6 +140,7 @@ public class PlayerListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
+		Log.info(event.getRightClicked().getClass().getSimpleName() + " has been right clicked by " + event.getPlayer().getName());
 		if(event.getRightClicked() instanceof Player) {
 			SporkPlayer player = SporkPlayer.getPlayer((Player) event.getRightClicked());
 			Log.info(player.getName() + " has been right clicked by " + event.getPlayer().getName());
