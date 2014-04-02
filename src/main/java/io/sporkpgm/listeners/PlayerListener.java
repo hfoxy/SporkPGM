@@ -118,7 +118,7 @@ public class PlayerListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		SporkPlayer player = SporkPlayer.getPlayer(event.getPlayer());
 		if(!player.isParticipating()) {
