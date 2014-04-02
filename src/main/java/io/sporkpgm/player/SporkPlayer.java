@@ -17,10 +17,12 @@ import io.sporkpgm.team.SporkTeam;
 import io.sporkpgm.team.spawns.SporkSpawn;
 import io.sporkpgm.util.Log;
 import io.sporkpgm.util.NMSUtil;
+import io.sporkpgm.util.SchedulerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -37,7 +39,9 @@ import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SporkPlayer implements Listener {
 
@@ -55,6 +59,7 @@ public class SporkPlayer implements Listener {
 		SporkPlayer about = new SporkPlayer(player);
 		players.add(about);
 
+		about.inventoryCheck.startRepeat(5);
 		Spork.registerListener(about);
 		Spork.callEvent(new PlayerAddEvent(player));
 		return about;
@@ -72,6 +77,7 @@ public class SporkPlayer implements Listener {
 		SporkPlayer about = getPlayer(player);
 		players.remove(getPlayer(player));
 
+		about.inventoryCheck.stopRepeat();
 		Spork.unregisterListener(about);
 		Spork.callEvent(new PlayerRemoveEvent(player));
 		return true;
@@ -115,6 +121,8 @@ public class SporkPlayer implements Listener {
 	boolean joined;
 	int score;
 
+	SchedulerUtil inventoryCheck;
+	Map<Inventory, Inventory> inventories;
 	int lives;
 
 	List<Rank> ranks;
@@ -124,6 +132,13 @@ public class SporkPlayer implements Listener {
 		this.ranks = new ArrayList<>();
 		this.attachments = new ArrayList<>();
 		this.name = player.getName();
+		this.inventories = new HashMap<>();
+		this.inventoryCheck = new SchedulerUtil(new Runnable() {
+			@Override
+			public void run() {
+				update();
+			}
+		}, false);
 	}
 
 	public Player getPlayer() {
@@ -573,6 +588,31 @@ public class SporkPlayer implements Listener {
 		SporkSpawn spawn = getTeam().getSporkSpawn();
 		event.setRespawnLocation(spawn.getSpawn());
 		inventory(spawn);
+	}
+
+	public void open(Inventory inventory) {
+		Inventory fake = Bukkit.createInventory(getPlayer(), inventory.getSize(), inventory.getTitle());
+		fake.setContents(inventory.getContents());
+		inventories.put(inventory, fake);
+	}
+
+	public void close(Inventory inventory) {
+		inventories.remove(inventory);
+	}
+
+	public void update() {
+		for(Inventory key : inventories.keySet()) {
+			Inventory view = inventories.get(key);
+			if(key.getHolder() instanceof Chest) {
+				Chest chest = (Chest) key.getHolder();
+				if(chest.getLocation().getBlock().getState() instanceof Chest == false) {
+					getPlayer().closeInventory();
+					continue;
+				}
+			}
+
+			view.setContents(key.getContents());
+		}
 	}
 
 	public static void vanish() {

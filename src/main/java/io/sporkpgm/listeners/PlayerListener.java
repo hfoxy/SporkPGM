@@ -16,6 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerAchievementAwardedEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -127,10 +128,10 @@ public class PlayerListener implements Listener {
 		player.updateInventory();
 		if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && event.getClickedBlock().getType().equals(Material.CHEST)) {
 			if(player.isObserver() || RotationSlot.getRotation().getCurrentMatch().getPhase() != MatchPhase.PLAYING) {
-				event.setCancelled(true);
 				Chest chest = (Chest) event.getClickedBlock().getState();
-				player.getPlayer().openInventory(chest.getInventory());
+				player.open(chest.getInventory());
 				event.setUseInteractedBlock(Result.DENY);
+				event.setCancelled(true);
 			}
 		} else if(event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 			if(player.isObserver() && (!event.getPlayer().getItemInHand().getType().equals(Material.AIR) || event.getPlayer().getItemInHand().getType().equals(Material.COMPASS))) {
@@ -168,6 +169,20 @@ public class PlayerListener implements Listener {
 				player.updateInventory();
 			}
 		}
+	}
+
+	@EventHandler
+	public void onInventoryClose(InventoryCloseEvent event) {
+		if(event.getPlayer() instanceof Player == false) {
+			return;
+		}
+
+		SporkPlayer player = SporkPlayer.getPlayer((Player) event.getPlayer());
+		if(player.isParticipating()) {
+			return;
+		}
+
+		player.close(event.getInventory());
 	}
 
 }
