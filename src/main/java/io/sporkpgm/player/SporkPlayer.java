@@ -1,5 +1,6 @@
 package io.sporkpgm.player;
 
+import com.google.common.collect.Lists;
 import io.sporkpgm.Spork;
 import io.sporkpgm.map.SporkMap;
 import io.sporkpgm.map.event.BlockChangeEvent;
@@ -159,26 +160,18 @@ public class SporkPlayer implements Listener {
 			inventory = getPlayer().getServer().createInventory(null, 45, getPlayer().getDisplayName());
 		}
 
-		final int health = getPlayer().getHealth() <= 0 ? 1 : (int) getPlayer().getHealth();
-		ItemStack healthBar = new ItemStack(Material.POTION, health);
+		int health = getPlayer().getHealth() <= 0 ? 1 : (int) getPlayer().getHealth();
+		ItemStack healthBar = new ItemStack(Material.POTION, health, (short) 16389);
 		PotionMeta potionMeta = (PotionMeta) healthBar.getItemMeta();
 		potionMeta.setDisplayName(ChatColor.RED + "Health");
-		potionMeta.setLore(new ArrayList<String>() {
-			{
-				add(health + " Health.");
-			}
-		});
-		potionMeta.setMainEffect(PotionEffectType.HEAL);
+		potionMeta.setLore(Lists.newArrayList(new String[]{getPlayer().getFoodLevel() + " Food."}));
 		healthBar.setItemMeta(potionMeta);
 
-		ItemStack foodBar = new ItemStack(Material.COOKED_CHICKEN, getPlayer().getFoodLevel());
+		int food = getPlayer().getFoodLevel() <= 0 ? 1 : (int) getPlayer().getFoodLevel();
+		ItemStack foodBar = new ItemStack(Material.SPECKLED_MELON, food, (short) 59);
 		ItemMeta foodMeta = foodBar.getItemMeta();
 		foodMeta.setDisplayName(ChatColor.GOLD + "Food");
-		foodMeta.setLore(new ArrayList<String>() {
-			{
-				add(getPlayer().getFoodLevel() + " Food.");
-			}
-		});
+		foodMeta.setLore(Lists.newArrayList(new String[]{getPlayer().getFoodLevel() + " Food."}));
 		foodBar.setItemMeta(foodMeta);
 
 		inventory.setItem(7, healthBar);
