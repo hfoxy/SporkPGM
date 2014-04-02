@@ -4,6 +4,7 @@ import io.sporkpgm.map.event.BlockChangeEvent;
 import io.sporkpgm.module.Module;
 import io.sporkpgm.module.ModuleInfo;
 import io.sporkpgm.module.builder.Builder;
+import io.sporkpgm.util.Log;
 import org.bukkit.event.EventHandler;
 import static org.bukkit.ChatColor.*;
 
@@ -22,6 +23,7 @@ public class MaxHeightModule extends Module {
 			return;
 		}
 
+		Log.info("Checking Y > Max Y (" + event.getLocation().getBlockY() + " > " + height + ") = " + (event.getLocation().getBlockY() > height));
 		if(event.getLocation().getBlockY() > height) {
 			event.setCancelled(true);
 			event.getPlayer().getPlayer().sendMessage(YELLOW + " [!]" + GRAY + " You may not edit above the height limit (" + RED + height + " Blocks" + GRAY + ")");
