@@ -126,9 +126,9 @@ public class PlayerListener implements Listener {
 		if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && event.getClickedBlock().getType().equals(Material.CHEST)) {
 
 			if(player.isObserver() || RotationSlot.getRotation().getCurrentMatch().getPhase() != MatchPhase.PLAYING) {
-				event.setCancelled(true);
 				Chest chest = (Chest) event.getClickedBlock().getState();
 				player.getPlayer().openInventory(chest.getInventory());
+				event.setCancelled(true);
 			}
 		} else if(event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 			if(player.isObserver() && (!event.getPlayer().getItemInHand().getType().equals(Material.AIR) || event.getPlayer().getItemInHand().getType().equals(Material.COMPASS))) {
