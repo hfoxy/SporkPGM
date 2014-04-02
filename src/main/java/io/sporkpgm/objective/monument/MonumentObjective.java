@@ -72,7 +72,7 @@ public class MonumentObjective extends ObjectiveModule implements InitModule {
 	public MonumentBlock getBlock(BlockRegion region) {
 		if(blocks == null) return null;
 		for(MonumentBlock block : blocks) {
-			if(block.getBlock().isInside(region)) {
+			if(block.getBlock().isInside(region, true)) {
 				return block;
 			}
 		}
@@ -122,7 +122,6 @@ public class MonumentObjective extends ObjectiveModule implements InitModule {
 	@EventHandler
 	public void onBlockChange(BlockChangeEvent event) {
 		MonumentBlock broken = getBlock(event.getLocation());
-		Log.info("Checking for MonumentBlock @ " + event.getRegion());
 
 		if(event.isPlace()) {
 			return;

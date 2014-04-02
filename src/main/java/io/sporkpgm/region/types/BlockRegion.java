@@ -1,6 +1,7 @@
 package io.sporkpgm.region.types;
 
 import io.sporkpgm.region.Region;
+import io.sporkpgm.util.Log;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -233,10 +234,33 @@ public class BlockRegion extends Region {
 	}
 
 	public boolean isInside(BlockRegion block) {
+		return isInside(block, false);
+	}
+
+	@Override
+	public boolean isInside(BlockRegion block, boolean log) {
 		boolean isX = (block.isXInfinite() || isXInfinite()) || block.getIntegerX() == getIntegerX();
+		if(log) {
+			log("x", block, block.isXInfinite(), isXInfinite(), block.getIntegerX(), getIntegerX(), isX);
+		}
+
 		boolean isY = (block.isYInfinite() || isYInfinite()) || block.getIntegerY() == getIntegerY();
+		if(log) {
+			log("y", block, block.isYInfinite(), isYInfinite(), block.getIntegerY(), getIntegerY(), isY);
+		}
+
 		boolean isZ = (block.isZInfinite() || isZInfinite()) || block.getIntegerZ() == getIntegerZ();
+		if(log) {
+			log("z", block, block.isZInfinite(), isZInfinite(), block.getIntegerZ(), getIntegerZ(), isZ);
+		}
+
 		return isX && isY && isZ;
+	}
+
+	public void log(String check, BlockRegion block, boolean blockInf, boolean inf, int blockInt, int integer, boolean end) {
+		String u = check.toUpperCase();
+		String l = check.toLowerCase();
+		Log.info("Checking " + u + " for " + block + ": (Block.inf[" + blockInf + "] or inf[" + inf + "]) or Block." + l + "[" + blockInt + "] == " + l + "[" + integer + "] (" + end + ")");
 	}
 
 	public boolean isAbove(BlockRegion block) {
