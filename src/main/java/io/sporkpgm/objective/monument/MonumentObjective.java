@@ -122,13 +122,17 @@ public class MonumentObjective extends ObjectiveModule implements InitModule {
 	@EventHandler
 	public void onBlockChange(BlockChangeEvent event) {
 		MonumentBlock broken = getBlock(event.getLocation());
+		Log.info("Checking for MonumentBlock @ " + event.getRegion());
+
+		if(event.isPlace()) {
+			return;
+		}
 
 		if(broken == null) {
 			return;
 		}
 
 		if(isComplete()) {
-			event.setCancelled(true);
 			return;
 		}
 
