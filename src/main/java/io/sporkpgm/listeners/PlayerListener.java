@@ -153,8 +153,7 @@ public class PlayerListener implements Listener {
 		if(event.getWhoClicked() instanceof Player) {
 			SporkPlayer player = SporkPlayer.getPlayer((Player) event.getWhoClicked());
 
-			if((player.isObserver() && !event.getInventory().equals(player.getPlayer().getInventory()))
-					|| RotationSlot.getRotation().getCurrentMatch().getPhase() != MatchPhase.PLAYING) {
+			if(!player.isParticipating() && !event.getInventory().equals(player.getPlayer().getInventory()) {
 				event.setCancelled(true);
 			}
 
