@@ -5,6 +5,7 @@ import io.sporkpgm.match.MatchPhase;
 import io.sporkpgm.player.SporkPlayer;
 import io.sporkpgm.player.event.PlayingPlayerMoveEvent;
 import io.sporkpgm.rotation.RotationSlot;
+import io.sporkpgm.util.Log;
 import org.bukkit.Material;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
@@ -141,9 +142,11 @@ public class PlayerListener implements Listener {
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
 		if(event.getRightClicked() instanceof Player) {
 			SporkPlayer player = SporkPlayer.getPlayer((Player) event.getRightClicked());
+			Log.info(player.getName() + " has been right clicked by " + event.getPlayer().getName());
 
 			if(!player.isParticipating()) {
 				event.getPlayer().openInventory(player.getInventory());
+				Log.info(player.getName() + " has had their inventory opened by " + event.getPlayer().getName());
 			}
 		}
 	}
