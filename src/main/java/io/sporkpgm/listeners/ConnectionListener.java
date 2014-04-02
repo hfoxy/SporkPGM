@@ -14,6 +14,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 
@@ -43,10 +44,23 @@ public class ConnectionListener implements Listener {
 			}
 
 		}, false).delay(1);
+
+		event.setJoinMessage(player.getFullName() + ChatColor.YELLOW + " joined the game");
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerQuit(PlayerQuitEvent event) {
+		SporkPlayer player = SporkPlayer.getPlayer(event.getPlayer());
+		event.setQuitMessage(player.getFullName() + ChatColor.YELLOW + " left the game");
+
+		SporkPlayer.remove(event.getPlayer());
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onPlayerKick(PlayerKickEvent event) {
+		SporkPlayer player = SporkPlayer.getPlayer(event.getPlayer());
+		event.setLeaveMessage(player.getFullName() + ChatColor.YELLOW + " left the game");
+
 		SporkPlayer.remove(event.getPlayer());
 	}
 
