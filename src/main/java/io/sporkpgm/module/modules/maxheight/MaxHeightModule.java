@@ -4,8 +4,8 @@ import io.sporkpgm.map.event.BlockChangeEvent;
 import io.sporkpgm.module.Module;
 import io.sporkpgm.module.ModuleInfo;
 import io.sporkpgm.module.builder.Builder;
-import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
+import static org.bukkit.ChatColor.*;
 
 @ModuleInfo(name = "MaxHeightModule", description = "Prevents players from building above a defined height", multiple = false)
 public class MaxHeightModule extends Module {
@@ -24,7 +24,7 @@ public class MaxHeightModule extends Module {
 
 		if(event.getLocation().getBlockY() > height) {
 			event.setCancelled(true);
-			event.getPlayer().getPlayer().sendMessage(ChatColor.RED + "You have reached the maximum build height");
+			event.getPlayer().getPlayer().sendMessage(YELLOW + " [!]" + GRAY + " You may not edit above the height limit (" + RED + height + " Blocks" + GRAY + ")");
 		}
 	}
 
