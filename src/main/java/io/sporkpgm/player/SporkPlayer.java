@@ -19,6 +19,7 @@ import io.sporkpgm.team.spawns.SporkSpawn;
 import io.sporkpgm.util.Log;
 import io.sporkpgm.util.NMSUtil;
 import io.sporkpgm.util.SchedulerUtil;
+import io.sporkpgm.util.StringUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -27,7 +28,10 @@ import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -116,6 +120,7 @@ public class SporkPlayer implements Listener {
 	String name;
 	SporkTeam team;
 	Inventory inventory;
+    String nickname;
 	List<PermissionAttachment> attachments;
 	String uuid;
 
@@ -140,6 +145,7 @@ public class SporkPlayer implements Listener {
 				update();
 			}
 		}, false);
+        this.nickname = player.getName();
 	}
 
 	public Player getPlayer() {
@@ -219,6 +225,14 @@ public class SporkPlayer implements Listener {
 
 		return true;
 	}
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getNickname() {
+        return this.nickname;
+    }
 
 	public boolean addRank(Rank rank) {
 		if(getRanks().contains(rank)) {
@@ -311,6 +325,7 @@ public class SporkPlayer implements Listener {
 		getPlayer().setDisplayName(getPrefix() + team.getColor() + getPlayer().getName());
 		getTeam().getTeam().addPlayer(getPlayer());
 		getPlayer().setScoreboard(team.getMap().getScoreboard());
+        getPlayer().setPlayerListName(team.getColor() + getNickname());
 
 		return team;
 	}
@@ -531,7 +546,13 @@ public class SporkPlayer implements Listener {
 		return this.score;
 	}
 
-	@EventHandler
+    @EventHandler
+    public void onPlayerDeath(PlayerDeathEvent e) {
+        String newdm = e.getDeathMessage().replaceAll(getPlayer().getName(), getNickname());
+        e.setDeathMessage(newdm);
+    }
+
+    @EventHandler
 	public void onPlayerChat(AsyncPlayerChatEvent event) {
 		if(event.getPlayer() != getPlayer())
 			return;
@@ -551,7 +572,7 @@ public class SporkPlayer implements Listener {
 
 		boolean team = event.isTeam() && getTeam() != null;
 		String pre = (team ? getTeamColour() + "[Team] " : "");
-		String full = pre + getFullName() + ChatColor.WHITE + ": " + event.getMessage();
+		String full = pre + getTeamColour() + getNickname() + ChatColor.WHITE + ": " + event.getMessage();
 		if(team) {
 			for(SporkPlayer player : getTeam().getPlayers()) {
 				player.getPlayer().sendMessage(full);
@@ -573,6 +594,18 @@ public class SporkPlayer implements Listener {
 		if(isObserver() || !match.isRunning())
 			event.setCancelled(true);
 	}
+
+    @EventHandler
+    public void onPlayerLeave(PlayerQuitEvent e) {
+        String newqm = e.getQuitMessage().replaceAll(getPlayer().getName(), getNickname());
+        e.setQuitMessage(newqm);
+    }
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent e) {
+        String newjm = e.getJoinMessage().replaceAll(getPlayer().getName(), getNickname());
+        e.setJoinMessage(newjm);
+    }
 
 	@EventHandler
 	public void onPlayerRespawn(PlayerRespawnEvent event) {

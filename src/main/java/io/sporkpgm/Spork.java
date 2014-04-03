@@ -9,10 +9,7 @@ import com.sk89q.minecraft.util.commands.CommandUsageException;
 import com.sk89q.minecraft.util.commands.CommandsManager;
 import com.sk89q.minecraft.util.commands.MissingNestedCommandException;
 import com.sk89q.minecraft.util.commands.WrappedCommandException;
-import io.sporkpgm.commands.MapCommands;
-import io.sporkpgm.commands.MatchCommands;
-import io.sporkpgm.commands.RotationCommands;
-import io.sporkpgm.commands.TeamCommands;
+import io.sporkpgm.commands.*;
 import io.sporkpgm.filter.exceptions.InvalidFilterException;
 import io.sporkpgm.listeners.BlockListener;
 import io.sporkpgm.listeners.ConnectionListener;
@@ -232,6 +229,7 @@ public class Spork extends JavaPlugin {
 		cmr.register(MatchCommands.class);
 		cmr.register(RotationCommands.class);
 		cmr.register(TeamCommands.class);
+        cmr.register(NickCommands.class);
 	}
 
 	@Override
