@@ -28,7 +28,7 @@ public class NickCommands {
         if (cmd.argsLength() == 1) {
             SporkPlayer cmdsender = SporkPlayer.getPlayer(sender.getName());
             cmdsender.setNickname(nickname);
-            sender.sendMessage(cmdsender.getTeamColour() + "You" + ChatColor.GRAY + " have changed your nickname to " + cmdsender.getTeamColour() + nickname);
+            sender.sendMessage(cmdsender.getTeamColour() + "Your" + ChatColor.GRAY + "  nickname has changed to " + cmdsender.getTeamColour() + nickname);
 
             playersender.setPlayerListName(cmdsender.getTeamColour() + nickname);
         } else if (cmd.argsLength() == 2) {
