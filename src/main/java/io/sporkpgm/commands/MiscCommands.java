@@ -16,6 +16,7 @@ import io.sporkpgm.util.SchedulerUtil;
 import io.sporkpgm.util.StringUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -24,213 +25,50 @@ import java.util.List;
 
 public class MiscCommands {
 
-	@Command(aliases = {"join"}, desc = "Join the match", usage = "[team]", max = 1)
-	public static void join(CommandContext cmd, CommandSender sender) throws CommandException {
-		if(!(sender instanceof Player))
-			throw new CommandException("Only Players can use this command");
+    @Command(aliases = {"a"}, desc = "Admin chat", usage = "[message]", min = 1)
+    @CommandPermissions("spork.misc.adminchat")
+    public static void adminchat(CommandContext cmd, CommandSender sender) throws CommandException {
+        if(!(sender instanceof Player)) {
+            throw new CommandException("Only players can use admin chat");
+        }
 
-		SporkMap map = RotationSlot.getRotation().getCurrent();
-		SporkPlayer player = SporkPlayer.getPlayer((Player) sender);
-		if(cmd.argsLength() == 1) {
-			List<SporkTeam> teams = map.getTeams(cmd.getString(0));
-			if(teams.size() > 1) {
-				List<String> names = new ArrayList<>();
-				for(SporkTeam team : teams) {
-					names.add(team.getColoredName());
-				}
-				sender.sendMessage(ChatColor.RED + "Too many teams matched that query!");
-				sender.sendMessage(ChatColor.GRAY + "Returned: " + StringUtil.listToEnglishCompound(names, "", ChatColor.GRAY.toString()));
-				return;
-			} else if(teams.size() == 0) {
-				throw new CommandException("No teams matched query");
-			}
+        for (SporkPlayer player : SporkPlayer.getPlayers()) {
+            if (player.hasPermission("spork.misc.adminchat")) {
+                ChatColor white = ChatColor.WHITE;
+                player.getPlayer().sendMessage(white + "[" + ChatColor.GOLD + "A" + white + "] " + SporkPlayer.getPlayer((Player)sender).getFullName() + ChatColor.GRAY + ": " + white + cmd.getJoinedStrings(0));
+            }
+        }
 
-			SporkTeam team = teams.get(0);
-			/*
-			if(!team.isObservers()) {
-				if(!player.hasPermission("spork.team.select")) {
-					throw new CommandPermissionsException();
-				}
-			}
-			*/
+    }
 
-			if(!team.canJoin(player)) {
-				team.reasonJoin(player, ChatColor.GRAY);
-				return;
-			}
+    @Command(aliases = {"staff"}, desc = "List of online staff")
+    public static void staff(CommandContext cmd, CommandSender sender) throws CommandException {
+        List<String> list = new ArrayList<>();
+        for (SporkPlayer player : SporkPlayer.getPlayers()) {
+            if (player.hasPermission("spork.misc.staff")) {
+                list.add(player.getFullName());
+            }
+        }
+        String staff = StringUtil.staffList(list, ChatColor.WHITE);
+        String others = ChatColor.WHITE + "[" + ChatColor.GOLD + "SporkPGM" + ChatColor.WHITE + "] " + ChatColor.GRAY + "Staff Online (" + list.size() + "): ";
+        sender.sendMessage(others + staff);
 
-			player.setTeam(team);
-			return;
-		}
+    }
 
-		SporkTeam lowest = map.getLowestTeam();
-		if(!lowest.canJoin(player)) {
-			player.getPlayer().sendMessage(lowest.reasonJoin(player, ChatColor.GRAY));
-			return;
-		}
+    @Command(aliases = {"request"}, desc = "Send a request to staff", usage = "[message]", min = 1)
+    public static void request(CommandContext cmd, CommandSender sender) throws CommandException {
+        if(!(sender instanceof Player)) {
+            throw new CommandException("Only players can request");
+        }
 
-		player.setTeam(lowest);
-	}
+        for (SporkPlayer player : SporkPlayer.getPlayers()) {
+            if (player.hasPermission("spork.misc.staff")) {
+                ChatColor white = ChatColor.WHITE;
+                player.getPlayer().sendMessage(white + "[" + ChatColor.GOLD + "A" + white + "] " + SporkPlayer.getPlayer((Player)sender).getFullName() + ChatColor.GRAY + " has requested " + white + "'" + cmd.getJoinedStrings(0) + "'");
+                player.getPlayer().playSound(player.getPlayer().getLocation(), Sound.ORB_PICKUP, 10, 1);
 
-	@Command(aliases = {"match", "matchinfo"}, desc = "View match information")
-	public static void match(CommandContext cmd, CommandSender sender) throws CommandException {
-		if(!(sender instanceof Player)) {
-			throw new CommandException("Only Players can use this command");
-		}
-
-		Match match = Spork.get().getMatch();
-		sender.sendMessage(ChatColor.GOLD + "Match Information");
-		sender.sendMessage(ChatColor.DARK_AQUA + "Map playing: " + match.getMap().getName());
-		sender.sendMessage(ChatColor.DARK_AQUA + "Status: " + match.getPhase().toString());
-		sender.sendMessage(ChatColor.DARK_AQUA + "Match time: " + match.getMatchTime());
-	}
-
-	@Command(aliases = {"g", "!", "all"}, desc = "Global chat", usage = "[message]", min = 1)
-	public static void global(CommandContext cmd, CommandSender sender) throws CommandException {
-		if(!(sender instanceof Player)) {
-			throw new CommandException("Only player can use global chat");
-		}
-
-		SporkPlayer player = SporkPlayer.getPlayer((Player) sender);
-		PlayerChatEvent pce = new PlayerChatEvent(player, cmd.getJoinedStrings(0), false);
-		Spork.callEvent(pce);
-	}
-
-	@Command(aliases = {"start"}, desc = "Start the map with the specified countdown", usage = "[time]", min = 1, max = 1)
-	@CommandPermissions("spork.match.start")
-	public static void start(CommandContext cmd, CommandSender sender) throws CommandException {
-		Match match = RotationSlot.getRotation().getCurrentMatch();
-		MatchPhase phase = match.getPhase();
-		if(phase == MatchPhase.WAITING) {
-			match.setPhase(MatchPhase.STARTING, cmd.getInteger(0), true);
-			return;
-		}
-
-		if(phase == MatchPhase.STARTING) {
-			match.setDuration(cmd.getInteger(0));
-			match.start();
-			return;
-		}
-		sender.sendMessage(ChatColor.RED + "Server must be waiting or starting to set start time");
-	}
-
-
-	@Command(aliases = {"ready"}, desc = "Set a team's readiness state", usage = "{team}", max = 1)
-	@CommandPermissions("spork.match.ready")
-	public static void ready(CommandContext cmd, CommandSender sender) throws CommandException {
-		Match match = Spork.get().getRotation().getCurrentMatch();
-		if(cmd.argsLength() == 1) {
-			if(!sender.hasPermission("spork.match.ready.force"))
-				throw new CommandException("You don't have permission");
-			List<SporkTeam> matchingTeams = match.getMap().getTeams(cmd.getString(1));
-			if(matchingTeams.size() == 0) throw new CommandException("No matching teams found");
-			SporkTeam matched = matchingTeams.get(0);
-			matched.setReady(true);
-			Bukkit.broadcastMessage(matched.getColoredName() + ChatColor.WHITE + " has been toggled ready!");
-			boolean ready = true;
-			for(SporkTeam team : match.getMap().getTeams()) {
-				if(!team.isReady()) ready = false;
-			}
-			if(ready) {
-				Bukkit.broadcastMessage(ChatColor.GREEN + "All teams are ready, starting match!");
-				match.setPhase(MatchPhase.STARTING);
-			}
-		} else {
-			if(!(sender instanceof Player)) throw new CommandException("Only a player may use this command");
-			SporkTeam player_team = SporkPlayer.getPlayer((Player) sender).getTeam();
-			player_team.setReady(true);
-			Bukkit.broadcastMessage(player_team.getColoredName() + ChatColor.WHITE + " has been toggled ready!");
-			boolean ready = true;
-			for(SporkTeam team : match.getMap().getTeams()) {
-				if(!team.isReady()) ready = false;
-			}
-			if(ready) {
-				Bukkit.broadcastMessage(ChatColor.GREEN + "All teams are ready, starting match!");
-				match.setPhase(MatchPhase.STARTING);
-			}
-		}
-	}
-
-	@Command(aliases = {"end"}, desc = "Ends the match", max = 1)
-	@CommandPermissions("spork.match.end")
-	public static void end(CommandContext cmd, CommandSender sender) throws CommandException {
-		Match match = RotationSlot.getRotation().getCurrentMatch();
-		MatchPhase phase = match.getPhase();
-
-		if(phase == MatchPhase.PLAYING) {
-			if(cmd.argsLength() == 1) {
-				List<SporkTeam> teams = match.getMap().getTeams(cmd.getString(0));
-				if(teams.size() > 1) {
-					List<String> names = new ArrayList<>();
-					for(SporkTeam team : teams) {
-						names.add(team.getColoredName());
-					}
-					sender.sendMessage(ChatColor.RED + "Too many teams matched that query!");
-					sender.sendMessage(ChatColor.GRAY + "Returned: " + StringUtil.listToEnglishCompound(names, "", ChatColor.GRAY.toString()));
-					return;
-				} else if(teams.size() == 0) {
-					throw new CommandException("No teams matched query");
-				}
-
-				SporkTeam team = teams.get(0);
-				match.getMap().setWinner(team);
-			}
-			match.getMap().setEnded(true);
-			return;
-		}
-
-		sender.sendMessage(ChatColor.RED + "There is no match currently playing");
-	}
-
-	@Command(aliases = {"cancel"}, desc = "Cancels all active Spork countdowns", max = 0)
-	@CommandPermissions("spork.match.cancel")
-	public static void cancel(CommandContext cmd, CommandSender sender) throws CommandException {
-		Match match = RotationSlot.getRotation().getCurrentMatch();
-		MatchPhase phase = match.getPhase();
-
-		if(phase != MatchPhase.WAITING && phase != MatchPhase.PLAYING) {
-			match.stop();
-			sender.sendMessage(ChatColor.GREEN + "Countdowns cancelled");
-			return;
-		}
-
-		sender.sendMessage(ChatColor.RED + "There are no countdowns while a match is waiting or playing");
-	}
-
-	@Command(aliases = {"cycle"}, desc = "Cycle the map with the specified countdown", usage = "[time]", min = 1, max = 1)
-	@CommandPermissions("spork.match.cycle")
-	public static void cycle(final CommandContext cmd, final CommandSender sender) throws CommandException {
-		Match match = RotationSlot.getRotation().getCurrentMatch();
-		MatchPhase phase = match.getPhase();
-
-		final int duration = cmd.getInteger(0);
-		int delay = 0;
-		if(phase == MatchPhase.PLAYING) {
-			match.getMap().setEnded(true);
-			match.setDuration(duration);
-			delay = 2;
-		} else if(phase == MatchPhase.WAITING || phase == MatchPhase.STARTING) {
-			match.stop();
-			match.setPhase(MatchPhase.CYCLING, duration);
-			return;
-		}
-
-		Runnable run = new Runnable() {
-			@Override
-			public void run() {
-				Match match = RotationSlot.getRotation().getCurrentMatch();
-				MatchPhase phase = match.getPhase();
-				if(phase == MatchPhase.CYCLING) {
-					match.setDuration(duration);
-					match.start();
-					return;
-				}
-
-				sender.sendMessage(ChatColor.RED + "Invalid MatchPhase? " + phase.name());
-			}
-		};
-
-		new SchedulerUtil(run, false).delay(delay);
-	}
-
+            }
+        }
+        sender.sendMessage(ChatColor.RED + "Your request has been submitted.");
+    }
 }
